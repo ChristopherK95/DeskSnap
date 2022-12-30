@@ -8,6 +8,12 @@ export const VideoContaier = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  :hover {
+    #slider {
+      opacity: 1;
+    }
+  }
 `;
 
 export const Video = styled.video`
