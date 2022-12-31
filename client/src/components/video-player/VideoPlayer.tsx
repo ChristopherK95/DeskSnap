@@ -1,4 +1,4 @@
-import VideoFile from '../../assets/video.mkv';
+import VideoFile from '../../assets/test2.mp4';
 import { useLayoutEffect, useRef, useState } from 'react';
 import StateIndicator from '../../state-indicator/StateIndicator';
 import { Video, VideoContaier } from './Styles';
