@@ -17,6 +17,7 @@ export const VideoContaier = styled.div`
 `;
 
 export const Video = styled.video`
+  user-select: none;
   height: 100%;
   width: 100%;
 `;

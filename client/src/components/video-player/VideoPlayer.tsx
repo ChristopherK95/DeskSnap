@@ -20,6 +20,13 @@ const VideoPlayer = () => {
     setPaused(videoRef.current.paused);
   };
 
+  const togglePause = (b: boolean) => {
+    match(b)
+      .with(true, () => videoRef.current.pause())
+      .otherwise(() => videoRef.current.play());
+    setPaused(videoRef.current.paused);
+  };
+
   const rewind = (n: number) => {
     setCurrentTime(n);
     videoRef.current.currentTime = n;
@@ -66,6 +73,7 @@ const VideoPlayer = () => {
         currentTime={currentTime}
         max={duration}
         changeTime={rewind}
+        togglePause={togglePause}
       />
     </VideoContaier>
   );

@@ -6,37 +6,53 @@ const VideoTrack = (props: {
   currentTime: number;
   max: number;
   changeTime: (n: number) => void;
+  togglePause: (b: boolean) => void;
 }) => {
   const [thumbDown, setThumbDown] = useState<boolean>(false);
   const trackRef = useRef({} as HTMLDivElement);
 
   const mouseDown = (e: MouseEvent) => {
-    if (e.target instanceof HTMLDivElement && e.target.id === 'thumb') {
+    if (
+      e.target instanceof HTMLDivElement &&
+      (e.target.id === 'thumb' || e.target.id === 'slider')
+    ) {
       setThumbDown(true);
+      updateTime(e.clientX);
       e.target.focus();
+      props.togglePause(true);
     }
   };
 
   const mouseUp = () => {
-    setThumbDown(false);
-    window.addEventListener('mousedown', mouseDown, false);
+    if (thumbDown) {
+      setThumbDown(false);
+      window.addEventListener('mousedown', mouseDown, false);
+      props.togglePause(false);
+    }
   };
 
   const mouseMove = (e: MouseEvent) => {
     if (thumbDown) {
-      let newValue =
-        ((e.clientX - 10) / trackRef.current.clientWidth) * props.max;
-      if (newValue > props.max) newValue = props.max;
-      if (newValue < 0) newValue = 0;
-      props.changeTime(newValue);
+      updateTime(e.clientX);
     }
+  };
+
+  const mouseClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    updateTime(e.clientX);
+  };
+
+  const updateTime = (x: number) => {
+    let newValue = ((x - 20) / trackRef.current.clientWidth) * props.max;
+    if (newValue > props.max) newValue = props.max;
+    if (newValue < 0) newValue = 0;
+    props.changeTime(newValue);
   };
 
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = time - minutes * 60;
 
-    return `${minutes}:${seconds}`;
+    return `${minutes}:${seconds > 9 ? seconds : 0 + '' + seconds}`;
   };
 
   useEffect(() => {
@@ -52,7 +68,7 @@ const VideoTrack = (props: {
   });
 
   return (
-    <Container ref={trackRef} id={'slider'}>
+    <Container ref={trackRef} id={'slider'} onClick={mouseClick}>
       <Track>
         <Progress style={{ transform: `scaleX(${props.progress}%)` }} />
       </Track>

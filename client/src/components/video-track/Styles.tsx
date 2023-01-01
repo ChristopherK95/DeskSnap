@@ -24,16 +24,10 @@ export const Container = styled.div`
   :active {
     opacity: 1;
   }
-
-  :hover {
-    #thumb {
-      background-color: #ca0202;
-      opacity: 1;
-    }
-  }
 `;
 
 export const Track = styled.div`
+  pointer-events: none;
   background-color: #54545485;
   height: 5px;
   width: 100%;
@@ -45,7 +39,7 @@ export const Progress = styled.div`
   width: 100%;
   height: 5px;
   transform-origin: left;
-  background-color: rgb(184, 55, 55);
+  background-color: rgb(233, 14, 89);
   border-radius: 5px;
 `;
 
@@ -55,17 +49,12 @@ export const Thumb = styled.div<{ pressed: boolean }>`
   height: 10px;
   left: 0;
   bottom: 0px;
-  background-color: #f54d4d;
+  background-color: white;
   user-select: none;
   border-radius: 100%;
   transform: translateX(-50%);
-  opacity: 0;
+  opacity: ${(p) => (p.pressed ? 1 : 0)};
   transition: opacity 0.3s ease;
-
-  :active {
-    background-color: #ca0202;
-    opacity: 1;
-  }
 
   ::after {
     content: attr(data-title);
