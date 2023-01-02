@@ -1,5 +1,5 @@
 /// <reference types="vite/client" />
-declare module "*.mkv" {
+declare module '*.mkv' {
   const src: string;
   export default src;
 }
