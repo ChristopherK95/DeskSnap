@@ -60,24 +60,13 @@ const VideoPlayer = () => {
   }, [paused, duration]);
 
   const loadFile = async () => {
-    const file: { type: string; data: Buffer } = (
+    const url: string = (
       await axios.post('http://localhost:3000/storage/downloadFile', {
         fileName: 'test.mp4',
       })
     ).data;
 
-    const blob = new Blob([file.data]);
-
-    const reader = new FileReader();
-    reader.onload = function (event) {
-      const base64 = event.target?.result;
-      setVideoSrc(undefined);
-      setVideoSrc(
-        base64?.toString().replace('application/octet-stream', 'video/mp4'),
-      );
-    };
-
-    reader.readAsDataURL(blob);
+    setVideoSrc(url);
   };
 
   useEffect(() => {
