@@ -1,6 +1,6 @@
-import express from "express";
-import Multer from "multer";
-import storageController from "../controllers/Storage";
+import express from 'express';
+import Multer from 'multer';
+import storageController from '../controllers/Storage';
 
 const multer = Multer({
   storage: Multer.memoryStorage(),
@@ -11,8 +11,7 @@ const multer = Multer({
 
 const router = express.Router();
 
-router.post("/uploadFile", multer.single("file"), storageController.uploadFile);
-router.delete("/deleteFile", storageController.deleteFile);
-router.post("/downloadFile", storageController.downloadFile);
+router.post('/uploadFile', multer.single('file'), storageController.uploadFile);
+router.delete('/deleteFile', storageController.deleteFile);
 
 export = router;

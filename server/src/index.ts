@@ -1,10 +1,12 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import { config } from 'dotenv';
-import { Storage } from '@google-cloud/storage';
 import { ServerApiVersion } from 'mongodb';
 import userRoutes from './routes/User';
 import storageRoutes from './routes/Storage';
+import urlRoutes from './routes/Url';
+import channelRoutes from './routes/Channel';
+import channelConnectionRoutes from './routes/Channel-Connection';
 import cors from 'cors';
 
 config();
@@ -38,5 +40,8 @@ try {
 /** Routes */
 app.use('/users/', userRoutes);
 app.use('/storage/', storageRoutes);
+app.use('/url/', urlRoutes);
+app.use('/channel/', channelRoutes);
+app.use('/connection/', channelConnectionRoutes);
 
 app.listen(3000, () => console.log('Server listening on port 3000'));
