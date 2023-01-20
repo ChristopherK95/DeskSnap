@@ -19,7 +19,6 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
       return res.status(201).json(doc);
     }
   });
-  // return res.status(500).json(err);
 };
 
 const getUser = async (req: Request, res: Response, next: NextFunction) => {
