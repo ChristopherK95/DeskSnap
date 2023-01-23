@@ -1,38 +1,33 @@
 import { useState } from 'react';
-import { Channel, Circle, Content, Sidebar, Tooltip } from './Styles';
-import { useQuery } from 'react-query';
-import axios from 'axios';
+import { Container, Content } from './Styles';
 import VideoPlayer from '../video-player/VideoPlayer';
+import Sidebar from '../sidebar/Sidebar';
+import useFetch from '../hooks/useFetch';
+import LoginPage from './login-page/LoginPage';
 
 const HomePage = () => {
   // const a = useQuery('getChannels', () => axios.post('getChannels', {userId: }))
+  const [user, setUser] = useState<{ id: string; name: string }>();
   const [channels, setChannels] = useState<{ id: number; name: string }[]>([
     { id: 0, name: 'Basse' },
     { id: 1, name: 'Victor' },
     { id: 2, name: 'Christopher' },
   ]);
 
-  const [selected, setSelected] = useState<number>();
+  const fetch = useFetch();
+  // const data = fetch({ route: 'channel', action: 'getChannels' });
+
+  if (!user) {
+    return <LoginPage setUser={setUser} />;
+  }
 
   return (
-    <div style={{ width: '100vw', height: '100vh', display: 'flex' }}>
-      <Sidebar>
-        {channels.map((c) => (
-          <Channel key={c.id}>
-            <Circle
-              selected={selected === c.id}
-              onClick={() => setSelected(c.id)}
-            >
-              {c.name[0]}
-              <Tooltip>{c.name}</Tooltip>
-            </Circle>
-          </Channel>
-        ))}
-      </Sidebar>
+    <Container>
+      <Sidebar channels={channels} />
       <Content>
         <VideoPlayer />
       </Content>
-    </div>
+    </Container>
   );
 };
 

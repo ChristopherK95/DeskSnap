@@ -18,11 +18,25 @@ export const Container = styled.div`
   width: calc(100% - 20px);
   height: 5px;
   cursor: pointer;
-  padding: 10px 0 3px 0;
+  padding: 10px 0;
   transition: opacity 0.3s ease;
+  user-select: none;
+  display: flex;
+  align-items: center;
 
   :active {
     opacity: 1;
+  }
+
+  :hover {
+    #thumb {
+      opacity: 1;
+    }
+
+    #tooltip {
+      opacity: 1;
+      transform: translate(0);
+    }
   }
 `;
 
@@ -33,41 +47,37 @@ export const Track = styled.div`
   width: 100%;
   border-radius: 5px;
   overflow: hidden;
+  user-select: none;
 `;
 
 export const Progress = styled.div`
+  pointer-events: none;
   width: 100%;
   height: 5px;
   transform-origin: left;
   background-color: rgb(233, 14, 89);
   border-radius: 5px;
+  user-select: none;
 `;
 
 export const Thumb = styled.div<{ pressed: boolean }>`
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: ${(p) => (p.pressed ? '15px' : '10px')};
+  height: ${(p) => (p.pressed ? '15px' : '10px')};
   left: 0;
-  bottom: 0px;
   background-color: white;
   user-select: none;
   border-radius: 100%;
   transform: translateX(-50%);
   opacity: ${(p) => (p.pressed ? 1 : 0)};
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease, height 0.3s ease, width 0.3s ease;
+  display: flex;
+  justify-content: center;
 
-  ::after {
-    content: attr(data-title);
-    background: #5c5c5c;
-    position: absolute;
-    top: -40px;
-    height: 20px;
-    width: auto;
-    padding: 5px;
-    border-radius: 5px;
-    transform: translateX(-50%);
-    color: white;
-    font-size: 16px;
-    font-family: 'RobotoMedium';
+  ${(p) => p.pressed && '& ~ #tooltip { opacity: 1; }'}
+
+  &:active ~ #tooltip {
+    opacity: 1;
+    transform: translate(0);
   }
 `;

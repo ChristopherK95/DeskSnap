@@ -22,11 +22,10 @@ const VideoPlayer = () => {
     setPaused(videoRef.current.paused);
   };
 
-  const togglePause = (b: boolean) => {
-    match(b)
-      .with(true, () => videoRef.current.pause())
-      .otherwise(() => videoRef.current.play());
-    setPaused(videoRef.current.paused);
+  const tempPause = (mouseDown: boolean) => {
+    if (mouseDown) {
+      videoRef.current.pause();
+    } else videoRef.current.play();
   };
 
   const rewind = (n: number) => {
@@ -69,10 +68,6 @@ const VideoPlayer = () => {
     setVideoSrc(url);
   };
 
-  useEffect(() => {
-    videoRef.current.onload = () => console.log('loaded');
-  }, []);
-
   useEffect(() => videoRef.current.load(), [videoSrc]);
 
   return (
@@ -83,7 +78,7 @@ const VideoPlayer = () => {
           onClick={togglePlay}
           onCanPlay={(e) => setDuration(e.currentTarget.duration)}
           loop
-          src={videoSrc}
+          src={VideoFile}
         >
           {/* {videoSrc && <source src={} type="video/mp4" />} */}
         </Video>
@@ -93,7 +88,8 @@ const VideoPlayer = () => {
           currentTime={currentTime}
           max={duration}
           changeTime={rewind}
-          togglePause={togglePause}
+          paused={paused}
+          tempPause={tempPause}
         />
       </VideoContaier>
       <button onClick={() => loadFile()}>click</button>
