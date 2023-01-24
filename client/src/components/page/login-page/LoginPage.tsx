@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { ButtonContainer, Container } from './Styles';
 import Input from '../../input/Input';
-import axios from 'axios';
 import useFetch from '../../hooks/useFetch';
 // import { Input } from './Styles';
 
@@ -18,7 +17,6 @@ const LoginPage = (props: {
 
   const login = async () => {
     const result = await fetch<
-      'user',
       { id: string; message: string; login: boolean }
     >({
       route: 'user',
