@@ -63,26 +63,36 @@ const updateUser = async (req: Request, res: Response, next: NextFunction) => {
 
 const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   const { user_id } = req.body;
-  await userSchema.findByIdAndDelete(user_id, (err: Error, docs: any) => {
-    if (err) {
-      return res.status(500).json({ err });
-    } else {
-      return res.status(201).json({ docs });
-    }
-  });
+  try {
+    const response = await userSchema.findByIdAndDelete(user_id);
+    if (response != null) {
+      return res.json(response);
+    } else return res.json({ message: 'User not found' });
+  } catch (err) {
+    console.log('error');
+    return res.json(err);
+  }
 };
 
 const login = async (req: Request, res: Response) => {
   const { username, password } = req.body;
   try {
-    const user = await userSchema.findOne({ username }).exec();
+    const user = await userSchema
+      .findOne({ username: username.toLowerCase() })
+      .exec();
     if (!user) {
-      return res.status(400).json({ message: 'No user with that username' });
+      return res.json({ message: 'No user with that username', login: false });
     }
     if (!bcrypt.compareSync(password, user.password)) {
-      return res.status(400).json({ message: 'The password is invalid' });
+      return res
+        .status(401)
+        .json({ message: 'Invalid password', login: false });
     }
-    res.json({ message: 'The username and password combination are correct!' });
+    res.json({
+      message: 'The username and password combination are correct!',
+      login: true,
+      user_id: user.id,
+    });
   } catch (err) {
     res.status(500).json(err);
   }

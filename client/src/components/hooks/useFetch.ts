@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 type Route = 'storage' | 'channel' | 'channel-connection' | 'url' | 'user';
 
@@ -47,11 +47,12 @@ type Params<T extends Route> = {
 };
 
 const useFetch = () => {
-  const fetch = <T extends Route>(params: Params<T>) => {
-    axios.post(
+  const fetch = async <T extends Route, K>(params: Params<T>) => {
+    const result = await axios.post<K>(
       `http://localhost:3000/${params.route}/${params.action}`,
       params.payload,
     );
+    return result;
   };
 
   return fetch;

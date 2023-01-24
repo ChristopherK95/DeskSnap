@@ -38,7 +38,7 @@ try {
 }
 
 /** Routes */
-app.use('/users/', userRoutes);
+app.use('/user/', userRoutes);
 app.use('/storage/', storageRoutes);
 app.use('/url/', urlRoutes);
 app.use('/channel/', channelRoutes);

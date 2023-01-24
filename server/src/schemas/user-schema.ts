@@ -8,6 +8,7 @@ export const userSchema = new mongoose.Schema(
       maxLength: [20, 'Can be at most 20 characters.'],
       required: true,
       unique: true,
+      lowercase: true,
       validate: {
         validator: function (v: string) {
           return /^[\w\-]{3,20}[^-_]$/.test(v);

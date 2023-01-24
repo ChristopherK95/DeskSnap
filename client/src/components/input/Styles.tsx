@@ -9,6 +9,7 @@ export const Container = styled.div`
   width: 250px;
   height: 50px;
   align-items: center;
+  overflow: hidden;
 `;
 
 export const Label = styled.div<{ empty: boolean }>`

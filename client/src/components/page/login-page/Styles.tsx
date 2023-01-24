@@ -19,3 +19,11 @@ export const Input = styled.input`
   padding: 5px;
   width: 250px;
 `;
+
+export const ButtonContainer = styled.div`
+  width: 250px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 40px;
+  grid-gap: 30px;
+`;
