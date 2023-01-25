@@ -5,11 +5,13 @@ const Input = (props: {
   label: string;
   value: string;
   style?: CSSProperties;
+  type: React.HTMLInputTypeAttribute;
   onChange: (value: string) => void;
 }) => {
   return (
     <Container style={props.style}>
       <Value
+        type={props.type}
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
       />

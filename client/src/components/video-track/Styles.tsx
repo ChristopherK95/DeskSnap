@@ -1,15 +1,4 @@
-import styled, { createGlobalStyle } from 'styled-components';
-import RobotoMedium from '../../fonts/Roboto/Roboto-Medium.ttf';
-
-export const GlobalStyle = createGlobalStyle`
-  @font-face {
-    font-family: "RobotoMedium";
-    src: url(${RobotoMedium}) format("truetype");
-    font-weight: regular;
-    font-style: normal;
-    font-display: auto;
-  }
-`;
+import styled from 'styled-components';
 
 export const Container = styled.div`
   opacity: 0;

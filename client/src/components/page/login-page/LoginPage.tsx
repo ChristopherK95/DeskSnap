@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { ButtonContainer, Container } from './Styles';
+import { FormEvent, useState } from 'react';
+import { ButtonContainer, Form, Link } from './Styles';
 import Input from '../../input/Input';
 import useFetch from '../../hooks/useFetch';
 // import { Input } from './Styles';
@@ -15,31 +15,65 @@ const LoginPage = (props: {
 
   const fetch = useFetch();
 
-  const login = async () => {
-    const result = await fetch<
-      { id: string; message: string; login: boolean }
-    >({
-      route: 'user',
-      action: 'login',
-      payload: { username, password },
-    });
+  const login = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const result = await fetch<{ id: string; message: string; login: boolean }>(
+      {
+        route: 'user',
+        action: 'login',
+        payload: { username, password },
+      },
+    );
     if (result.data.login) {
       return props.setUser({ id: result.data.id, name: username });
     }
     return setLoginError(result.data.message);
   };
 
-  const signUser = async () => {
-    // const user = (await axios.post('http://localhost:3000/users/createUser', {
-    // }))
+  const signUser = async (e: FormEvent) => {
+    e.preventDefault();
+    if (username.length < 3 || username.length > 20)
+      return setLoginError(
+        'The username needs to be at least 4 characters and at most 20',
+      );
+    if (password.length < 4)
+      return setLoginError('Password does not fulfill requirements');
+    if (password != confirmPassword)
+      return setLoginError('The passwords do not match');
+
+    const user = await fetch<{ id: string; username: string }>({
+      route: 'user',
+      action: 'createUser',
+      payload: { username, password },
+    });
+    if (user.data.toString().indexOf('Duplicate') != null) {
+      setLoginError('A user with that name already exist');
+      return;
+    }
+    if (user.data) {
+      // props.setUser({ id: user.data.id, name: user.data.username });
+      return;
+    }
+    // return setLoginError(user.data.toString());
+  };
+
+  const nameOnChange = (v: string) => {
+    setLoginError('');
+    setUsername(v);
+  };
+
+  const passOnChange = (v: string) => {
+    setLoginError('');
+    setPassword(v);
   };
 
   return (
-    <Container>
+    <Form onSubmit={login}>
       <Input
         label="Username"
         value={username}
-        onChange={setUsername}
+        onChange={(v) => nameOnChange(v)}
+        type="text"
         // placeholder="Username"
         // value={username}
         // onChange={(e) => setUsername(e.target.value)}
@@ -47,7 +81,8 @@ const LoginPage = (props: {
       <Input
         label="Password"
         value={password}
-        onChange={setPassword}
+        onChange={(v) => passOnChange(v)}
+        type="password"
         // placeholder="Password"
         // value={password}
         // onChange={(e) => setPassword(e.target.value)}
@@ -57,20 +92,32 @@ const LoginPage = (props: {
           height: `${signUp ? '50px' : '0'}`,
           opacity: `${signUp ? '1' : '0'}`,
           marginBottom: `${signUp ? '0' : '-20px'}`,
-          transition: 'height 0.4s, opacity 0.4s, margin-bottom 0.4s',
+          transition: `height 0.4s, ${
+            signUp ? 'opacity 0.6s' : 'opacity 0.2s'
+          }, margin-bottom 0.4s`,
         }}
         label="Repeat Password"
         value={confirmPassword}
         onChange={setConfirmPassword}
+        type="password"
       />
       <ButtonContainer>
-        <button onClick={signUp ? () => setSignUp(false) : login}>Login</button>
-        <button onClick={signUp ? () => signUser() : () => setSignUp(true)}>
-          Sign Up
+        <button type="submit" onClick={signUp ? signUser : login}>
+          {signUp ? 'Submit' : 'Login'}
         </button>
+        {signUp ? (
+          <div>
+            Already a member?{' '}
+            <Link onClick={() => setSignUp(false)}>Login</Link>
+          </div>
+        ) : (
+          <div>
+            Not a member? <Link onClick={() => setSignUp(true)}>Signup</Link>
+          </div>
+        )}
       </ButtonContainer>
       <label>{loginError}</label>
-    </Container>
+    </Form>
   );
 };
 
