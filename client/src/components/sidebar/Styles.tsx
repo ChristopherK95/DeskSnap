@@ -46,3 +46,30 @@ export const Circle = styled.div<{ selected: boolean }>`
     }
   }
 `;
+
+export const Home = styled.div<{ selected: boolean }>`
+  background-color: ${(p) => (p.selected ? '#666666' : '')};
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  font-family: 'RobotoMedium';
+  font-size: 22px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s ease;
+  /* border: ${(p) => (p.selected ? '4px solid #01e783' : 'none')}; */
+
+  :hover {
+    background-color: #4e4d4d;
+
+    div:last-child {
+      opacity: 1;
+      transform: translateX(0);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+  }
+`;
