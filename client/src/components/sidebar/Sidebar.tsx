@@ -1,12 +1,14 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import Tooltip from '../tooltip/Tooltip';
-import { Channel, Circle, Container, Home } from './Styles';
+import { AddChannel, Channel, Circle, Container, Home } from './Styles';
 import HomeLogo from '../../svgs/Home';
 import { SidebarContext } from './SidebarContext';
+import Modal from '../modal/Modal';
 
 const Sidebar = (props: { channels: { id: string; name: string }[] }) => {
   const { channels } = props;
   const { activeChannel, setActiveChannel } = useContext(SidebarContext);
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <Container>
@@ -29,6 +31,14 @@ const Sidebar = (props: { channels: { id: string; name: string }[] }) => {
           </Circle>
         </Channel>
       ))}
+      <Channel>
+        <AddChannel onClick={() => setShowModal(true)}>+</AddChannel>
+      </Channel>
+      {showModal && (
+        <Modal size={{ height: 500, width: 400 }}>
+          <div>testing</div>
+        </Modal>
+      )}
     </Container>
   );
 };

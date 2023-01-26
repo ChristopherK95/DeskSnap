@@ -73,3 +73,11 @@ export const Home = styled.div<{ selected: boolean }>`
     }
   }
 `;
+
+export const AddChannel = styled.div`
+  cursor: pointer;
+  font-size: 40px;
+  :hover {
+    color: #ff8e38;
+  }
+`;
