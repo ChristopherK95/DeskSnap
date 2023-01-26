@@ -41,20 +41,25 @@ const LoginPage = (props: {
     if (password != confirmPassword)
       return setLoginError('The passwords do not match');
 
-    const user = await fetch<{ id: string; username: string }>({
-      route: 'user',
-      action: 'createUser',
-      payload: { username, password },
-    });
-    if (user.data.toString().indexOf('Duplicate') != null) {
+    const user = await fetch<{ id: string; username: string; message: string }>(
+      {
+        route: 'user',
+        action: 'createUser',
+        payload: { username, password },
+      },
+    );
+    if (
+      user.data.message != undefined &&
+      user.data.message.indexOf('Duplicate') >= 0
+    ) {
       setLoginError('A user with that name already exist');
       return;
     }
-    if (user.data) {
-      // props.setUser({ id: user.data.id, name: user.data.username });
+    if (user.data.username != undefined) {
+      props.setUser({ id: user.data.id, name: user.data.username });
       return;
     }
-    // return setLoginError(user.data.toString());
+    return setLoginError(user.data.message);
   };
 
   const nameOnChange = (v: string) => {
@@ -68,7 +73,7 @@ const LoginPage = (props: {
   };
 
   return (
-    <Form onSubmit={login}>
+    <Form onSubmit={signUp ? signUser : login}>
       <Input
         label="Username"
         value={username}
@@ -102,9 +107,7 @@ const LoginPage = (props: {
         type="password"
       />
       <ButtonContainer>
-        <button type="submit" onClick={signUp ? signUser : login}>
-          {signUp ? 'Submit' : 'Login'}
-        </button>
+        <button type="submit">{signUp ? 'Submit' : 'Login'}</button>
         {signUp ? (
           <div>
             Already a member?{' '}
