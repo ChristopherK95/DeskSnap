@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema, SchemaTypes } from 'mongoose';
 
 export const userSchema = new mongoose.Schema(
   {
@@ -21,8 +21,15 @@ export const userSchema = new mongoose.Schema(
       minLength: 4,
       required: true,
     },
+    channels: [
+      {
+        type: Schema.Types.ObjectId,
+        required: true,
+        ref: 'channel',
+      },
+    ],
   },
   { collection: 'user' }
 );
 
-export default mongoose.model('User', userSchema);
+export default mongoose.model('user', userSchema);

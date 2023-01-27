@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 export const channelSchema = new mongoose.Schema(
   {
@@ -8,6 +8,13 @@ export const channelSchema = new mongoose.Schema(
       maxLength: 20,
       required: true,
     },
+    users: [
+      {
+        type: Schema.Types.ObjectId,
+        required: true,
+        ref: 'user',
+      },
+    ],
   },
   { collection: 'channel' }
 );

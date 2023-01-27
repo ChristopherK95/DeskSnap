@@ -18,7 +18,8 @@ const LoginPage = (props: {
     const result = await fetchOnce<
       'user',
       {
-        id: string;
+        user_id: string;
+        username: string;
         message: string;
         login: boolean;
       }
@@ -29,7 +30,11 @@ const LoginPage = (props: {
     });
 
     if (result.data.login) {
-      return props.setUser({ id: result.data.id, name: username });
+      console.log(result.data);
+      return props.setUser({
+        id: result.data.user_id,
+        name: result.data.username,
+      });
     }
     return setLoginError(result.data.message);
   };

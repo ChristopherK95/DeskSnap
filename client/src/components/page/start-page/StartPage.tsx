@@ -8,23 +8,23 @@ interface Channels {
 }
 
 const StartPage = () => {
-  const { data, isLoading } = useFetch<'channel', Channels>({
-    route: 'channel',
-    action: 'getChannels',
-    key: 'channels-overview',
-    options: { refetchOnWindowFocus: false },
-  });
-  const [channels, setChannels] = useState<Channels>();
+  // const { data, isLoading } = useFetch<'channel', Channels>({
+  //   route: 'channel',
+  //   action: 'getChannels',
+  //   key: 'channels-overview',
+  //   options: { refetchOnWindowFocus: false },
+  // });
+  // const [channels, setChannels] = useState<Channels>();
 
-  useEffect(() => {
-    if (data) {
-      setChannels(data);
-    }
-  });
+  // useEffect(() => {
+  //   if (data) {
+  //     setChannels(data);
+  //   }
+  // }, [data]);
 
-  if (isLoading) {
-    return <Container>Loading..</Container>;
-  }
+  // if (isLoading) {
+  //   return <Container>Loading..</Container>;
+  // }
 
   return <Container></Container>;
 };

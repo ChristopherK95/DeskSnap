@@ -11,14 +11,8 @@ type Channel =
   | 'createChannel'
   | 'removeChannel'
   | 'getChannelName'
-  | 'getChannels';
-
-type ChannelConnection =
-  | 'getConnections'
-  | 'getConnectionsByUserId'
-  | 'getConnectionsByChannelId'
-  | 'removeConnectionByUserId'
-  | 'removeConnectionByChannelId';
+  | 'getChannels'
+  | 'getUsers';
 
 type Url =
   | 'createUrl'
@@ -31,6 +25,7 @@ type User =
   | 'createUser'
   | 'getUser'
   | 'getUsers'
+  | 'getChannels'
   | 'updateUser'
   | 'deleteUser'
   | 'login';
@@ -39,8 +34,6 @@ type Action<T extends Route> = T extends 'storage'
   ? Storage
   : T extends 'channel'
   ? Channel
-  : T extends 'channel-connection'
-  ? ChannelConnection
   : T extends 'url'
   ? Url
   : User;
@@ -60,10 +53,12 @@ export default <T extends Route, K>(params: Params<T, K>) =>
   useQuery<K, unknown, K, QueryKey>(
     params.key,
     async () =>
-      axios.post(
-        `http://localhost:3000/${params.route}/${params.action}`,
-        params.payload,
-      ),
+      (
+        await axios.post(
+          `http://localhost:3000/${params.route}/${params.action}`,
+          params.payload,
+        )
+      ).data,
     params.options,
   );
 

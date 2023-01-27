@@ -13,11 +13,9 @@ export const BackDrop = styled.div`
 `;
 
 export const Window = styled.div<{ size?: { height: number; width: number } }>`
-  width: 400px;
   padding: 10px;
   background-color: #2d3250;
   border-radius: 8px;
-
   ${(p) => p.size && `height: ${p.size.height}px; width: ${p.size.width}px;`}
   box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.2);
 `;
