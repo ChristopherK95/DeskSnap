@@ -1,4 +1,7 @@
 import axios from 'axios';
+import { useQuery } from 'react-query';
+import { QueryKey } from 'react-query/types/core';
+import { UseQueryOptions } from 'react-query/types/react';
 
 type Route = 'storage' | 'channel' | 'channel-connection' | 'url' | 'user';
 
@@ -32,30 +35,42 @@ type User =
   | 'deleteUser'
   | 'login';
 
-type Params = {
-  route: Route;
-  action: Route extends 'storage'
-    ? Storage
-    : Route extends 'channel'
-    ? Channel
-    : Route extends 'channel-connection'
-    ? ChannelConnection
-    : Route extends 'url'
-    ? Url
-    : User;
+type Action<T extends Route> = T extends 'storage'
+  ? Storage
+  : T extends 'channel'
+  ? Channel
+  : T extends 'channel-connection'
+  ? ChannelConnection
+  : T extends 'url'
+  ? Url
+  : User;
+
+interface Params<T extends Route, K> {
+  key: string;
+  route: T;
+  action: Action<T>;
   payload?: object;
-};
+  options?: Omit<
+    UseQueryOptions<K, unknown, K, QueryKey>,
+    'queryKey' | 'queryFn'
+  >;
+}
 
-const useFetch = () => {
-  const fetch = async <K>(params: Params) => {
-    const result = await axios.post<K>(
-      `http://localhost:3000/${params.route}/${params.action}`,
-      params.payload,
-    );
-    return result;
-  };
+export default <T extends Route, K>(params: Params<T, K>) =>
+  useQuery<K, unknown, K, QueryKey>(
+    params.key,
+    async () =>
+      axios.post(
+        `http://localhost:3000/${params.route}/${params.action}`,
+        params.payload,
+      ),
+    params.options,
+  );
 
-  return fetch;
-};
-
-export default useFetch;
+export const fetchOnce = async <T extends Route, K>(
+  params: Omit<Params<T, K>, 'key' | 'options'>,
+) =>
+  axios.post<K>(
+    `http://localhost:3000/${params.route}/${params.action}`,
+    params.payload,
+  );

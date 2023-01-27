@@ -1,7 +1,7 @@
 import { FormEvent, useState } from 'react';
 import { ButtonContainer, Form, Link } from './Styles';
 import Input from '../../input/Input';
-import useFetch from '../../hooks/useFetch';
+import { fetchOnce } from '../../hooks/useFetch';
 // import { Input } from './Styles';
 
 const LoginPage = (props: {
@@ -13,17 +13,21 @@ const LoginPage = (props: {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loginError, setLoginError] = useState('');
 
-  const fetch = useFetch();
-
   const login = async (e: React.FormEvent) => {
     e.preventDefault();
-    const result = await fetch<{ id: string; message: string; login: boolean }>(
+    const result = await fetchOnce<
+      'user',
       {
-        route: 'user',
-        action: 'login',
-        payload: { username, password },
-      },
-    );
+        id: string;
+        message: string;
+        login: boolean;
+      }
+    >({
+      route: 'user',
+      action: 'login',
+      payload: { username, password },
+    });
+
     if (result.data.login) {
       return props.setUser({ id: result.data.id, name: username });
     }
@@ -41,13 +45,18 @@ const LoginPage = (props: {
     if (password != confirmPassword)
       return setLoginError('The passwords do not match');
 
-    const user = await fetch<{ id: string; username: string; message: string }>(
+    const user = await fetchOnce<
+      'user',
       {
-        route: 'user',
-        action: 'createUser',
-        payload: { username, password },
-      },
-    );
+        id: string;
+        username: string;
+        message: string;
+      }
+    >({
+      route: 'user',
+      action: 'createUser',
+      payload: { username, password },
+    });
     if (
       user.data.message != undefined &&
       user.data.message.indexOf('Duplicate') >= 0

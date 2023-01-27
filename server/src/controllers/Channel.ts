@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from 'express';
-import channelSchema from '../schemas/channel-schema';
-import { createConnection } from './Channel-Connection';
+import { NextFunction, Request, Response } from "express";
+import channelSchema from "../schemas/channel-schema";
+import { createConnection } from "./Channel-Connection";
 
 const createChannel = async (req: Request, res: Response) => {
   const { channel_name, user_id } = req.body;
@@ -26,7 +26,7 @@ const removeChannel = async (req: Request, res: Response) => {
   if (response) {
     return res.json(response);
   } else {
-    return res.status(500).json({ message: 'Channel not found' });
+    return res.status(500).json({ message: "Channel not found" });
   }
 };
 
@@ -36,6 +36,15 @@ const getChannels = async (req: Request, res: Response) => {
     return res.json({ channels });
   } catch (err) {
     return res.status(500).json({ err });
+  }
+};
+
+const getChannelsOverview = async (req: Request, res: Response) => {
+  try {
+    const channels = await channelSchema.find({});
+    return res.json();
+  } catch (err) {
+    return res.json();
   }
 };
 
@@ -49,7 +58,7 @@ const getChannelName = async (req: Request, res: Response) => {
 
   if (channel_name != null) {
     return res.status(200).json(channel_name);
-  } else return res.status(404).json({ message: 'Channel not found' });
+  } else return res.status(404).json({ message: "Channel not found" });
 };
 
 export default { createChannel, removeChannel, getChannels, getChannelName };
