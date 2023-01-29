@@ -85,6 +85,7 @@ const StartPage = (props: { userId: string }) => {
                           payload: { channel_id: channel._id },
                         });
                         queryClient.invalidateQueries('channels-overview');
+                        queryClient.invalidateQueries('sidebar-channels');
                       },
                     },
                   ]}
