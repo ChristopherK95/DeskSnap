@@ -1,8 +1,9 @@
 import React, { useLayoutEffect, useRef } from 'react';
 import { Container, ContextItem } from './Styles';
 
-const ContextMenu = (props: {
-  actions: { label: React.ReactNode; action: () => void }[];
+const ContextMenu = <T,>(props: {
+  row: T;
+  actions: { label: React.ReactNode; action: (row: T) => void }[];
   close: () => void;
 }) => {
   const ref = useRef({} as HTMLDivElement);
@@ -16,7 +17,7 @@ const ContextMenu = (props: {
           key={idx}
           onClick={(e: React.MouseEvent) => {
             e.stopPropagation();
-            action.action();
+            action.action(props.row);
             props.close();
           }}
         >

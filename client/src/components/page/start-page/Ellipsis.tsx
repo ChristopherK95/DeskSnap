@@ -15,8 +15,21 @@ const Icon = styled.div`
   }
 `;
 
+interface User {
+  _id: string;
+  username: string;
+}
+
+interface Channel {
+  _id: string;
+  channel_name: string;
+  users: User[];
+  owner: User;
+}
+
 const Ellipsis = (props: {
-  actions: { label: React.ReactNode; action: () => void }[];
+  channel: Channel;
+  actions: { label: React.ReactNode; action: (channel: Channel) => void }[];
 }) => {
   const [showContext, setShowContext] = useState<boolean>(false);
 
@@ -29,6 +42,7 @@ const Ellipsis = (props: {
       <EllipsisIcon />
       {showContext && (
         <ContextMenu
+          row={props.channel}
           actions={props.actions}
           close={() => setShowContext(false)}
         />
