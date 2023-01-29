@@ -1,5 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
-import { Schema } from 'mongoose';
+import { Request, Response } from 'express';
 import channelSchema from '../schemas/channel-schema';
 import { addChannelConnection } from './User';
 
@@ -8,6 +7,7 @@ const createChannel = async (req: Request, res: Response) => {
   const newChannel = new channelSchema({
     channel_name,
     users: [user_id],
+    owner: user_id,
   });
   try {
     const response = await newChannel.save();
@@ -23,7 +23,7 @@ const removeChannel = async (req: Request, res: Response) => {
 
   const response = await channelSchema.findByIdAndRemove(channel_id);
   if (response) {
-    return res.json(response);
+    return res.status(200).json();
   } else {
     return res.status(500).json({ message: 'Channel not found' });
   }
@@ -37,8 +37,14 @@ const getUsers = async (req: Request, res: Response) => {
 
 const getChannelsOverview = async (req: Request, res: Response) => {
   try {
-    const channels = await channelSchema.find({});
-    return res.json();
+    const channels = await channelSchema
+      .find({
+        users: req.body.user_id,
+      })
+      .populate({ path: 'users', select: ['id', 'username'] })
+      .populate({ path: 'owner', select: ['id', 'username'] })
+      .exec();
+    return res.json(channels);
   } catch (err) {
     return res.json();
   }
@@ -62,4 +68,5 @@ export default {
   removeChannel,
   getUsers,
   getChannelName,
+  getChannelsOverview,
 };

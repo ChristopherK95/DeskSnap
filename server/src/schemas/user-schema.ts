@@ -1,4 +1,4 @@
-import mongoose, { Schema, SchemaTypes } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 export const userSchema = new mongoose.Schema(
   {
@@ -11,7 +11,7 @@ export const userSchema = new mongoose.Schema(
       lowercase: true,
       validate: {
         validator: function (v: string) {
-          return /^[\w\-]{3,20}[^-_]$/.test(v);
+          return /^(?=^[^_-]+[-_]?[^_-]+$)[\w-]{3,20}$/.test(v);
         },
         message: 'Username is not valid',
       },
@@ -29,7 +29,7 @@ export const userSchema = new mongoose.Schema(
       },
     ],
   },
-  { collection: 'user' }
+  { collection: 'user' },
 );
 
 export default mongoose.model('user', userSchema);

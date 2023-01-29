@@ -29,6 +29,7 @@
         "no-trailing-spaces": "error",
         "no-console": "warn",
         "no-empty-function": "off",
+        "react/display-name": "off",
         "@typescript-eslint/no-empty-function": "off"
     }
 }

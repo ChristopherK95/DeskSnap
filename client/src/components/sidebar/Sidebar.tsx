@@ -24,7 +24,7 @@ const Sidebar = (props: { user: { id: string; name: string } }) => {
   >({
     route: 'user',
     action: 'getChannels',
-    key: 'sidebarChannels',
+    key: 'sidebar-channels',
     options: { refetchOnWindowFocus: false },
     payload: { user_id: user?.id },
   });

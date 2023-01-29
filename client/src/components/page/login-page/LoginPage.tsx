@@ -30,7 +30,6 @@ const LoginPage = (props: {
     });
 
     if (result.data.login) {
-      console.log(result.data);
       return props.setUser({
         id: result.data.user_id,
         name: result.data.username,

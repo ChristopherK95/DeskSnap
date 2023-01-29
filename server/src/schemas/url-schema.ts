@@ -15,7 +15,7 @@ export const urlSchema = new mongoose.Schema(
       required: true,
     },
     seen: {
-      type: Array<String>,
+      type: Array<string>,
       required: true,
     },
   },

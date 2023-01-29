@@ -8,6 +8,11 @@ export const channelSchema = new mongoose.Schema(
       maxLength: 20,
       required: true,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: 'user',
+    },
     users: [
       {
         type: Schema.Types.ObjectId,
@@ -16,7 +21,7 @@ export const channelSchema = new mongoose.Schema(
       },
     ],
   },
-  { collection: 'channel' }
+  { collection: 'channel' },
 );
 
 export default mongoose.model('channel', channelSchema);

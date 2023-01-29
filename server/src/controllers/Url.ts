@@ -33,7 +33,7 @@ const createUrl = async (req: Request, res: Response) => {
 
 const getUrlsNotSeen = async (req: Request, res: Response) => {
   const { channel_id, user_id } = req.body;
-  let regex = new RegExp(`${user_id}`);
+  const regex = new RegExp(`${user_id}`);
 
   const url = await urlSchema
     .find<{ file_name: string }>(

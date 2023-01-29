@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: ['http://localhost:1420', 'http://127.0.0.1:1420'],
-  })
+  }),
 );
 
 const credentials = `${__dirname}\\mongo-cert.pem`;

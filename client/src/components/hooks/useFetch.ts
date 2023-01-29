@@ -12,7 +12,8 @@ type Channel =
   | 'removeChannel'
   | 'getChannelName'
   | 'getChannels'
-  | 'getUsers';
+  | 'getUsers'
+  | 'getChannelsOverview';
 
 type Url =
   | 'createUrl'
@@ -62,7 +63,7 @@ export default <T extends Route, K>(params: Params<T, K>) =>
     params.options,
   );
 
-export const fetchOnce = async <T extends Route, K>(
+export const fetchOnce = async <T extends Route, K = never>(
   params: Omit<Params<T, K>, 'key' | 'options'>,
 ) =>
   axios.post<K>(

@@ -1,8 +1,8 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import userSchema from '../schemas/user-schema';
 import bcrypt from 'bcrypt';
 
-const createUser = async (req: Request, res: Response, next: NextFunction) => {
+const createUser = async (req: Request, res: Response) => {
   const { username, password } = req.body;
   const cryptedPassword = bcrypt.hashSync(password, 10);
 
@@ -25,7 +25,6 @@ const getUser = async (req: Request, res: Response) => {
   const { user_id } = req.body;
 
   const user = await userSchema.findById(user_id);
-  console.log(user);
   if (user) {
     return res.status(200).json({ user });
   } else {
@@ -48,7 +47,6 @@ const getChannels = async (req: Request, res: Response) => {
     .findById(user_id, { channels: 1, _id: 0 })
     .populate({ path: 'channels', select: 'channel_name' })
     .exec();
-  console.log(result?.channels);
   return res.json(result?.channels);
 };
 
@@ -111,7 +109,7 @@ const login = async (req: Request, res: Response) => {
 
 export const addChannelConnection = async (
   channel_id: string,
-  user_id: string
+  user_id: string,
 ) => {
   const response = await userSchema.findByIdAndUpdate(user_id, {
     $push: { channels: channel_id },

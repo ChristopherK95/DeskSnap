@@ -20,7 +20,7 @@ const HomePage = () => {
     <Container>
       <Sidebar user={user} />
       {activeChannel === 'home' ? (
-        <StartPage />
+        <StartPage userId={user.id} />
       ) : (
         <Content>
           <VideoPlayer />
