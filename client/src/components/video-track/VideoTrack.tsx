@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import {
+  Backdrop,
   Container,
   Mute,
   Progress,
@@ -82,6 +83,7 @@ const VideoTrack = (props: {
         onClick={mouseClick}
         onMouseMove={(e) => setMousePos(handleTooltip(e.clientX))}
       >
+        <Backdrop />
         <Progress
           id={'progress'}
           style={{ transform: `scaleX(${props.progress}%)` }}
@@ -93,12 +95,12 @@ const VideoTrack = (props: {
         style={{ left: `${props.progress}%` }}
         pressed={thumbDown}
       ></Thumb>
-      {/* <Tooltip
+      <Tooltip
         ref={tooltipRef}
         direction="up"
         value={formatTime(Math.round(props.currentTime))}
         style={mousePos}
-      /> */}
+      />
       <VolumeContainer>
         <Mute id="mute" onClick={muteButtonClick} />
         <Volume

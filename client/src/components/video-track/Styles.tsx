@@ -29,17 +29,28 @@ export const Container = styled.div`
 `;
 
 export const Track = styled.div`
-  background-color: #54545485;
+  position: relative;
+  padding: 10px 0;
   height: 5px;
-  padding: 5px 0;
   width: 100%;
   cursor: pointer;
   border-radius: 5px;
+  display: flex;
+  align-items: center;
   overflow: hidden;
   user-select: none;
   :hover ~ #tooltip {
     opacity: 1;
   }
+`;
+
+export const Backdrop = styled.div`
+  position: absolute;
+  height: 5px;
+  width: 100%;
+  left: 0;
+  background-color: #54545485;
+  border-radius: 5px;
 `;
 
 export const Progress = styled.div`

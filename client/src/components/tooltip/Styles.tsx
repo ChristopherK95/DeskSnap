@@ -17,7 +17,7 @@ const left = css`
 const up = css`
   position: absolute;
   transform: translateY(80%);
-  bottom: 110%;
+  bottom: 150%;
 `;
 
 const down = css`

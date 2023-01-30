@@ -7,6 +7,7 @@ import storageRoutes from './routes/Storage';
 import urlRoutes from './routes/Url';
 import channelRoutes from './routes/Channel';
 import cors from 'cors';
+import path from 'path';
 
 config();
 
@@ -20,7 +21,7 @@ app.use(
   }),
 );
 
-const credentials = `${__dirname}\\mongo-cert.pem`;
+const credentials = path.join(__dirname, 'mongo-cert.pem');
 /** Connect to MongoDB */
 try {
   mongoose.set('strictQuery', true);

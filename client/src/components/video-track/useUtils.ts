@@ -42,7 +42,7 @@ export const useUtils = (params: {
   const handleTooltip = (x?: number): CSSProperties => {
     if (!thumbDown && x) {
       return {
-        left: `${x - tooltipRef.clientWidth / 2}px`,
+        left: `${x - tooltipRef.clientWidth / 2 - 80}px`,
       };
     }
     if (thumbRef.offsetLeft <= 0 + tooltipRef.clientWidth / 2) {
