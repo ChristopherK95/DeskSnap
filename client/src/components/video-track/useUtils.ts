@@ -39,7 +39,12 @@ export const useUtils = (params: {
     return `${minutes}:${seconds > 9 ? seconds : 0 + '' + seconds}`;
   };
 
-  const handleTooltip = (): CSSProperties => {
+  const handleTooltip = (x?: number): CSSProperties => {
+    if (!thumbDown && x) {
+      return {
+        left: `${x - tooltipRef.clientWidth / 2}px`,
+      };
+    }
     if (thumbRef.offsetLeft <= 0 + tooltipRef.clientWidth / 2) {
       return { left: 0 };
     }
@@ -60,8 +65,8 @@ export const useUtils = (params: {
 
     const mouseOnTrack = match(e.target.id)
       .with('thumb', () => true)
-      .with('slider', () => true)
       .with('progress', () => true)
+      .with('track', () => true)
       .otherwise(() => false);
 
     if (mouseOnTrack) {

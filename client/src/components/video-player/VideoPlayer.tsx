@@ -12,6 +12,7 @@ const VideoPlayer = () => {
   const [currentTime, setCurrentTime] = useState<number>(0);
   const videoRef = useRef({} as HTMLVideoElement);
   const [videoSrc, setVideoSrc] = useState<string>();
+  const [volume, setVolume] = useState<number>(100);
 
   const togglePlay = () => {
     if (videoRef.current.paused) {
@@ -68,7 +69,9 @@ const VideoPlayer = () => {
     setVideoSrc(url);
   };
 
-  useEffect(() => videoRef.current.load(), [videoSrc]);
+  useEffect(() => {
+    videoRef.current.load();
+  }, [videoSrc]);
 
   return (
     <>
@@ -90,6 +93,7 @@ const VideoPlayer = () => {
           changeTime={rewind}
           paused={paused}
           tempPause={tempPause}
+          videoRef={videoRef.current}
         />
       </VideoContaier>
       <button onClick={() => loadFile()}>click</button>

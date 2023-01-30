@@ -1,46 +1,49 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  opacity: 0;
   position: absolute;
   bottom: 0px;
   width: calc(100% - 20px);
-  height: 5px;
-  cursor: pointer;
+  height: 50px;
   padding: 10px 0;
   transition: opacity 0.3s ease;
   user-select: none;
   display: flex;
-  align-items: center;
+  align-items: end;
 
   :active {
     opacity: 1;
   }
 
   :hover {
+    padding-bottom: 50px;
     #thumb {
       opacity: 1;
     }
 
-    #tooltip {
+    /* #tooltip {
       opacity: 1;
       transform: translate(0);
-    }
+    } */
   }
 `;
 
 export const Track = styled.div`
-  pointer-events: none;
   background-color: #54545485;
   height: 5px;
+  padding: 5px 0;
   width: 100%;
+  cursor: pointer;
   border-radius: 5px;
   overflow: hidden;
   user-select: none;
+  :hover ~ #tooltip {
+    opacity: 1;
+  }
 `;
 
 export const Progress = styled.div`
-  pointer-events: none;
+  /* pointer-events: none; */
   width: 100%;
   height: 5px;
   transform-origin: left;
@@ -69,4 +72,24 @@ export const Thumb = styled.div<{ pressed: boolean }>`
     opacity: 1;
     transform: translate(0);
   }
+`;
+
+export const VolumeContainer = styled.div`
+  position: absolute;
+  bottom: 20px;
+  display: flex;
+  gap: 10px;
+`;
+
+export const Volume = styled.input`
+  display: none;
+`;
+
+export const Mute = styled.div`
+  display: none;
+  background-color: white;
+  border-radius: 100%;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
 `;
