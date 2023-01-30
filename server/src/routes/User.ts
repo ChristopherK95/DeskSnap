@@ -4,9 +4,11 @@ import controller from '../controllers/User';
 const router = express.Router();
 
 router.post('/createUser', controller.createUser);
-router.get('/getUser/:userId', controller.readUser);
-router.get('/getUsers', controller.readAllUsers);
-router.patch('/updateUser', controller.updateUser);
-router.delete('/deleteUser/:userId', controller.deleteUser);
+router.post('/getUser', controller.getUser);
+router.get('/getUsers', controller.getUsers);
+router.post('/getChannels', controller.getChannels);
+router.post('/updateUser', controller.updateUser);
+router.delete('/deleteUser', controller.deleteUser);
+router.post('/login', controller.login);
 
 export = router;

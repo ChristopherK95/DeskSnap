@@ -22,25 +22,14 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "indent": [
-            "error",
-            2
-        ],
-        "linebreak-style": [
-            "error",
-            "windows"
-        ],
         "quotes": [
             "error",
             "single"
         ],
-        "semi": [
-            "error",
-            "always"
-        ],
         "no-trailing-spaces": "error",
         "no-console": "warn",
         "no-empty-function": "off",
+        "react/display-name": "off",
         "@typescript-eslint/no-empty-function": "off"
     }
 }

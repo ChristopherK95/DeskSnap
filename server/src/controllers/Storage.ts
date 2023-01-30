@@ -1,8 +1,8 @@
 import { format } from 'util';
 import { Request, Response, NextFunction } from 'express';
-import { Storage } from '@google-cloud/storage';
+import { Storage, GetSignedUrlConfig } from '@google-cloud/storage';
 import { config } from 'dotenv';
-import fs from 'fs';
+import { nanoid } from 'nanoid';
 
 config();
 
@@ -18,7 +18,18 @@ const uploadFile = (req: Request, res: Response, next: NextFunction) => {
     return;
   }
 
-  const blob = bucket.file(req.file.originalname);
+  const fileName =
+    req.body.userId +
+    new Date()
+      .toLocaleDateString('en-se', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      })
+      .replace(', ', '_')
+      .replaceAll(':', '-');
+
+  const blob = bucket.file(fileName);
   const blobStream = blob.createWriteStream();
 
   blobStream.on('error', (err) => next(err));
@@ -42,19 +53,19 @@ const deleteFile = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const downloadFile = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    //not sure where to put downloaded file, download params can set file dest i think
-    const file = await bucket.file(req.body.fileName).download();
+export const getSignedUrl = async (fileName: string) => {
+  const options: GetSignedUrlConfig = {
+    version: 'v4',
+    action: 'read',
+    expires: Date.now() + 1 * 60 * 1000,
+  };
 
-    res.status(200).json(file[0]);
+  try {
+    const url = await bucket.file(fileName).getSignedUrl(options);
+    return url;
   } catch (err) {
-    res.status(500).json({ err });
+    return err;
   }
 };
 
-export default { uploadFile, deleteFile, downloadFile };
+export default { uploadFile, deleteFile, getSignedUrl };

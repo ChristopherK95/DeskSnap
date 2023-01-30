@@ -1,15 +1,18 @@
 import VideoFile from '../../assets/test2.mp4';
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import StateIndicator from '../../state-indicator/StateIndicator';
 import { Video, VideoContaier } from './Styles';
 import { match } from 'ts-pattern';
 import VideoTrack from '../video-track/VideoTrack';
+import axios from 'axios';
 
 const VideoPlayer = () => {
   const [paused, setPaused] = useState<boolean>(true);
   const [duration, setDuration] = useState<number>(0);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const videoRef = useRef({} as HTMLVideoElement);
+  const [videoSrc, setVideoSrc] = useState<string>();
+  const [volume, setVolume] = useState<number>(100);
 
   const togglePlay = () => {
     if (videoRef.current.paused) {
@@ -20,11 +23,10 @@ const VideoPlayer = () => {
     setPaused(videoRef.current.paused);
   };
 
-  const togglePause = (b: boolean) => {
-    match(b)
-      .with(true, () => videoRef.current.pause())
-      .otherwise(() => videoRef.current.play());
-    setPaused(videoRef.current.paused);
+  const tempPause = (mouseDown: boolean) => {
+    if (mouseDown) {
+      videoRef.current.pause();
+    } else videoRef.current.play();
   };
 
   const rewind = (n: number) => {
@@ -57,25 +59,45 @@ const VideoPlayer = () => {
     return () => clearInterval(interval);
   }, [paused, duration]);
 
+  const loadFile = async () => {
+    const url: string = (
+      await axios.post('http://localhost:3000/storage/downloadFile', {
+        fileName: 'test.mp4',
+      })
+    ).data;
+
+    setVideoSrc(url);
+  };
+
+  useEffect(() => {
+    videoRef.current.load();
+  }, [videoSrc]);
+
   return (
-    <VideoContaier>
-      <Video
-        ref={videoRef}
-        onClick={togglePlay}
-        onCanPlay={(e) => setDuration(e.currentTarget.duration)}
-        loop
-      >
-        <source src={VideoFile} type="video/mp4" />
-      </Video>
-      {paused && <StateIndicator />}
-      <VideoTrack
-        progress={(currentTime / duration) * 100}
-        currentTime={currentTime}
-        max={duration}
-        changeTime={rewind}
-        togglePause={togglePause}
-      />
-    </VideoContaier>
+    <>
+      <VideoContaier>
+        <Video
+          ref={videoRef}
+          onClick={togglePlay}
+          onCanPlay={(e) => setDuration(e.currentTarget.duration)}
+          loop
+          src={VideoFile}
+        >
+          {/* {videoSrc && <source src={} type="video/mp4" />} */}
+        </Video>
+        {paused && <StateIndicator />}
+        <VideoTrack
+          progress={(currentTime / duration) * 100}
+          currentTime={currentTime}
+          max={duration}
+          changeTime={rewind}
+          paused={paused}
+          tempPause={tempPause}
+          videoRef={videoRef.current}
+        />
+      </VideoContaier>
+      <button onClick={() => loadFile()}>click</button>
+    </>
   );
 };
 

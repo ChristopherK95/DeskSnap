@@ -13,6 +13,5 @@ const router = express.Router();
 
 router.post('/uploadFile', multer.single('file'), storageController.uploadFile);
 router.delete('/deleteFile', storageController.deleteFile);
-router.post('/downloadFile', storageController.downloadFile);
 
 export = router;

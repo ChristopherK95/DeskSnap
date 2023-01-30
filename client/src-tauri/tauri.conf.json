@@ -57,8 +57,10 @@
         "fullscreen": false,
         "height": 600,
         "resizable": true,
-        "title": "test",
-        "width": 800
+        "width": 800,
+        "transparent": true,
+        "minHeight": 500,
+        "minWidth": 600
       }
     ]
   }
