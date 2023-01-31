@@ -1,17 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import {
-  Backdrop,
-  Container,
-  Mute,
-  Progress,
-  Thumb,
-  Track,
-  Volume,
-  VolumeContainer,
-} from './Styles';
+import { Backdrop, Container, Progress, Thumb, Track } from './Styles';
 import Tooltip from '../tooltip/Tooltip';
 import { useUtils } from './useUtils';
 import { CSSProperties } from 'styled-components';
+import Time from './Time';
+import VolumeControls from '../video-player/volume-controls/VolumeControls';
 
 const VideoTrack = (props: {
   progress: number;
@@ -31,7 +24,7 @@ const VideoTrack = (props: {
 
   const {
     formatTime,
-    handleTooltip,
+    // handleTooltip,
     mouseDown,
     mouseUp,
     mouseMove,
@@ -45,7 +38,7 @@ const VideoTrack = (props: {
     tempPause: props.tempPause,
     thumbRef: thumbRef.current,
     trackRef: trackRef.current,
-    tooltipRef: tooltipRef.current,
+    // tooltipRef: tooltipRef.current,
   });
 
   const changeVolume = (value: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,13 +47,14 @@ const VideoTrack = (props: {
   };
 
   const muteButtonClick = () => {
-    if (volume != 0) {
+    if (!props.videoRef.muted) {
       setPrevVolume(volume);
       setVolume(0);
-      props.videoRef.volume = 0;
+      // props.videoRef.volume = 0;
+      props.videoRef.muted = true;
     } else {
       setVolume(prevVolume);
-      props.videoRef.volume = prevVolume;
+      props.videoRef.muted = false;
     }
   };
 
@@ -77,11 +71,11 @@ const VideoTrack = (props: {
   }, [thumbDown, props.paused]);
 
   return (
-    <Container ref={trackRef} id={'slider'}>
+    <Container ref={trackRef} id={'slider'} paused={props.paused}>
       <Track
         id={'track'}
         onClick={mouseClick}
-        onMouseMove={(e) => setMousePos(handleTooltip(e.clientX))}
+        // onMouseMove={(e) => setMousePos(handleTooltip(e.clientX))}
       >
         <Backdrop />
         <Progress
@@ -95,24 +89,22 @@ const VideoTrack = (props: {
         style={{ left: `${props.progress}%` }}
         pressed={thumbDown}
       ></Thumb>
-      <Tooltip
+      {/* <Tooltip
         ref={tooltipRef}
         direction="up"
         value={formatTime(Math.round(props.currentTime))}
         style={mousePos}
+      /> */}
+      <VolumeControls
+        volume={volume}
+        muted={props.videoRef.muted}
+        muteButtonClick={muteButtonClick}
+        changeVolume={changeVolume}
       />
-      <VolumeContainer>
-        <Mute id="mute" onClick={muteButtonClick} />
-        <Volume
-          id="volume"
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value={volume}
-          onChange={(e) => changeVolume(e)}
-        />
-      </VolumeContainer>
+      <Time
+        timeElapsed={formatTime(Math.round(props.currentTime))}
+        duration={formatTime(Math.round(props.max))}
+      />
     </Container>
   );
 };

@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const Container = styled.div<{ paused: boolean }>`
   position: absolute;
   bottom: 0px;
   width: calc(100% - 20px);
   height: 50px;
-  padding: 10px 0;
+  padding: ${(p) => (p.paused ? '10px 0 50px 0' : '10px 0')};
   transition: opacity 0.3s ease;
   user-select: none;
   display: flex;
@@ -83,24 +83,4 @@ export const Thumb = styled.div<{ pressed: boolean }>`
     opacity: 1;
     transform: translate(0);
   }
-`;
-
-export const VolumeContainer = styled.div`
-  position: absolute;
-  bottom: 20px;
-  display: flex;
-  gap: 10px;
-`;
-
-export const Volume = styled.input`
-  display: none;
-`;
-
-export const Mute = styled.div`
-  display: none;
-  background-color: white;
-  border-radius: 100%;
-  width: 25px;
-  height: 25px;
-  cursor: pointer;
 `;

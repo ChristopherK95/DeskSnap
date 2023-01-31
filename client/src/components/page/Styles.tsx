@@ -9,5 +9,5 @@ export const Container = styled.div`
 
 export const Content = styled.div`
   background-color: #313236;
-  width: -webkit-fill-available;
+  width: 100%;
 `;

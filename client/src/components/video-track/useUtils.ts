@@ -8,18 +8,18 @@ export const useUtils = (params: {
   paused: boolean;
   thumbRef: HTMLDivElement;
   trackRef: HTMLDivElement;
-  tooltipRef: HTMLDivElement;
+  // tooltipRef: HTMLDivElement;
   changeTime: (value: number) => void;
   tempPause: (pause: boolean) => void;
 }) => {
   const {
     max,
-    progress,
+    // progress,
     paused,
     changeTime,
     thumbRef,
     trackRef,
-    tooltipRef,
+    // tooltipRef,
     tempPause,
   } = params;
   const [thumbDown, setThumbDown] = useState<boolean>(false);
@@ -39,26 +39,26 @@ export const useUtils = (params: {
     return `${minutes}:${seconds > 9 ? seconds : 0 + '' + seconds}`;
   };
 
-  const handleTooltip = (x?: number): CSSProperties => {
-    if (!thumbDown && x) {
-      return {
-        left: `${x - tooltipRef.clientWidth / 2 - 80}px`,
-      };
-    }
-    if (thumbRef.offsetLeft <= 0 + tooltipRef.clientWidth / 2) {
-      return { left: 0 };
-    }
-    if (
-      thumbRef.offsetLeft >=
-      trackRef.clientWidth - tooltipRef.clientWidth / 2
-    ) {
-      return { right: 0 };
-    }
+  // const handleTooltip = (x?: number): CSSProperties => {
+  //   if (!thumbDown && x) {
+  //     return {
+  //       left: `${x - tooltipRef.clientWidth / 2 - 80}px`,
+  //     };
+  //   }
+  //   if (thumbRef.offsetLeft <= 0 + tooltipRef.clientWidth / 2) {
+  //     return { left: 0 };
+  //   }
+  //   if (
+  //     thumbRef.offsetLeft >=
+  //     trackRef.clientWidth - tooltipRef.clientWidth / 2
+  //   ) {
+  //     return { right: 0 };
+  //   }
 
-    return {
-      left: `calc(${progress}% - ${tooltipRef.clientWidth / 2}px)`,
-    };
-  };
+  //   return {
+  //     left: `calc(${progress}% - ${tooltipRef.clientWidth / 2}px)`,
+  //   };
+  // };
 
   const mouseDown = (e: MouseEvent) => {
     if (!(e.target instanceof HTMLDivElement)) return;
@@ -103,7 +103,7 @@ export const useUtils = (params: {
 
   return {
     formatTime,
-    handleTooltip,
+    // handleTooltip,
     mouseDown,
     mouseUp,
     mouseMove,
