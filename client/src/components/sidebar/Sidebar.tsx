@@ -6,17 +6,24 @@ import { SidebarContext } from './SidebarContext';
 import Modal from '../modal/Modal';
 import AddChannelForm from './add-channel-form/AddChannelForm';
 import useFetch from '../hooks/useFetch';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 interface Channel {
   _id: string;
   channel_name: string;
 }
 
-const Sidebar = (props: { user: { id: string; name: string } }) => {
-  const { user } = props;
+const Sidebar = () => {
   const { activeChannel, setActiveChannel } = useContext(SidebarContext);
   const [showModal, setShowModal] = useState(false);
   const [channels, setChannels] = useState<Channel[]>([]);
+
+  const user = useSelector((state: RootState) => state.user);
+
+  if (!user.id) {
+    return <></>;
+  }
 
   const { data } = useFetch<'channel', { _id: string; channel_name: string }[]>(
     {

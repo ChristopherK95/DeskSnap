@@ -5,7 +5,7 @@ import { Button, Form, Title } from './Styles';
 import { useQueryClient } from 'react-query';
 
 const AddChannelForm = (props: {
-  user: { id: string; name: string };
+  user: { id: string; username: string };
   setActiveChannel: (id: string) => void;
   setShowModal: (b: boolean) => void;
 }) => {

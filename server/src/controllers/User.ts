@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import userSchema from '../schemas/user-schema';
+import sessionSchema from '../schemas/session-schema';
 import bcrypt from 'bcrypt';
 
 const createUser = async (req: Request, res: Response) => {
@@ -96,6 +97,13 @@ const login = async (req: Request, res: Response) => {
         .status(401)
         .json({ message: 'Invalid password', login: false });
     }
+    req.session.user = {
+      id: user.id,
+      username: user.username,
+      password: user.password,
+    };
+    req.session.isLoggedIn = true;
+    req.session.save();
     res.json({
       message: 'The username and password combination are correct!',
       login: true,
@@ -105,6 +113,21 @@ const login = async (req: Request, res: Response) => {
   } catch (err) {
     res.status(500).json(err);
   }
+};
+
+const checkSession = async (req: Request, res: Response) => {
+  if (req.session.isLoggedIn) {
+    console.log(req.session.isLoggedIn);
+    return res.json({
+      isLoggedIn: true,
+      user: { id: req.session.user?.id, username: req.session.user?.username },
+    });
+  }
+  console.log('not logged in');
+  return res.json({
+    isLoggedIn: false,
+    user: { id: undefined, username: undefined },
+  });
 };
 
 export const addChannelConnection = async (
@@ -125,4 +148,5 @@ export default {
   updateUser,
   deleteUser,
   login,
+  checkSession,
 };

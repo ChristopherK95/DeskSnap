@@ -3,6 +3,7 @@ declare global {
     interface ProcessEnv {
       DATABASE_URL: string;
       BUCKET_ID: string;
+      SECRET_SESSION: string;
     }
   }
 }
