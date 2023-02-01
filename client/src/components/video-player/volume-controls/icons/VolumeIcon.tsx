@@ -5,15 +5,29 @@ const Container = styled.div<{ volume: number; muted: boolean }>`
   height: 25px;
   display: flex;
   font-smoothing: antialiased;
+  cursor: pointer;
+  display: none;
+
+  :hover {
+    #volume {
+      fill: white;
+    }
+    #volume-low,
+    #volume-high,
+    #mute {
+      stroke: white;
+    }
+  }
 
   #volume {
-    fill: white;
+    fill: #bbbbbb;
+    transition: fill 0.3s ease;
   }
   #volume-high,
   #volume-low,
   #mute {
-    stroke: white;
-    transition: stroke-opacity 0.5s ease;
+    stroke: #bbbbbb;
+    transition: stroke-opacity 0.5s ease, stroke 0.3s ease;
   }
 
   ${(p) => {
@@ -70,6 +84,7 @@ const VolumeIcon = (props: {
 }) => {
   return (
     <Container
+      id="volume-icon"
       volume={props.volume}
       muted={props.muted}
       onClick={props.onClick}

@@ -14,7 +14,9 @@ export const VideoContaier = styled.div`
     #slider {
       padding: 10px 0 70px 0;
     }
-
+    #volume-icon {
+      display: flex;
+    }
     #volume {
       display: block;
     }
