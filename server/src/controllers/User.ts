@@ -78,7 +78,6 @@ const deleteUser = async (req: Request, res: Response) => {
       return res.json(response);
     } else return res.json({ message: 'User not found' });
   } catch (err) {
-    console.log('error');
     return res.json(err);
   }
 };
@@ -117,13 +116,11 @@ const login = async (req: Request, res: Response) => {
 
 const checkSession = async (req: Request, res: Response) => {
   if (req.session.isLoggedIn) {
-    console.log(req.session.isLoggedIn);
     return res.json({
       isLoggedIn: true,
       user: { id: req.session.user?.id, username: req.session.user?.username },
     });
   }
-  console.log('not logged in');
   return res.json({
     isLoggedIn: false,
     user: { id: undefined, username: undefined },

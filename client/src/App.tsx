@@ -21,7 +21,6 @@ function App() {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
 
-  console.log(user.isLoggedIn);
   const router = createBrowserRouter([
     {
       path: '/',
@@ -49,10 +48,8 @@ function App() {
           user: { id: string; username: string };
         }>('http://localhost:3000/user/isLoggedIn', { withCredentials: true })
       ).data;
-      console.log(a);
       dispatch(setUser({ ...a.user, isLoggedIn: a.isLoggedIn }));
     };
-    console.log(user.isLoggedIn);
     if (!user.isLoggedIn) {
       getSess();
     }
