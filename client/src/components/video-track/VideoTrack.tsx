@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Backdrop, Container, Progress, Thumb, Track } from './Styles';
-import Tooltip from '../tooltip/Tooltip';
+// import Tooltip from '../tooltip/Tooltip';
 import { useUtils } from './useUtils';
-import { CSSProperties } from 'styled-components';
 import Time from './Time';
 import VolumeControls from '../video-player/volume-controls/VolumeControls';
 
@@ -17,8 +16,7 @@ const VideoTrack = (props: {
 }) => {
   const trackRef = useRef({} as HTMLDivElement);
   const thumbRef = useRef({} as HTMLDivElement);
-  const tooltipRef = useRef({} as HTMLDivElement);
-  const [mousePos, setMousePos] = useState<CSSProperties>();
+  // const tooltipRef = useRef({} as HTMLDivElement);
   const [volume, setVolume] = useState<number>(1);
   const [prevVolume, setPrevVolume] = useState<number>(0);
 
@@ -38,7 +36,6 @@ const VideoTrack = (props: {
     tempPause: props.tempPause,
     thumbRef: thumbRef.current,
     trackRef: trackRef.current,
-    // tooltipRef: tooltipRef.current,
   });
 
   const changeVolume = (value: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,7 +47,6 @@ const VideoTrack = (props: {
     if (!props.videoRef.muted) {
       setPrevVolume(volume);
       setVolume(0);
-      // props.videoRef.volume = 0;
       props.videoRef.muted = true;
     } else {
       setVolume(prevVolume);

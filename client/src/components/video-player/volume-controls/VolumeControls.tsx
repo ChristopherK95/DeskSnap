@@ -1,6 +1,6 @@
 import React from 'react';
 import { Volume, VolumeContainer } from './Styles';
-import MuteButton from './MuteButton';
+import VolumeIcon from './icons/VolumeIcon';
 
 const VolumeControls = (props: {
   volume: number;
@@ -12,7 +12,7 @@ const VolumeControls = (props: {
 
   return (
     <VolumeContainer>
-      <MuteButton volume={volume} muted={muted} onClick={muteButtonClick} />
+      <VolumeIcon volume={volume} muted={muted} onClick={muteButtonClick} />
       <Volume
         id="volume"
         type="range"
