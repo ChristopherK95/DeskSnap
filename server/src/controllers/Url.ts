@@ -1,9 +1,5 @@
-import { format } from 'util';
-import { Request, Response, NextFunction } from 'express';
-import { Storage, GetSignedUrlConfig } from '@google-cloud/storage';
-import { config } from 'dotenv';
+import { Request, Response } from 'express';
 import urlSchema from '../schemas/url-schema';
-import { ObjectID } from 'bson';
 import { getSignedUrl } from './Storage';
 
 interface Url {
@@ -38,7 +34,7 @@ const getUrlsNotSeen = async (req: Request, res: Response) => {
   const url = await urlSchema
     .find<{ file_name: string }>(
       { channel_id, seen: { $not: regex } },
-      'file_name'
+      'file_name',
     )
     .sort('date')
     .exec();
@@ -66,7 +62,7 @@ const nextVideo = async (req: Request, res: Response) => {
     .findOneAndUpdate(
       { file_name: prevFile, channel_id },
       { $push: { seen: user_id } },
-      { returnOriginal: false }
+      { returnOriginal: false },
     )
     .exec();
   if (nextFile) {

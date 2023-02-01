@@ -1,17 +1,27 @@
 import { FormEvent, useState } from 'react';
 import { ButtonContainer, Form, Link } from './Styles';
+import { redirect, useNavigate } from 'react-router-dom';
 import Input from '../../input/Input';
 import { fetchOnce } from '../../hooks/useFetch';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser } from '../../../slice/userSlice';
+import { RootState } from '../../../store';
 // import { Input } from './Styles';
 
-const LoginPage = (props: {
-  setUser: (user: { id: string; name: string }) => void;
-}) => {
+const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [signUp, setSignUp] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loginError, setLoginError] = useState('');
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user);
+
+  if (user.isLoggedIn) {
+    navigate('/home');
+  }
 
   const login = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,13 +37,18 @@ const LoginPage = (props: {
       route: 'user',
       action: 'login',
       payload: { username, password },
+      withCredentials: true,
     });
 
     if (result.data.login) {
-      return props.setUser({
-        id: result.data.user_id,
-        name: result.data.username,
-      });
+      dispatch(
+        setUser({
+          id: result.data.user_id,
+          username: result.data.username,
+          isLoggedIn: true,
+        }),
+      );
+      return redirect('/home');
     }
     return setLoginError(result.data.message);
   };
@@ -60,6 +75,7 @@ const LoginPage = (props: {
       route: 'user',
       action: 'createUser',
       payload: { username, password },
+      withCredentials: true,
     });
     if (
       user.data.message != undefined &&
@@ -69,10 +85,17 @@ const LoginPage = (props: {
       return;
     }
     if (user.data.username != undefined) {
-      props.setUser({ id: user.data.id, name: user.data.username });
-      return;
+      dispatch(
+        setUser({
+          id: user.data.id,
+          username: user.data.username,
+          isLoggedIn: true,
+        }),
+      );
+      navigate('/home');
+    } else {
+      return setLoginError(user.data.message);
     }
-    return setLoginError(user.data.message);
   };
 
   const nameOnChange = (v: string) => {

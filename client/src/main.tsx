@@ -6,6 +6,8 @@ import axios from 'axios';
 import { createGlobalStyle } from 'styled-components';
 import RobotoMedium from './fonts/Roboto/Roboto-Medium.ttf';
 import RobotoBold from './fonts/Roboto/Roboto-Bold.ttf';
+import { Provider } from 'react-redux';
+import { store } from './store';
 
 const GlobalStyle = createGlobalStyle`
   @font-face {
@@ -41,6 +43,8 @@ axios.interceptors.response.use(
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <GlobalStyle />
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>,
 );

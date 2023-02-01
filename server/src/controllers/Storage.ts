@@ -36,7 +36,7 @@ const uploadFile = (req: Request, res: Response, next: NextFunction) => {
 
   blobStream.on('finish', () => {
     const publicUrl = format(
-      `https://storage.googleapis.com${bucket.name}/${blob.name}`
+      `https://storage.googleapis.com${bucket.name}/${blob.name}`,
     );
     res.status(200).send(publicUrl);
   });

@@ -81,3 +81,11 @@ export const AddChannel = styled.div`
     color: #ff8e38;
   }
 `;
+
+export const LogoutButton = styled.div`
+  position: absolute;
+  bottom: 10px;
+  justify-self: end;
+  width: 70px;
+  height: 70px;
+`;

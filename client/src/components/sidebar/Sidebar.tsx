@@ -1,22 +1,37 @@
 import { useContext, useEffect, useState } from 'react';
 import Tooltip from '../tooltip/Tooltip';
-import { AddChannel, Channel, Circle, Container, Home } from './Styles';
+import {
+  AddChannel,
+  Channel,
+  Circle,
+  Container,
+  Home,
+  LogoutButton,
+} from './Styles';
 import HomeLogo from '../../svgs/Home';
 import { SidebarContext } from './SidebarContext';
 import Modal from '../modal/Modal';
 import AddChannelForm from './add-channel-form/AddChannelForm';
 import useFetch from '../hooks/useFetch';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import Logout from './Logout/Logout';
 
 interface Channel {
   _id: string;
   channel_name: string;
 }
 
-const Sidebar = (props: { user: { id: string; name: string } }) => {
-  const { user } = props;
+const Sidebar = () => {
   const { activeChannel, setActiveChannel } = useContext(SidebarContext);
   const [showModal, setShowModal] = useState(false);
   const [channels, setChannels] = useState<Channel[]>([]);
+
+  const user = useSelector((state: RootState) => state.user);
+
+  if (!user.id) {
+    return <></>;
+  }
 
   const { data } = useFetch<'channel', { _id: string; channel_name: string }[]>(
     {
@@ -58,6 +73,9 @@ const Sidebar = (props: { user: { id: string; name: string } }) => {
       <Channel>
         <AddChannel onClick={() => setShowModal(true)}>+</AddChannel>
       </Channel>
+      <LogoutButton>
+        <Logout />
+      </LogoutButton>
       {showModal && (
         <Modal>
           <AddChannelForm
