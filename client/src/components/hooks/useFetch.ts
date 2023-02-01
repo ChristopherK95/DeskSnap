@@ -29,7 +29,8 @@ type User =
   | 'getChannels'
   | 'updateUser'
   | 'deleteUser'
-  | 'login';
+  | 'login'
+  | 'logout';
 
 type Action<T extends Route> = T extends 'storage'
   ? Storage

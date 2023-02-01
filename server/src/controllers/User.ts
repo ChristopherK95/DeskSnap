@@ -114,6 +114,13 @@ const login = async (req: Request, res: Response) => {
   }
 };
 
+const logout = async (req: Request, res: Response) => {
+  req.session.destroy((err) => {
+    if (err) return res.json('No active session');
+    return res.json(`User logged out`);
+  });
+};
+
 const checkSession = async (req: Request, res: Response) => {
   if (req.session.isLoggedIn) {
     return res.json({
@@ -145,5 +152,6 @@ export default {
   updateUser,
   deleteUser,
   login,
+  logout,
   checkSession,
 };
