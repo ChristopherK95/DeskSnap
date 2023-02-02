@@ -74,6 +74,22 @@ const getChannelName = async (req: Request, res: Response) => {
   } else return res.status(404).json({ message: 'Channel not found' });
 };
 
+const addUser = async (req: Request, res: Response) => {
+  const { user_id, channel_id } = req.body;
+  const response = await channelSchema.findByIdAndUpdate(channel_id, {
+    $push: { users: user_id },
+  });
+  return res.json(response);
+};
+
+const removeUser = async (req: Request, res: Response) => {
+  const { user_id, channel_id } = req.body;
+  const response = await channelSchema.findByIdAndUpdate(channel_id, {
+    $pull: { users: user_id },
+  });
+  return res.json(response);
+};
+
 export default {
   createChannel,
   removeChannel,
@@ -81,4 +97,6 @@ export default {
   getUsers,
   getChannelName,
   getChannelsOverview,
+  addUser,
+  removeUser,
 };

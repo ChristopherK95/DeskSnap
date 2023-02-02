@@ -9,5 +9,7 @@ router.post('/getChannelName', channelController.getChannelName);
 router.post('/getChannels', channelController.getChannelsByUserId);
 router.post('/getUsers', channelController.getUsers);
 router.post('/getChannelsOverview', channelController.getChannelsOverview);
+router.post('/addUser', channelController.addUser);
+router.post('/removeUser', channelController.removeUser);
 
 export = router;
