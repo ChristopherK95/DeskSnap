@@ -36,7 +36,7 @@ const getChannelsByUserId = async (req: Request, res: Response) => {
       .exec();
     return res.json(channels);
   } catch (err) {
-    return res.json(err);
+    return res.json([]);
   }
 };
 

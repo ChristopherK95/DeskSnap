@@ -9,6 +9,7 @@ import channelRoutes from './routes/Channel';
 import cors from 'cors';
 import session from 'express-session';
 import MongoDBSession from 'connect-mongodb-session';
+import cookieParser from 'cookie-parser';
 
 type User = {
   id: Schema.Types.ObjectId;
@@ -55,7 +56,7 @@ app.use(
   session({
     cookie: {
       httpOnly: false,
-      secure: true,
+      // secure: true,
       sameSite: 'none',
     },
     secret: process.env.SECRET_SESSION,
@@ -64,6 +65,8 @@ app.use(
     store: store,
   }),
 );
+
+app.use(cookieParser());
 
 /** Connect to MongoDB */
 try {

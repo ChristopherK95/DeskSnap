@@ -117,6 +117,7 @@ const login = async (req: Request, res: Response) => {
 const logout = async (req: Request, res: Response) => {
   req.session.destroy((err) => {
     if (err) return res.json('No active session');
+    res.clearCookie('connect.sid');
     return res.json(`User logged out`);
   });
 };
