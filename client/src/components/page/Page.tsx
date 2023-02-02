@@ -12,6 +12,10 @@ const HomePage = () => {
   const { activeChannel } = useContext(SidebarContext);
   const user = useSelector((state: RootState) => state.user);
 
+  if (!user.id) {
+    return <></>;
+  }
+
   return (
     <Container>
       <Sidebar />

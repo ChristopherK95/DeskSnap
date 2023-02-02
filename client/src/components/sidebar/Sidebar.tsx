@@ -16,6 +16,7 @@ import useFetch from '../hooks/useFetch';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import Logout from './Logout/Logout';
+import useUtil from './useUtil';
 
 interface Channel {
   _id: string;
@@ -26,12 +27,12 @@ const Sidebar = () => {
   const { activeChannel, setActiveChannel } = useContext(SidebarContext);
   const [showModal, setShowModal] = useState(false);
   const [channels, setChannels] = useState<Channel[]>([]);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [channelName, setChannelName] = useState('');
 
   const user = useSelector((state: RootState) => state.user);
 
-  if (!user.id) {
-    return <></>;
-  }
+  const { addChannel } = useUtil({ channelName, user, setErrorMessage });
 
   const { data } = useFetch<'channel', { _id: string; channel_name: string }[]>(
     {
@@ -49,6 +50,9 @@ const Sidebar = () => {
     }
   }, [data]);
 
+  if (!user.id) {
+    return <></>;
+  }
   return (
     <Container>
       <Channel>
@@ -77,11 +81,23 @@ const Sidebar = () => {
         <Logout />
       </LogoutButton>
       {showModal && (
-        <Modal>
+        <Modal
+          onClose={() => {
+            setShowModal(false);
+            setChannelName('');
+          }}
+          onConfirm={() => {
+            addChannel();
+            setChannelName('');
+          }}
+          showModal={showModal}
+        >
           <AddChannelForm
             user={user}
+            channelName={channelName}
+            errorMessage={errorMessage}
             setActiveChannel={(id: string) => setActiveChannel(id)}
-            setShowModal={(b: boolean) => setShowModal(b)}
+            setChannelName={setChannelName}
           />
         </Modal>
       )}
