@@ -17,6 +17,7 @@ const Sidebar = (props: { user: { id: string; name: string } }) => {
   const { activeChannel, setActiveChannel } = useContext(SidebarContext);
   const [showModal, setShowModal] = useState(false);
   const [channels, setChannels] = useState<Channel[]>([]);
+  const [showTooltip, setShowTooltip] = useState<boolean>(false);
 
   const { data } = useFetch<'channel', { _id: string; channel_name: string }[]>(
     {
@@ -48,10 +49,16 @@ const Sidebar = (props: { user: { id: string; name: string } }) => {
         <Channel key={i}>
           <Circle
             selected={activeChannel === c._id}
+            onMouseEnter={() => setShowTooltip(true)}
+            onMouseLeave={() => setShowTooltip(false)}
             onClick={() => setActiveChannel(c._id)}
           >
             {c.channel_name[0]}
-            <Tooltip direction="right" value={c.channel_name} />
+            <Tooltip
+              direction="right"
+              visible={showTooltip}
+              value={c.channel_name}
+            />
           </Circle>
         </Channel>
       ))}

@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
-export const Container = styled.div<{ paused: boolean }>`
+export const Container = styled.div<{ pressed: boolean }>`
   position: absolute;
   bottom: 0px;
   width: calc(100% - 20px);
-  height: 50px;
-  padding: ${(p) => (p.paused ? '10px 0 50px 0' : '10px 0')};
+  height: 0px;
+  padding: 10px 0 0 0;
   transition: opacity 0.3s ease;
   user-select: none;
   display: flex;
@@ -26,6 +26,8 @@ export const Container = styled.div<{ paused: boolean }>`
       transform: translate(0);
     } */
   }
+
+  ${(p) => p.pressed && 'padding-bottom: 50px;'}
 `;
 
 export const Track = styled.div`
@@ -34,7 +36,6 @@ export const Track = styled.div`
   height: 5px;
   width: 100%;
   cursor: pointer;
-  border-radius: 5px;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -50,7 +51,7 @@ export const Backdrop = styled.div`
   width: 100%;
   left: 0;
   background-color: #54545485;
-  border-radius: 5px;
+  user-select: none;
 `;
 
 export const Progress = styled.div`
@@ -65,17 +66,20 @@ export const Progress = styled.div`
 
 export const Thumb = styled.div<{ pressed: boolean }>`
   position: absolute;
-  width: ${(p) => (p.pressed ? '15px' : '10px')};
-  height: ${(p) => (p.pressed ? '15px' : '10px')};
+  width: 10px;
+  height: 10px;
   left: 0;
+  top: -4px;
   background-color: white;
   user-select: none;
   border-radius: 100%;
-  transform: translateX(-50%);
+  transform: ${(p) =>
+    p.pressed ? 'translateX(-50%) scale(150%)' : 'translateX(-50%)'};
   opacity: ${(p) => (p.pressed ? 1 : 0)};
   transition: opacity 0.3s ease, height 0.3s ease, width 0.3s ease;
   display: flex;
   justify-content: center;
+  cursor: pointer;
 
   ${(p) => p.pressed && '& ~ #tooltip { opacity: 1; }'}
 

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Volume, VolumeContainer } from './Styles';
 import VolumeIcon from './icons/VolumeIcon';
+import Tooltip from '../../tooltip/Tooltip';
 
 const VolumeControls = (props: {
   volume: number;
@@ -9,6 +10,7 @@ const VolumeControls = (props: {
   changeVolume: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   const { volume, muted, muteButtonClick, changeVolume } = props;
+  const [showTooltip, setShowTooltip] = useState<boolean>(false);
 
   return (
     <VolumeContainer>
@@ -21,6 +23,14 @@ const VolumeControls = (props: {
         step="0.01"
         value={volume}
         onChange={(e) => changeVolume(e)}
+        onMouseDown={() => setShowTooltip(true)}
+        onMouseUp={() => setShowTooltip(false)}
+      />
+      <Tooltip
+        value={String(`${Math.round(volume * 100)}%`)}
+        visible={showTooltip}
+        direction="right"
+        transparent
       />
     </VolumeContainer>
   );

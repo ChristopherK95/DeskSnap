@@ -67,13 +67,13 @@ const VideoTrack = (props: {
   }, [thumbDown, props.paused]);
 
   return (
-    <Container ref={trackRef} id={'slider'} paused={props.paused}>
+    <Container ref={trackRef} id={'slider'} pressed={thumbDown}>
       <Track
         id={'track'}
         onClick={mouseClick}
         // onMouseMove={(e) => setMousePos(handleTooltip(e.clientX))}
       >
-        <Backdrop />
+        <Backdrop id={'backdrop'} />
         <Progress
           id={'progress'}
           style={{ transform: `scaleX(${props.progress}%)` }}

@@ -67,6 +67,7 @@ export const useUtils = (params: {
       .with('thumb', () => true)
       .with('progress', () => true)
       .with('track', () => true)
+      .with('backdrop', () => true)
       .otherwise(() => false);
 
     if (mouseOnTrack) {

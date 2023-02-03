@@ -39,11 +39,11 @@ export const Circle = styled.div<{ selected: boolean }>`
   :hover {
     background-color: #4e4d4d;
 
-    div:last-child {
+    /* div:last-child {
       opacity: 1;
       transform: translateX(0);
       transition: opacity 0.3s ease, transform 0.3s ease;
-    }
+    } */
   }
 `;
 
