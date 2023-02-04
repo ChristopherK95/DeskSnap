@@ -99,6 +99,7 @@ export const useUtils = (params: {
   };
 
   const mouseClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    console.log(e.clientX);
     updateTime(e.clientX);
   };
 

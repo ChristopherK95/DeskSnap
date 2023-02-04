@@ -2,8 +2,8 @@ import styled from 'styled-components';
 
 export const VolumeContainer = styled.div`
   position: absolute;
-  top: 30px;
-  left: 10px;
+  top: 15px;
+  left: 0px;
   display: flex;
   gap: 10px;
 `;

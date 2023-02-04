@@ -16,7 +16,6 @@ const VideoTrack = (props: {
 }) => {
   const trackRef = useRef({} as HTMLDivElement);
   const thumbRef = useRef({} as HTMLDivElement);
-  // const tooltipRef = useRef({} as HTMLDivElement);
   const [volume, setVolume] = useState<number>(1);
   const [prevVolume, setPrevVolume] = useState<number>(0);
 
@@ -64,15 +63,11 @@ const VideoTrack = (props: {
       removeEventListener('mouseup', mouseUp);
       removeEventListener('mousedown', mouseDown);
     };
-  }, [thumbDown, props.paused]);
+  }, [thumbDown, props.paused, thumbRef.current]);
 
   return (
     <Container ref={trackRef} id={'slider'} pressed={thumbDown}>
-      <Track
-        id={'track'}
-        onClick={mouseClick}
-        // onMouseMove={(e) => setMousePos(handleTooltip(e.clientX))}
-      >
+      <Track id={'track'} onClick={mouseClick}>
         <Backdrop id={'backdrop'} />
         <Progress
           id={'progress'}
@@ -85,12 +80,6 @@ const VideoTrack = (props: {
         style={{ left: `${props.progress}%` }}
         pressed={thumbDown}
       ></Thumb>
-      {/* <Tooltip
-        ref={tooltipRef}
-        direction="up"
-        value={formatTime(Math.round(props.currentTime))}
-        style={mousePos}
-      /> */}
       <VolumeControls
         volume={volume}
         muted={props.videoRef.muted}

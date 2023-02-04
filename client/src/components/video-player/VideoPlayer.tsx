@@ -30,8 +30,10 @@ const VideoPlayer = () => {
   };
 
   const rewind = (n: number) => {
-    setCurrentTime(n);
-    videoRef.current.currentTime = n;
+    if (!isNaN(n)) {
+      setCurrentTime(n);
+      videoRef.current.currentTime = n;
+    }
   };
 
   useLayoutEffect(() => {
