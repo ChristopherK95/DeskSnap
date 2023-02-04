@@ -1,8 +1,7 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { Container, Content } from './Styles';
 import VideoPlayer from '../video-player/VideoPlayer';
 import Sidebar from '../sidebar/Sidebar';
-import useFetch from '../hooks/useFetch';
 import LoginPage from './login-page/LoginPage';
 import { SidebarContext } from '../sidebar/SidebarContext';
 import StartPage from './start-page/StartPage';

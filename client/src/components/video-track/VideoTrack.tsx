@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { Backdrop, Container, Progress, Thumb, Track } from './Styles';
-// import Tooltip from '../tooltip/Tooltip';
 import { useUtils } from './useUtils';
 import Time from './Time';
 import VolumeControls from '../video-player/volume-controls/VolumeControls';
@@ -19,23 +18,16 @@ const VideoTrack = (props: {
   const [volume, setVolume] = useState<number>(1);
   const [prevVolume, setPrevVolume] = useState<number>(0);
 
-  const {
-    formatTime,
-    // handleTooltip,
-    mouseDown,
-    mouseUp,
-    mouseMove,
-    mouseClick,
-    thumbDown,
-  } = useUtils({
-    max: props.max,
-    progress: props.progress,
-    paused: props.paused,
-    changeTime: props.changeTime,
-    tempPause: props.tempPause,
-    thumbRef: thumbRef.current,
-    trackRef: trackRef.current,
-  });
+  const { formatTime, mouseDown, mouseUp, mouseMove, mouseClick, thumbDown } =
+    useUtils({
+      max: props.max,
+      progress: props.progress,
+      paused: props.paused,
+      changeTime: props.changeTime,
+      tempPause: props.tempPause,
+      thumbRef: thumbRef.current,
+      trackRef: trackRef.current,
+    });
 
   const changeVolume = (value: React.ChangeEvent<HTMLInputElement>) => {
     setVolume(+value.target.value);
@@ -77,12 +69,17 @@ const VideoTrack = (props: {
       <Thumb
         ref={thumbRef}
         id={'thumb'}
-        style={{ left: `${props.progress}%` }}
+        style={{
+          transform: `translateX(${
+            (props.progress / 100) * trackRef.current.clientWidth
+          }px)`,
+        }}
         pressed={thumbDown}
       ></Thumb>
       <VolumeControls
         volume={volume}
         muted={props.videoRef.muted}
+        pressed={thumbDown}
         muteButtonClick={muteButtonClick}
         changeVolume={changeVolume}
       />

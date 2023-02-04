@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import useColor from '../../reusable/hooks/useColor';
 
 export const Container = styled.div<{ pressed: boolean }>`
   position: absolute;
@@ -32,7 +33,6 @@ export const Track = styled.div`
   cursor: pointer;
   display: flex;
   align-items: center;
-  /* overflow: hidden; */
   user-select: none;
   :hover ~ #tooltip {
     opacity: 1;
@@ -53,7 +53,7 @@ export const Progress = styled.div`
   width: 100%;
   height: 5px;
   transform-origin: left;
-  background-color: rgb(233, 14, 89);
+  background-color: ${() => useColor('orange')};
   user-select: none;
 `;
 
@@ -62,8 +62,8 @@ export const Thumb = styled.div<{ pressed: boolean }>`
   width: 10px;
   height: 10px;
   left: 0;
-  top: -4px;
-  background-color: white;
+  top: -5px;
+  background-color: ${() => useColor('white')};
   user-select: none;
   border-radius: 100%;
   transform: ${(p) =>

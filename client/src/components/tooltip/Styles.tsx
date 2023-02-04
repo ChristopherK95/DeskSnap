@@ -1,10 +1,10 @@
 import styled, { css } from 'styled-components';
 import { Direction } from './Tooltip';
 import { match } from 'ts-pattern';
+import useColor from '../../reusable/hooks/useColor';
 
 const right = css`
   position: absolute;
-  /* transform: translateX(100%); */
   left: 120%;
 `;
 
@@ -48,7 +48,7 @@ export const StyledTooltip = styled.div<{
     }
 
     return {
-      backgroundColor: '#252424',
+      backgroundColor: useColor('black'),
       padding: '5px 10px',
     };
   }}
@@ -71,7 +71,7 @@ export const StyledTooltip = styled.div<{
   justify-content: center;
   align-items: center;
   text-align: center;
-  color: white;
+  color: ${() => useColor('white')};
   font-family: 'RobotoMedium';
   font-size: 16px;
   position: absolute;

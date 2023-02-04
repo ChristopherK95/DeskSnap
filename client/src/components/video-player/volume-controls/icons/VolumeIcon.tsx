@@ -1,12 +1,16 @@
 import styled from 'styled-components';
 
-const Container = styled.div<{ volume: number; muted: boolean }>`
+const Container = styled.div<{
+  volume: number;
+  muted: boolean;
+  pressed: boolean;
+}>`
   width: 25px;
   height: 25px;
   display: flex;
   font-smoothing: antialiased;
   cursor: pointer;
-  display: none;
+  display: ${(p) => (p.pressed ? 'block' : 'none')};
 
   :hover {
     #volume {
@@ -80,6 +84,7 @@ const Container = styled.div<{ volume: number; muted: boolean }>`
 const VolumeIcon = (props: {
   volume: number;
   muted: boolean;
+  pressed: boolean;
   onClick: () => void;
 }) => {
   return (
@@ -87,6 +92,7 @@ const VolumeIcon = (props: {
       id="volume-icon"
       volume={props.volume}
       muted={props.muted}
+      pressed={props.pressed}
       onClick={props.onClick}
     >
       <svg

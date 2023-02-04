@@ -6,17 +6,22 @@ import Tooltip from '../../tooltip/Tooltip';
 const VolumeControls = (props: {
   volume: number;
   muted: boolean;
+  pressed: boolean;
   muteButtonClick: () => void;
   changeVolume: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
-  const { volume, muted, muteButtonClick, changeVolume } = props;
+  const { volume, muted, pressed, muteButtonClick, changeVolume } = props;
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
 
   return (
-    <VolumeContainer>
-      <VolumeIcon volume={volume} muted={muted} onClick={muteButtonClick} />
+    <VolumeContainer id="volume" pressed={pressed}>
+      <VolumeIcon
+        volume={volume}
+        muted={muted}
+        pressed={pressed}
+        onClick={muteButtonClick}
+      />
       <Volume
-        id="volume"
         type="range"
         min="0"
         max="1"

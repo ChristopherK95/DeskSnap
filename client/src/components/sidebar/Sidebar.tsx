@@ -1,13 +1,13 @@
 import { useContext, useEffect, useState } from 'react';
-import Tooltip from '../tooltip/Tooltip';
-import { AddChannel, Channel, Circle, Container, Home } from './Styles';
+import { AddChannel, StyledChannel, Container, Home } from './Styles';
 import HomeLogo from '../../svgs/Home';
 import { SidebarContext } from './SidebarContext';
 import Modal from '../modal/Modal';
 import AddChannelForm from './add-channel-form/AddChannelForm';
 import useFetch from '../hooks/useFetch';
+import Channel from './channel/Channel';
 
-interface Channel {
+interface ChannelType {
   _id: string;
   channel_name: string;
 }
@@ -16,8 +16,7 @@ const Sidebar = (props: { user: { id: string; name: string } }) => {
   const { user } = props;
   const { activeChannel, setActiveChannel } = useContext(SidebarContext);
   const [showModal, setShowModal] = useState(false);
-  const [channels, setChannels] = useState<Channel[]>([]);
-  const [showTooltip, setShowTooltip] = useState<boolean>(false);
+  const [channels, setChannels] = useState<ChannelType[]>([]);
 
   const { data } = useFetch<'channel', { _id: string; channel_name: string }[]>(
     {
@@ -37,34 +36,20 @@ const Sidebar = (props: { user: { id: string; name: string } }) => {
 
   return (
     <Container>
-      <Channel>
+      <StyledChannel selected={activeChannel === 'home'}>
         <Home
           selected={activeChannel === 'home'}
           onClick={() => setActiveChannel('home')}
         >
           <HomeLogo />
         </Home>
-      </Channel>
+      </StyledChannel>
       {channels.map((c, i) => (
-        <Channel key={i}>
-          <Circle
-            selected={activeChannel === c._id}
-            onMouseEnter={() => setShowTooltip(true)}
-            onMouseLeave={() => setShowTooltip(false)}
-            onClick={() => setActiveChannel(c._id)}
-          >
-            {c.channel_name[0]}
-            <Tooltip
-              direction="right"
-              visible={showTooltip}
-              value={c.channel_name}
-            />
-          </Circle>
-        </Channel>
+        <Channel key={i} idx={i} channel={c} />
       ))}
-      <Channel>
+      <StyledChannel>
         <AddChannel onClick={() => setShowModal(true)}>+</AddChannel>
-      </Channel>
+      </StyledChannel>
       {showModal && (
         <Modal>
           <AddChannelForm

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { CSSProperties } from 'styled-components';
 import { match } from 'ts-pattern';
 
 export const useUtils = (params: {
@@ -8,20 +7,10 @@ export const useUtils = (params: {
   paused: boolean;
   thumbRef: HTMLDivElement;
   trackRef: HTMLDivElement;
-  // tooltipRef: HTMLDivElement;
   changeTime: (value: number) => void;
   tempPause: (pause: boolean) => void;
 }) => {
-  const {
-    max,
-    // progress,
-    paused,
-    changeTime,
-    thumbRef,
-    trackRef,
-    // tooltipRef,
-    tempPause,
-  } = params;
+  const { max, paused, changeTime, thumbRef, trackRef, tempPause } = params;
   const [thumbDown, setThumbDown] = useState<boolean>(false);
   const [tempPaused, setTempPaused] = useState<boolean>(false);
 
@@ -94,12 +83,12 @@ export const useUtils = (params: {
 
   const mouseMove = (e: MouseEvent) => {
     if (thumbDown) {
+      // params.setThumbPos(e.clientX - 80);
       updateTime(e.clientX);
     }
   };
 
   const mouseClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    console.log(e.clientX);
     updateTime(e.clientX);
   };
 

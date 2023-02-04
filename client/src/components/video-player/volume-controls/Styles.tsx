@@ -1,15 +1,14 @@
 import styled from 'styled-components';
 
-export const VolumeContainer = styled.div`
+export const VolumeContainer = styled.div<{ pressed: boolean }>`
   position: absolute;
   top: 15px;
   left: 0px;
-  display: flex;
+  display: ${(p) => (p.pressed ? 'flex' : 'none')};
   gap: 10px;
 `;
 
 export const Volume = styled.input<{ value: number }>`
-  display: none;
   width: 80px;
   background-color: transparent;
   ::-moz-range-track {

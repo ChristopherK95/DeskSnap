@@ -4,7 +4,6 @@ import StateIndicator from '../../state-indicator/StateIndicator';
 import { Video, VideoContaier } from './Styles';
 import { match } from 'ts-pattern';
 import VideoTrack from '../video-track/VideoTrack';
-import axios from 'axios';
 
 const VideoPlayer = () => {
   const [paused, setPaused] = useState<boolean>(true);
@@ -12,7 +11,6 @@ const VideoPlayer = () => {
   const [currentTime, setCurrentTime] = useState<number>(0);
   const videoRef = useRef({} as HTMLVideoElement);
   const [videoSrc, setVideoSrc] = useState<string>();
-  const [volume, setVolume] = useState<number>(100);
 
   const togglePlay = () => {
     if (videoRef.current.paused) {
@@ -35,6 +33,16 @@ const VideoPlayer = () => {
       videoRef.current.currentTime = n;
     }
   };
+
+  // const loadFile = async () => {
+  //   const url: string = (
+  //     await axios.post('http://localhost:3000/storage/downloadFile', {
+  //       fileName: 'test.mp4',
+  //     })
+  //   ).data;
+
+  //   setVideoSrc(url);
+  // };
 
   useLayoutEffect(() => {
     const onKeyUp = (e: KeyboardEvent) => {
@@ -61,16 +69,6 @@ const VideoPlayer = () => {
     return () => clearInterval(interval);
   }, [paused, duration]);
 
-  const loadFile = async () => {
-    const url: string = (
-      await axios.post('http://localhost:3000/storage/downloadFile', {
-        fileName: 'test.mp4',
-      })
-    ).data;
-
-    setVideoSrc(url);
-  };
-
   useEffect(() => {
     videoRef.current.load();
   }, [videoSrc]);
@@ -82,6 +80,8 @@ const VideoPlayer = () => {
           ref={videoRef}
           onClick={togglePlay}
           onCanPlay={(e) => setDuration(e.currentTarget.duration)}
+          onPlay={() => setPaused(false)}
+          onPause={() => setPaused(true)}
           loop
           src={VideoFile}
         >
@@ -98,7 +98,6 @@ const VideoPlayer = () => {
           videoRef={videoRef.current}
         />
       </VideoContaier>
-      <button onClick={() => loadFile()}>click</button>
     </>
   );
 };

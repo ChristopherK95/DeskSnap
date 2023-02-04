@@ -18,7 +18,7 @@ export const VideoContaier = styled.div`
       display: flex;
     }
     #volume {
-      display: block;
+      display: flex;
     }
     #mute {
       display: block;
