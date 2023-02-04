@@ -64,3 +64,11 @@ export const AddChannel = styled.div`
     color: ${() => useColor('lightOrange')};
   }
 `;
+
+export const LogoutButton = styled.div`
+  position: absolute;
+  bottom: 10px;
+  justify-self: end;
+  width: 70px;
+  height: 70px;
+`;

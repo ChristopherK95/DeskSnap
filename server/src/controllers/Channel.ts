@@ -30,16 +30,20 @@ const removeChannel = async (req: Request, res: Response) => {
 };
 
 const getChannelsByUserId = async (req: Request, res: Response) => {
-  const channels = await channelSchema
-    .find({ users: req.body.user_id }, 'id channel_name')
-    .exec();
-  return res.json(channels);
+  try {
+    const channels = await channelSchema
+      .find({ users: req.body.user_id }, 'id channel_name')
+      .exec();
+    return res.json(channels);
+  } catch (err) {
+    return res.json([]);
+  }
 };
 
 const getUsers = async (req: Request, res: Response) => {
   const { channel_id } = req.body;
   const users = await channelSchema.findById(channel_id, 'users').exec();
-  return users;
+  return res.json(users);
 };
 
 const getChannelsOverview = async (req: Request, res: Response) => {

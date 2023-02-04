@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import userSchema from '../schemas/user-schema';
+import sessionSchema from '../schemas/session-schema';
 import bcrypt from 'bcrypt';
 
 const createUser = async (req: Request, res: Response) => {
@@ -77,7 +78,6 @@ const deleteUser = async (req: Request, res: Response) => {
       return res.json(response);
     } else return res.json({ message: 'User not found' });
   } catch (err) {
-    console.log('error');
     return res.json(err);
   }
 };
@@ -96,6 +96,13 @@ const login = async (req: Request, res: Response) => {
         .status(401)
         .json({ message: 'Invalid password', login: false });
     }
+    req.session.user = {
+      id: user.id,
+      username: user.username,
+      password: user.password,
+    };
+    req.session.isLoggedIn = true;
+    req.session.save();
     res.json({
       message: 'The username and password combination are correct!',
       login: true,
@@ -105,6 +112,27 @@ const login = async (req: Request, res: Response) => {
   } catch (err) {
     res.status(500).json(err);
   }
+};
+
+const logout = async (req: Request, res: Response) => {
+  req.session.destroy((err) => {
+    if (err) return res.json('No active session');
+    res.clearCookie('connect.sid');
+    return res.json(`User logged out`);
+  });
+};
+
+const checkSession = async (req: Request, res: Response) => {
+  if (req.session.isLoggedIn) {
+    return res.json({
+      isLoggedIn: true,
+      user: { id: req.session.user?.id, username: req.session.user?.username },
+    });
+  }
+  return res.json({
+    isLoggedIn: false,
+    user: { id: undefined, username: undefined },
+  });
 };
 
 export const addChannelConnection = async (
@@ -125,4 +153,6 @@ export default {
   updateUser,
   deleteUser,
   login,
+  logout,
+  checkSession,
 };

@@ -10,5 +10,7 @@ router.post('/getChannels', controller.getChannels);
 router.post('/updateUser', controller.updateUser);
 router.delete('/deleteUser', controller.deleteUser);
 router.post('/login', controller.login);
+router.post('/logout', controller.logout);
+router.get('/isLoggedIn', controller.checkSession);
 
 export = router;

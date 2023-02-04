@@ -29,7 +29,8 @@ type User =
   | 'getChannels'
   | 'updateUser'
   | 'deleteUser'
-  | 'login';
+  | 'login'
+  | 'logout';
 
 type Action<T extends Route> = T extends 'storage'
   ? Storage
@@ -48,6 +49,7 @@ interface Params<T extends Route, K> {
     UseQueryOptions<K, unknown, K, QueryKey>,
     'queryKey' | 'queryFn'
   >;
+  withCredentials?: boolean;
 }
 
 export default <T extends Route, K>(params: Params<T, K>) =>
@@ -69,4 +71,5 @@ export const fetchOnce = async <T extends Route, K = never>(
   axios.post<K>(
     `http://localhost:3000/${params.route}/${params.action}`,
     params.payload,
+    { withCredentials: params.withCredentials },
   );
