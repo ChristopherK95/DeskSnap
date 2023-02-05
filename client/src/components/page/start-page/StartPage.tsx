@@ -4,6 +4,7 @@ import { Container } from './Styles';
 import { useQueryClient } from 'react-query';
 import Table from './table/Table';
 import Edit from './Edit';
+import List from '../../list/List';
 
 interface User {
   _id: string;
@@ -42,8 +43,14 @@ const StartPage = (props: { userId: string }) => {
     return <>No channels</>;
   }
 
+  const arr = [
+    { channelName: 'games', owner: 'Torres' },
+    { channelName: 'sports', owner: 'Basse' },
+  ];
+
   return (
     <Container>
+      <List title="Invites" items={arr} button={<><div onClick={() => console.log('no')}>No</div><div onClick={() => console.log('yes')}>Yes</div></>} />
       <Table
         channels={channels}
         actions={[
