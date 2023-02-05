@@ -50,7 +50,7 @@ const StartPage = (props: { userId: string }) => {
 
   return (
     <Container>
-      <List title="Invites" items={arr} />
+      <List title="Invites" items={arr} button={<><div onClick={() => console.log('no')}>No</div><div onClick={() => console.log('yes')}>Yes</div></>} />
       <Table
         channels={channels}
         actions={[
