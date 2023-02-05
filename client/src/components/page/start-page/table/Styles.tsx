@@ -1,8 +1,13 @@
 import styled from 'styled-components';
+import useColor from '../../../../reusable/hooks/useColor';
 
 export const Title = styled.th`
-  background: linear-gradient(to bottom, #fa7646, #ff8e38);
-  color: white;
+  background: linear-gradient(
+    to bottom,
+    ${() => useColor('orange')},
+    ${() => useColor('lightOrange')}
+  );
+  color: ${() => useColor('white')};
   font-family: RobotoBold;
   font-size: 30px;
   height: 60px;
@@ -17,15 +22,16 @@ export const Table = styled.table`
 `;
 
 export const Row = styled.tr<{ index: number }>`
-  background-color: ${(p) => (p.index % 2 === 1 ? '#252222' : '#424242')};
+  background-color: ${(p) =>
+    p.index % 2 === 1 ? useColor('black') : useColor('gray')};
 `;
 
 export const Header = styled.th`
-  background-color: #292727;
+  background-color: ${() => useColor('black')};
   font-size: 22px;
   padding: 5px 10px;
   :not(:last-child) {
-    border-right: 2px solid #424242;
+    border-right: 2px solid ${() => useColor('gray')};
   }
 `;
 

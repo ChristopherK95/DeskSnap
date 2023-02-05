@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="156.15332mm"
+   height="160.56367mm"
+   viewBox="0 0 156.15332 160.56367"
+   version="1.1"
+   id="svg5"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs2" />
+  <g
+     id="layer1"
+     transform="translate(-28.330827,-64.737395)">
+    <path
+       id="volume"
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:6.36499;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 122.20494,70.527962 c 0,-13.088921 -33.552816,27.012458 -50.329225,40.518688 H 31.513322 v 34.01033 34.01032 h 40.362393 c 16.776409,13.50623 50.329225,53.37197 50.329225,40.51869 v -74.52901 z" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:11.265;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 144.12304,115.97569 c 0,0 22.05619,28.78211 0,58.14243"
+       id="low-volume" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:11.265;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 159.34557,99.804657 c 0,0 44.15817,44.792323 0,90.484493"
+       id="high-volume" />
+    <g
+       id="mute"
+       transform="translate(-1.5262407,85.572662)">
+      <g
+         id="g4445"
+         transform="translate(90.506071,23.809354)">
+        <path
+           style="fill:none;stroke:#000000;stroke-width:8.165;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="M 56.776151,18.314888 91.421814,52.96055"
+           id="path4337" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:8.165;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="M 56.776152,52.960551 91.421814,18.314888"
+           id="path4437" />
+      </g>
+    </g>
+  </g>
+</svg>

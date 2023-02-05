@@ -7,6 +7,7 @@ import storageRoutes from './routes/Storage';
 import urlRoutes from './routes/Url';
 import channelRoutes from './routes/Channel';
 import cors from 'cors';
+import path from 'path';
 import session from 'express-session';
 import MongoDBSession from 'connect-mongodb-session';
 import cookieParser from 'cookie-parser';
@@ -27,7 +28,7 @@ declare module 'express-session' {
 config();
 const MongoDBStore = MongoDBSession(session);
 
-const credentials = `${__dirname}\\mongo-cert.pem`;
+const credentials = path.join(__dirname, 'mongo-cert.pem');
 
 const app = express();
 const store = new MongoDBStore({

@@ -1,16 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import {
-  Container,
-  Mute,
-  Progress,
-  Thumb,
-  Track,
-  Volume,
-  VolumeContainer,
-} from './Styles';
-import Tooltip from '../tooltip/Tooltip';
+import { Backdrop, Container, Progress, Thumb, Track } from './Styles';
 import { useUtils } from './useUtils';
-import { CSSProperties } from 'styled-components';
+import Time from './Time';
+import VolumeControls from '../video-player/volume-controls/VolumeControls';
 
 const VideoTrack = (props: {
   progress: number;
@@ -23,29 +15,19 @@ const VideoTrack = (props: {
 }) => {
   const trackRef = useRef({} as HTMLDivElement);
   const thumbRef = useRef({} as HTMLDivElement);
-  const tooltipRef = useRef({} as HTMLDivElement);
-  const [mousePos, setMousePos] = useState<CSSProperties>();
   const [volume, setVolume] = useState<number>(1);
   const [prevVolume, setPrevVolume] = useState<number>(0);
 
-  const {
-    formatTime,
-    handleTooltip,
-    mouseDown,
-    mouseUp,
-    mouseMove,
-    mouseClick,
-    thumbDown,
-  } = useUtils({
-    max: props.max,
-    progress: props.progress,
-    paused: props.paused,
-    changeTime: props.changeTime,
-    tempPause: props.tempPause,
-    thumbRef: thumbRef.current,
-    trackRef: trackRef.current,
-    tooltipRef: tooltipRef.current,
-  });
+  const { formatTime, mouseDown, mouseUp, mouseMove, mouseClick, thumbDown } =
+    useUtils({
+      max: props.max,
+      progress: props.progress,
+      paused: props.paused,
+      changeTime: props.changeTime,
+      tempPause: props.tempPause,
+      thumbRef: thumbRef.current,
+      trackRef: trackRef.current,
+    });
 
   const changeVolume = (value: React.ChangeEvent<HTMLInputElement>) => {
     setVolume(+value.target.value);
@@ -53,13 +35,13 @@ const VideoTrack = (props: {
   };
 
   const muteButtonClick = () => {
-    if (volume != 0) {
+    if (!props.videoRef.muted) {
       setPrevVolume(volume);
       setVolume(0);
-      props.videoRef.volume = 0;
+      props.videoRef.muted = true;
     } else {
       setVolume(prevVolume);
-      props.videoRef.volume = prevVolume;
+      props.videoRef.muted = false;
     }
   };
 
@@ -73,15 +55,12 @@ const VideoTrack = (props: {
       removeEventListener('mouseup', mouseUp);
       removeEventListener('mousedown', mouseDown);
     };
-  }, [thumbDown, props.paused]);
+  }, [thumbDown, props.paused, thumbRef.current]);
 
   return (
-    <Container ref={trackRef} id={'slider'}>
-      <Track
-        id={'track'}
-        onClick={mouseClick}
-        onMouseMove={(e) => setMousePos(handleTooltip(e.clientX))}
-      >
+    <Container ref={trackRef} id={'slider'} pressed={thumbDown}>
+      <Track id={'track'} onClick={mouseClick}>
+        <Backdrop id={'backdrop'} />
         <Progress
           id={'progress'}
           style={{ transform: `scaleX(${props.progress}%)` }}
@@ -90,27 +69,24 @@ const VideoTrack = (props: {
       <Thumb
         ref={thumbRef}
         id={'thumb'}
-        style={{ left: `${props.progress}%` }}
+        style={{
+          transform: `translateX(${
+            (props.progress / 100) * trackRef.current.clientWidth
+          }px)`,
+        }}
         pressed={thumbDown}
       ></Thumb>
-      {/* <Tooltip
-        ref={tooltipRef}
-        direction="up"
-        value={formatTime(Math.round(props.currentTime))}
-        style={mousePos}
-      /> */}
-      <VolumeContainer>
-        <Mute id="mute" onClick={muteButtonClick} />
-        <Volume
-          id="volume"
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value={volume}
-          onChange={(e) => changeVolume(e)}
-        />
-      </VolumeContainer>
+      <VolumeControls
+        volume={volume}
+        muted={props.videoRef.muted}
+        pressed={thumbDown}
+        muteButtonClick={muteButtonClick}
+        changeVolume={changeVolume}
+      />
+      <Time
+        timeElapsed={formatTime(Math.round(props.currentTime))}
+        duration={formatTime(Math.round(props.max))}
+      />
     </Container>
   );
 };

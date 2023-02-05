@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import useColor from '../../reusable/hooks/useColor';
 
 export const Container = styled.div`
   height: 100vh;
@@ -9,5 +10,6 @@ export const Container = styled.div`
 
 export const Content = styled.div`
   background-color: #313236;
-  width: -webkit-fill-available;
+  background-color: ${() => useColor('black')};
+  width: 100%;
 `;

@@ -6,6 +6,8 @@ export type Direction = 'left' | 'right' | 'up' | 'down';
 interface Props {
   direction: Direction;
   value: string;
+  visible: boolean;
+  transparent?: boolean;
   style?: CSSProperties;
 }
 
@@ -15,6 +17,8 @@ const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
       id="tooltip"
       ref={ref}
       direction={props.direction}
+      visible={props.visible}
+      transparent={props.transparent}
       style={props.style}
     >
       {props.value}
