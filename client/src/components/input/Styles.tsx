@@ -1,8 +1,9 @@
 import styled from 'styled-components';
+import useColor from '../../reusable/hooks/useColor';
 
 export const Container = styled.div`
   display: flex;
-  background-color: white;
+  background-color: ${() => useColor('white')};
   border-radius: 3px;
   box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.2);
   position: relative;
@@ -26,7 +27,7 @@ export const Label = styled.div<{ empty: boolean }>`
 export const Value = styled.input`
   font-size: 16px;
   font-family: RobotoMedium;
-  color: #272727;
+  color: ${() => useColor('black')};
   background-color: transparent;
   width: 100%;
   padding: 20px 0 0 10px;

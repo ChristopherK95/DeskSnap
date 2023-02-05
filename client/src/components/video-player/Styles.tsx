@@ -12,11 +12,13 @@ export const VideoContaier = styled.div`
 
   :hover {
     #slider {
-      padding: 10px 0 70px 0;
+      padding: 10px 0 40px 0;
     }
-
+    #volume-icon {
+      display: flex;
+    }
     #volume {
-      display: block;
+      display: flex;
     }
     #mute {
       display: block;
