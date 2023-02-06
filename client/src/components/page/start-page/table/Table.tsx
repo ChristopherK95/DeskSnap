@@ -1,3 +1,5 @@
+import { useContext } from 'react';
+import { ModalContext } from '../../../modal/ModalContext';
 import Ellipsis from '../Ellipsis';
 import { Table as StyledTable, Cell, Header, Row, Title } from './Styles';
 
@@ -16,6 +18,8 @@ const Table = (props: {
   channels: Channel[];
   actions: { label: React.ReactNode; action: (channel: Channel) => void }[];
 }) => {
+  const { setInviteChannelId } = useContext(ModalContext);
+
   return (
     <StyledTable>
       <thead>
@@ -33,7 +37,12 @@ const Table = (props: {
         {props.channels.map((channel, idx) => (
           <Row key={idx} index={idx}>
             <Cell>{channel.channel_name}</Cell>
-            <Cell>{channel.users.map((user) => user.username)}</Cell>
+            <Cell
+              style={{ cursor: 'pointer' }}
+              onClick={() => setInviteChannelId(channel._id)}
+            >
+              {channel.users.map((user) => user.username)}
+            </Cell>
             <Cell>{channel.owner.username}</Cell>
             <Cell
               style={{

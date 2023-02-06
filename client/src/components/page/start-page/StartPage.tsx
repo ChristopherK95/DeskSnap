@@ -4,6 +4,8 @@ import { Container } from './Styles';
 import { useQueryClient } from 'react-query';
 import Table from './table/Table';
 import Edit from './Edit';
+import Modal from '../../modal/Modal';
+import InviteForm from './invite-form/InviteForm';
 
 interface User {
   _id: string;
@@ -65,6 +67,7 @@ const StartPage = (props: { userId: string }) => {
           },
         ]}
       />
+      <InviteForm />
     </Container>
   );
 };
