@@ -6,6 +6,7 @@ import Table from './table/Table';
 import Edit from './Edit';
 import Modal from '../../modal/Modal';
 import InviteForm from './invite-form/InviteForm';
+import Invites from './invites/Invites';
 
 interface User {
   _id: string;
@@ -46,6 +47,7 @@ const StartPage = (props: { userId: string }) => {
 
   return (
     <Container>
+      <Invites />
       <Table
         channels={channels}
         actions={[
