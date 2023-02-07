@@ -26,7 +26,6 @@ type User =
   | 'createUser'
   | 'getUser'
   | 'getUsers'
-  | 'getChannels'
   | 'updateUser'
   | 'deleteUser'
   | 'login'

@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import userSchema from '../schemas/user-schema';
-import sessionSchema from '../schemas/session-schema';
 import bcrypt from 'bcrypt';
 
 const createUser = async (req: Request, res: Response) => {
@@ -40,15 +39,6 @@ const getUsers = async (req: Request, res: Response) => {
   } else {
     return res.status(500).json({ message: 'No users found' });
   }
-};
-
-const getChannels = async (req: Request, res: Response) => {
-  const { user_id } = req.body;
-  const result = await userSchema
-    .findById(user_id, { channels: 1, _id: 0 })
-    .populate({ path: 'channels', select: 'channel_name' })
-    .exec();
-  return res.json(result?.channels);
 };
 
 const updateUser = async (req: Request, res: Response) => {
@@ -178,11 +168,20 @@ export const addChannelConnection = async (
   return response;
 };
 
+export const removeChannelConnection = async (
+  user_id: string,
+  channel_id: string,
+) => {
+  const response = await userSchema.findByIdAndUpdate(user_id, {
+    $pull: { channels: channel_id },
+  });
+  return response;
+};
+
 export default {
   createUser,
   getUser,
   getUsers,
-  getChannels,
   updateUser,
   deleteUser,
   login,

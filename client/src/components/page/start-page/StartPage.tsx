@@ -59,7 +59,7 @@ const StartPage = (props: { userId: string }) => {
               await fetchOnce<'channel'>({
                 route: 'channel',
                 action: 'removeChannel',
-                payload: { channel_id: channel._id },
+                payload: { user_id: props.userId, channel_id: channel._id },
               });
               queryClient.invalidateQueries('channels-overview');
               queryClient.invalidateQueries('sidebar-channels');
