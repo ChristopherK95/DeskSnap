@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import channelSchema from '../schemas/channel-schema';
-import { addChannelConnection } from './User';
+import { addChannelConnection, removeChannelConnection } from './User';
 
 const createChannel = async (req: Request, res: Response) => {
   const { channel_name, user_id } = req.body;
@@ -19,10 +19,11 @@ const createChannel = async (req: Request, res: Response) => {
 };
 
 const removeChannel = async (req: Request, res: Response) => {
-  const { channel_id } = req.body;
+  const { channel_id, user_id } = req.body;
 
   const response = await channelSchema.findByIdAndRemove(channel_id);
   if (response) {
+    await removeChannelConnection(user_id, channel_id);
     return res.status(200).json();
   } else {
     return res.status(500).json({ message: 'Channel not found' });
