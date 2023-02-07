@@ -12,7 +12,7 @@ import axios from 'axios';
 import LoginPage from './components/page/login-page/LoginPage';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from './slice/userSlice';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { RootState } from './store';
 
 const queryClient = new QueryClient();

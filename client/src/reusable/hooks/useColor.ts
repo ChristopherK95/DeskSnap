@@ -5,6 +5,7 @@ type Colors = {
   black: '252222';
   gray: '424242';
   darkGray: '363636';
+  red: 'fc7260';
 };
 
 const colors: Colors = {
@@ -14,6 +15,7 @@ const colors: Colors = {
   black: '252222',
   gray: '424242',
   darkGray: '363636',
+  red: 'fc7260',
 };
 
 export default (color: keyof Colors) => {
