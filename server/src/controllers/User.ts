@@ -135,6 +135,39 @@ const checkSession = async (req: Request, res: Response) => {
   });
 };
 
+const invite = async (req: Request, res: Response) => {
+  const { usernames, channel_id, sender } = req.body;
+  const invite = { channel_id, sender };
+
+  try {
+    const result = await userSchema.updateMany(
+      {
+        username: { $in: usernames },
+        channels: { $ne: channel_id },
+        'invites.channel_id': { $ne: channel_id },
+      },
+      {
+        $push: { invites: invite },
+      },
+    );
+    if (result.modifiedCount === 0) {
+      return res.json(
+        'The users are in the channel or already have an invite pending for this channel.',
+      );
+    }
+    if (result.modifiedCount < usernames.length) {
+      return res.json(
+        `${
+          usernames.length - result.modifiedCount
+        } users are in the channel or already have an invite pending for this channel.`,
+      );
+    }
+    return res.json(`${usernames} have been sent invites to the channel.`);
+  } catch (err) {
+    return res.json(err);
+  }
+};
+
 export const addChannelConnection = async (
   channel_id: string,
   user_id: string,
@@ -155,4 +188,5 @@ export default {
   login,
   logout,
   checkSession,
+  invite,
 };
