@@ -35,8 +35,7 @@ const Sidebar = () => {
 
   const { data } = useFetch<'channel', { _id: string; channel_name: string }[]>(
     {
-      route: 'channel',
-      action: 'getChannels',
+      action: 'channel/getChannels',
       key: 'sidebar-channels',
       options: { refetchOnWindowFocus: false },
       payload: { user_id: user?.id },
