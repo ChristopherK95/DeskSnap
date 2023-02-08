@@ -17,8 +17,7 @@ const InviteForm = () => {
   const invite = async () => {
     const arr = usernames.filter((item) => item !== '');
     const res = await fetchOnce<'user'>({
-      route: 'user',
-      action: 'invite',
+      action: 'user/invite',
       payload: {
         usernames: arr,
         channel_id: inviteChannelId,

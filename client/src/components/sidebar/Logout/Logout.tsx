@@ -13,8 +13,7 @@ const Logout = () => {
   const navigate = useNavigate();
   const logout = async () => {
     await fetchOnce<'user'>({
-      route: 'user',
-      action: 'logout',
+      action: 'user/logout',
       payload: {},
       withCredentials: true,
     });

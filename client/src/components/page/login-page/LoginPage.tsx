@@ -34,8 +34,7 @@ const LoginPage = () => {
         login: boolean;
       }
     >({
-      route: 'user',
-      action: 'login',
+      action: 'user/login',
       payload: { username, password },
       withCredentials: true,
     });
@@ -72,8 +71,7 @@ const LoginPage = () => {
         message: string;
       }
     >({
-      route: 'user',
-      action: 'createUser',
+      action: 'user/createUser',
       payload: { username, password },
       withCredentials: true,
     });

@@ -21,8 +21,7 @@ interface Channels {
 
 const StartPage = (props: { userId: string }) => {
   const { data, isLoading } = useFetch<'channel', Channels[]>({
-    route: 'channel',
-    action: 'getChannelsOverview',
+    action: 'channel/getChannelsOverview',
     payload: { user_id: props.userId },
     key: 'channels-overview',
     options: { refetchOnWindowFocus: false },
@@ -59,8 +58,7 @@ const StartPage = (props: { userId: string }) => {
             label: 'Delete',
             action: async (channel) => {
               await fetchOnce<'channel'>({
-                route: 'channel',
-                action: 'removeChannel',
+                action: 'channel/removeChannel',
                 payload: { user_id: props.userId, channel_id: channel._id },
               });
               queryClient.invalidateQueries('channels-overview');
