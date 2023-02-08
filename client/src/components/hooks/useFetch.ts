@@ -31,7 +31,8 @@ type User =
   | 'user/login'
   | 'user/logout'
   | 'user/invite'
-  | 'user/getInvites';
+  | 'user/getInvites'
+  | 'user/invitesSeen';
 
 type Action<T extends Route> = T extends 'storage'
   ? Storage

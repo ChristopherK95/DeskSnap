@@ -13,5 +13,6 @@ router.post('/logout', controller.logout);
 router.get('/isLoggedIn', controller.checkSession);
 router.post('/invite', controller.invite);
 router.post('/getInvites', controller.getInvites);
+router.post('/invitesSeen', controller.invitesSeen);
 
 export = router;

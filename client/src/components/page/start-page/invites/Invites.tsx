@@ -10,7 +10,7 @@ import {
   Row,
   StyledIcon,
 } from './Styles';
-import useFetch from '../../../hooks/useFetch';
+import useFetch, { fetchOnce } from '../../../hooks/useFetch';
 import Deny from '../../../../svgs/Deny';
 import Accept from '../../../../svgs/Accept';
 import useColor from '../../../../reusable/hooks/useColor';
@@ -23,6 +23,7 @@ interface Invites {
     channel_name: string;
   };
   sender: string;
+  seen: boolean;
 }
 
 const Icon = (props: { read: boolean }) => {
@@ -81,8 +82,18 @@ const InvitesList = (props: { invites: Invites[] }) => {
 
 const Invites = (props: { invites: Invites[] }) => {
   const { invites } = props;
-  const [read, setRead] = useState<boolean>(true);
-  const [visible, setVisible] = useState<boolean>(true);
+  const user = useSelector((state: RootState) => state.user);
+  const [read, setRead] = useState<boolean>(false);
+  const [visible, setVisible] = useState<boolean>(false);
+  const [showList, setShowList] = useState<boolean>(false);
+
+  const setInvitesSeen = () => {
+    const res = fetchOnce<'user', { message: string }>({
+      action: 'user/invitesSeen',
+      payload: { user_id: user.id },
+    });
+    return res;
+  };
 
   useEffect(() => {
     if (invites.length > 0) {
@@ -90,17 +101,24 @@ const Invites = (props: { invites: Invites[] }) => {
     } else {
       setVisible(false);
     }
+    for (const invite of invites) {
+      if (invite.seen) {
+        setRead(false);
+        break;
+      }
+    }
   }, [invites]);
 
   return (
     <Container
       onClick={() => {
-        setVisible(false);
         setRead(true);
+        setInvitesSeen();
+        setShowList(!showList);
       }}
       visible={visible}
     >
-      <InvitesList invites={invites} />
+      {showList && <InvitesList invites={invites} />}
       <InvitesButton>
         <Icon read={read} />
       </InvitesButton>

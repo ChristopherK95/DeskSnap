@@ -127,7 +127,7 @@ const checkSession = async (req: Request, res: Response) => {
 
 const invite = async (req: Request, res: Response) => {
   const { usernames, channel_id, sender } = req.body;
-  const invite = { channel_id, sender };
+  const invite = { channel: channel_id, sender, seen: false };
 
   try {
     const result = await userSchema.updateMany(
@@ -165,9 +165,16 @@ const getInvites = async (req: Request, res: Response) => {
       path: 'invites.channel',
       select: 'channel_name',
     })
-    .select('invites.sender invites.channel -_id')
+    .select('invites.sender invites.channel invites.seen -_id')
     .exec();
   return res.json(invites?.invites);
+};
+
+const invitesSeen = async (req: Request, res: Response) => {
+  await userSchema.findByIdAndUpdate(req.body.user_id, {
+    $set: { 'invites.$[].seen': true },
+  });
+  return res.json('Invites set as seen');
 };
 
 export const addChannelConnection = async (
@@ -201,4 +208,5 @@ export default {
   checkSession,
   invite,
   getInvites,
+  invitesSeen,
 };

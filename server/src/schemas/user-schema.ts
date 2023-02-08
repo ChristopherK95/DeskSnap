@@ -29,6 +29,7 @@ export const userSchema = new mongoose.Schema(
           required: true,
           ref: 'channel',
         },
+        seen: Boolean,
       },
     ],
   },
