@@ -101,12 +101,14 @@ const Invites = (props: { invites: Invites[] }) => {
     } else {
       setVisible(false);
     }
+    let seen = true;
     for (const invite of invites) {
-      if (invite.seen) {
-        setRead(false);
+      if (!invite.seen) {
+        seen = false;
         break;
       }
     }
+    setRead(seen);
   }, [invites]);
 
   return (
