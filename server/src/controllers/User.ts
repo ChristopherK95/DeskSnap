@@ -158,6 +158,18 @@ const invite = async (req: Request, res: Response) => {
   }
 };
 
+const getInvites = async (req: Request, res: Response) => {
+  const invites = await userSchema
+    .findById(req.body.user_id)
+    .populate({
+      path: 'invites.channel',
+      select: 'channel_name',
+    })
+    .select('invites.sender invites.channel -_id')
+    .exec();
+  return res.json(invites?.invites);
+};
+
 export const addChannelConnection = async (
   channel_id: string,
   user_id: string,
@@ -188,4 +200,5 @@ export default {
   logout,
   checkSession,
   invite,
+  getInvites,
 };

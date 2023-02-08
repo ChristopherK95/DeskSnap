@@ -7,6 +7,8 @@ import Edit from './Edit';
 import Modal from '../../modal/Modal';
 import InviteForm from './invite-form/InviteForm';
 import Invites from './invites/Invites';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 
 interface User {
   _id: string;
@@ -20,12 +22,22 @@ interface Channels {
 }
 
 const StartPage = (props: { userId: string }) => {
-  const { data, isLoading } = useFetch<'channel', Channels[]>({
+  const user = useSelector((state: RootState) => state.user);
+  const { data, isLoading, isFetching } = useFetch<'channel', Channels[]>({
     action: 'channel/getChannelsOverview',
     payload: { user_id: props.userId },
     key: 'channels-overview',
     options: { refetchOnWindowFocus: false },
   });
+
+  const invitesData = useFetch<'user', Invites[]>({
+    action: 'user/getInvites',
+    payload: { user_id: user.id },
+    key: 'get-invites',
+    options: { refetchOnWindowFocus: false },
+  }).data;
+
+  const [invites, setInvites] = useState<Invites[]>([]);
   const [channels, setChannels] = useState<Channels[]>();
 
   const queryClient = useQueryClient();
@@ -36,17 +48,30 @@ const StartPage = (props: { userId: string }) => {
     }
   }, [data]);
 
-  if (isLoading) {
+  useEffect(() => {
+    if (invitesData) {
+      setInvites(invitesData);
+    }
+  }, [invitesData]);
+
+  if (isLoading || isFetching) {
     return <Container>Loading..</Container>;
   }
 
   if (!channels || channels?.length === 0) {
-    return <>No channels</>;
+    return (
+      <div>
+        <Invites invites={invites} />
+        No channels
+      </div>
+    );
   }
+
+  console.log('ooooo');
 
   return (
     <Container>
-      <Invites />
+      <Invites invites={invites} />
       <Table
         channels={channels}
         actions={[

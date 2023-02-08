@@ -14,10 +14,15 @@ import useFetch from '../../../hooks/useFetch';
 import Deny from '../../../../svgs/Deny';
 import Accept from '../../../../svgs/Accept';
 import useColor from '../../../../reusable/hooks/useColor';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../store';
 
 interface Invites {
-  channelName: string;
-  senderName: string;
+  channel: {
+    channel_id: string;
+    channel_name: string;
+  };
+  sender: string;
 }
 
 const Icon = (props: { read: boolean }) => {
@@ -62,8 +67,8 @@ const InvitesList = (props: { invites: Invites[] }) => {
     <List>
       {props.invites.map((invite, idx) => (
         <Row key={idx} index={idx}>
-          <Cell>{invite.channelName}</Cell>
-          <Cell>{invite.senderName}</Cell>
+          <Cell>{invite.channel.channel_name}</Cell>
+          <Cell>{invite.sender}</Cell>
           <Buttons style={{ display: 'flex' }}>
             <Deny />
             <Accept />
@@ -74,20 +79,8 @@ const InvitesList = (props: { invites: Invites[] }) => {
   );
 };
 
-const Invites = () => {
-  // const {data} = useFetch<'user', {channelName: string; senderName: string}[]>({key: 'get-invites'})
-  const [invites, setInvites] = useState<Invites[]>([
-    { channelName: 'Sports', senderName: 'Victor' },
-    { channelName: 'Ultimate Giga Chads', senderName: 'Billy' },
-    { channelName: 'Ultimate Giga Chads', senderName: 'Billy' },
-    { channelName: 'Ultimate Giga Chads', senderName: 'Billy' },
-    { channelName: 'Ultimate Giga Chads', senderName: 'Billy' },
-    { channelName: 'Ultimate Giga Chads', senderName: 'Billy' },
-    { channelName: 'Ultimate Giga Chads', senderName: 'Billy' },
-    { channelName: 'Ultimate Giga Chads', senderName: 'Billy' },
-    { channelName: 'Ultimate Giga Chads', senderName: 'Billy' },
-    { channelName: 'Ultimate Giga Chads', senderName: 'Billy' },
-  ]);
+const Invites = (props: { invites: Invites[] }) => {
+  const { invites } = props;
   const [read, setRead] = useState<boolean>(true);
   const [visible, setVisible] = useState<boolean>(true);
 
@@ -99,19 +92,13 @@ const Invites = () => {
     }
   }, [invites]);
 
-  // useEffect(() => {
-  //   if(data) {
-  //     setInvites(data)
-  //   }
-  // }, [data])
-
   return (
     <Container
       onClick={() => {
         setVisible(false);
         setRead(true);
       }}
-      visible={true}
+      visible={visible}
     >
       <InvitesList invites={invites} />
       <InvitesButton>

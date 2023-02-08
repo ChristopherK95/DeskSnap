@@ -24,7 +24,11 @@ export const userSchema = new mongoose.Schema(
     invites: [
       {
         sender: String,
-        channel_id: { type: Schema.Types.ObjectId, ref: 'channel' },
+        channel: {
+          type: Schema.Types.ObjectId,
+          required: true,
+          ref: 'channel',
+        },
       },
     ],
   },

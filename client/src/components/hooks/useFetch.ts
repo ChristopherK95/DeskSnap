@@ -30,7 +30,8 @@ type User =
   | 'user/deleteUser'
   | 'user/login'
   | 'user/logout'
-  | 'user/invite';
+  | 'user/invite'
+  | 'user/getInvites';
 
 type Action<T extends Route> = T extends 'storage'
   ? Storage
