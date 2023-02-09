@@ -67,8 +67,6 @@ const StartPage = (props: { userId: string }) => {
     );
   }
 
-  console.log('ooooo');
-
   return (
     <Container>
       <Invites invites={invites} />

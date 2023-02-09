@@ -1,8 +1,9 @@
 import useColor from '../reusable/hooks/useColor';
 
-const Deny = () => {
+const Deny = (props: { onClick: () => void }) => {
   return (
     <svg
+      onClick={props.onClick}
       fill={useColor('denyRed')}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 448 512"

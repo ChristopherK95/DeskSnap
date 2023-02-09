@@ -16,10 +16,11 @@ import Accept from '../../../../svgs/Accept';
 import useColor from '../../../../reusable/hooks/useColor';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store';
+import { useQueryClient } from 'react-query';
 
 interface Invites {
   channel: {
-    channel_id: string;
+    _id: string;
     channel_name: string;
   };
   sender: string;
@@ -43,6 +44,30 @@ const Icon = (props: { read: boolean }) => {
 };
 
 const InvitesList = (props: { invites: Invites[] }) => {
+  const queryClient = useQueryClient();
+  const user = useSelector((state: RootState) => state.user);
+
+  const acceptInvite = async (channel_id: string) => {
+    const response = await fetchOnce<'channel', { message: string }>({
+      action: 'channel/acceptInvite',
+      payload: { user_id: user.id, channel_id },
+    });
+    if (response.status === 200) {
+      queryClient.invalidateQueries('channels-overview');
+      queryClient.invalidateQueries('get-invites');
+    }
+  };
+
+  const declineInvite = async (channel_id: string) => {
+    const response = await fetchOnce<'user', { message: string }>({
+      action: 'user/declineInvite',
+      payload: { user_id: user.id, channel_id },
+    });
+    if (response.status === 200) {
+      queryClient.invalidateQueries('get-invites');
+    }
+  };
+
   if (props.invites.length === 0) {
     return (
       <List>
@@ -71,8 +96,8 @@ const InvitesList = (props: { invites: Invites[] }) => {
           <Cell>{invite.channel.channel_name}</Cell>
           <Cell>{invite.sender}</Cell>
           <Buttons style={{ display: 'flex' }}>
-            <Deny />
-            <Accept />
+            <Deny onClick={() => declineInvite(invite.channel._id)} />
+            <Accept onClick={() => acceptInvite(invite.channel._id)} />
           </Buttons>
         </Row>
       ))}

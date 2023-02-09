@@ -170,31 +170,24 @@ const getInvites = async (req: Request, res: Response) => {
   return res.json(invites?.invites);
 };
 
+export const inviteAccepted = async (user_id: string, channel_id: string) => {
+  await userSchema.findByIdAndUpdate(user_id, {
+    $pull: { invites: { channel: channel_id } },
+  });
+};
+
+const declineInvite = async (req: Request, res: Response) => {
+  const response = await userSchema.findByIdAndUpdate(req.body.user_id, {
+    $pull: { 'invites.channel': req.body.channel_id },
+  });
+  return res.json(response);
+};
+
 const invitesSeen = async (req: Request, res: Response) => {
   await userSchema.findByIdAndUpdate(req.body.user_id, {
     $set: { 'invites.$[].seen': true },
   });
   return res.json('Invites set as seen');
-};
-
-export const addChannelConnection = async (
-  channel_id: string,
-  user_id: string,
-) => {
-  const response = await userSchema.findByIdAndUpdate(user_id, {
-    $push: { channels: channel_id },
-  });
-  return response;
-};
-
-export const removeChannelConnection = async (
-  user_id: string,
-  channel_id: string,
-) => {
-  const response = await userSchema.findByIdAndUpdate(user_id, {
-    $pull: { channels: channel_id },
-  });
-  return response;
 };
 
 export default {
@@ -208,5 +201,6 @@ export default {
   checkSession,
   invite,
   getInvites,
+  declineInvite,
   invitesSeen,
 };

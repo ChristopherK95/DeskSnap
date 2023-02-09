@@ -13,7 +13,8 @@ type Channel =
   | 'channel/getChannelName'
   | 'channel/getChannels'
   | 'channel/getUsers'
-  | 'channel/getChannelsOverview';
+  | 'channel/getChannelsOverview'
+  | 'channel/acceptInvite';
 
 type Url =
   | 'url/createUrl'
@@ -32,7 +33,8 @@ type User =
   | 'user/logout'
   | 'user/invite'
   | 'user/getInvites'
-  | 'user/invitesSeen';
+  | 'user/invitesSeen'
+  | 'user/declineInvite';
 
 type Action<T extends Route> = T extends 'storage'
   ? Storage

@@ -14,5 +14,6 @@ router.get('/isLoggedIn', controller.checkSession);
 router.post('/invite', controller.invite);
 router.post('/getInvites', controller.getInvites);
 router.post('/invitesSeen', controller.invitesSeen);
+router.post('/declineInvite', controller.declineInvite);
 
 export = router;
