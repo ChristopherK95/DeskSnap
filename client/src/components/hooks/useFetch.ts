@@ -1,36 +1,36 @@
 import axios from 'axios';
 import { useQuery } from 'react-query';
 import { QueryKey } from 'react-query/types/core';
-import { UseQueryOptions } from 'react-query/types/react';
+import { UseQueryOptions, UseQueryResult } from 'react-query/types/react';
 
 type Route = 'storage' | 'channel' | 'channel-connection' | 'url' | 'user';
 
-type Storage = 'uploadFile' | 'deleteFile';
+type Storage = 'storage/uploadFile' | 'storage/deleteFile';
 
 type Channel =
-  | 'createChannel'
-  | 'removeChannel'
-  | 'getChannelName'
-  | 'getChannels'
-  | 'getUsers'
-  | 'getChannelsOverview';
+  | 'channel/createChannel'
+  | 'channel/removeChannel'
+  | 'channel/getChannelName'
+  | 'channel/getChannels'
+  | 'channel/getUsers'
+  | 'channel/getChannelsOverview';
 
 type Url =
-  | 'createUrl'
-  | 'getUrlsNotSeen'
-  | 'getUrlsByChannelId'
-  | 'getNextUrl'
-  | 'removeUrl';
+  | 'url/createUrl'
+  | 'url/getUrlsNotSeen'
+  | 'url/getUrlsByChannelId'
+  | 'url/getNextUrl'
+  | 'url/removeUrl';
 
 type User =
-  | 'createUser'
-  | 'getUser'
-  | 'getUsers'
-  | 'getChannels'
-  | 'updateUser'
-  | 'deleteUser'
-  | 'login'
-  | 'logout';
+  | 'user/createUser'
+  | 'user/getUser'
+  | 'user/getUsers'
+  | 'user/updateUser'
+  | 'user/deleteUser'
+  | 'user/login'
+  | 'user/logout'
+  | 'user/invite';
 
 type Action<T extends Route> = T extends 'storage'
   ? Storage
@@ -42,7 +42,6 @@ type Action<T extends Route> = T extends 'storage'
 
 interface Params<T extends Route, K> {
   key: string;
-  route: T;
   action: Action<T>;
   payload?: object;
   options?: Omit<
@@ -52,13 +51,13 @@ interface Params<T extends Route, K> {
   withCredentials?: boolean;
 }
 
-export default <T extends Route, K>(params: Params<T, K>) =>
+export default <T extends Route, K>(params: Params<T, K>): UseQueryResult<K> =>
   useQuery<K, unknown, K, QueryKey>(
     params.key,
     async () =>
       (
         await axios.post(
-          `http://localhost:3000/${params.route}/${params.action}`,
+          `http://localhost:3000/${params.action}`,
           params.payload,
         )
       ).data,
@@ -68,8 +67,6 @@ export default <T extends Route, K>(params: Params<T, K>) =>
 export const fetchOnce = async <T extends Route, K = never>(
   params: Omit<Params<T, K>, 'key' | 'options'>,
 ) =>
-  axios.post<K>(
-    `http://localhost:3000/${params.route}/${params.action}`,
-    params.payload,
-    { withCredentials: params.withCredentials },
-  );
+  axios.post<K>(`http://localhost:3000/${params.action}`, params.payload, {
+    withCredentials: params.withCredentials,
+  });

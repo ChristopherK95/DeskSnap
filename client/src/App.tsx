@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from './slice/userSlice';
 import { useEffect } from 'react';
 import { RootState } from './store';
+import ModalProvider from './components/modal/ModalContext';
 
 const queryClient = new QueryClient();
 
@@ -58,9 +59,11 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <div className="container" style={{ paddingTop: 0 }}>
-        <SidebarProvider>
-          <RouterProvider router={router} />
-        </SidebarProvider>
+        <ModalProvider>
+          <SidebarProvider>
+            <RouterProvider router={router} />
+          </SidebarProvider>
+        </ModalProvider>
       </div>
     </QueryClientProvider>
   );

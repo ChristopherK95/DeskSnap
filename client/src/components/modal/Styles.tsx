@@ -1,7 +1,8 @@
 import styled from 'styled-components';
+import useColor from '../../reusable/hooks/useColor';
 
-export const BackDrop = styled.div`
-  display: flex;
+export const BackDrop = styled.div<{ show: boolean }>`
+  display: ${(p) => (p.show ? 'flex' : 'none')};
   align-items: center;
   justify-content: center;
   position: fixed;
@@ -12,7 +13,9 @@ export const BackDrop = styled.div`
   background-color: rgba(0, 0, 0, 0.6);
 `;
 
-export const Window = styled.div<{ size?: { height: number; width: number } }>`
+export const Window = styled.div<{
+  size?: { height: number | string; width: number | string };
+}>`
   background-color: #2d3250;
   border-radius: 8px 8px 0 0;
   font-family: RobotoMedium;
@@ -49,11 +52,13 @@ export const Cancel = styled.div`
 
 export const Button = styled.button<{ danger?: boolean }>`
   height: 40px;
-  background-color: ${(p) => (p.danger ? '#af0202' : '#ff9060')};
+  background-color: ${(p) =>
+    p.danger ? useColor('red') : useColor('lightOrange')};
   font-family: RobotoBold;
   border: none;
   border-radius: 6px;
   :hover {
-    background-color: ${(p) => (p.danger ? '#990404' : '#fa7646')};
+    background-color: ${(p) =>
+      p.danger ? useColor('redHover') : useColor('orange')};
   }
 `;

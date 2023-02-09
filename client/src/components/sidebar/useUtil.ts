@@ -19,8 +19,7 @@ export default (props: {
       'channel',
       { response: { _id: string; channel_name: string }; message: string }
     >({
-      route: 'channel',
-      action: 'createChannel',
+      action: 'channel/createChannel',
       payload: { channel_name: channelName, user_id: user.id },
     });
     console.log(channel.status);

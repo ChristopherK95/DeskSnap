@@ -21,11 +21,10 @@ export const userSchema = new mongoose.Schema(
       minLength: 4,
       required: true,
     },
-    channels: [
+    invites: [
       {
-        type: Schema.Types.ObjectId,
-        required: true,
-        ref: 'channel',
+        sender: String,
+        channel_id: { type: Schema.Types.ObjectId, ref: 'channel' },
       },
     ],
   },

@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'react';
-import { BackDrop, Button, ButtonContainer, Cancel, Window } from './Styles';
+import Button from '../../reusable/component/Button/Button';
+import { BackDrop, ButtonContainer, Cancel, Window } from './Styles';
 
 const Modal = (props: {
   children: React.ReactNode;
-  size?: { height: number; width: number };
+  size?: { height: number | string; width: number | string };
   showModal: boolean;
   buttonText?: string;
   danger?: boolean;
@@ -22,7 +23,7 @@ const Modal = (props: {
   }, [props.showModal]);
 
   return (
-    <BackDrop>
+    <BackDrop show={props.showModal}>
       <Window
         ref={ref}
         size={props.size}

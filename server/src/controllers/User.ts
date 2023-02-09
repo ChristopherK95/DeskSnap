@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import userSchema from '../schemas/user-schema';
-import sessionSchema from '../schemas/session-schema';
 import bcrypt from 'bcrypt';
 
 const createUser = async (req: Request, res: Response) => {
@@ -40,15 +39,6 @@ const getUsers = async (req: Request, res: Response) => {
   } else {
     return res.status(500).json({ message: 'No users found' });
   }
-};
-
-const getChannels = async (req: Request, res: Response) => {
-  const { user_id } = req.body;
-  const result = await userSchema
-    .findById(user_id, { channels: 1, _id: 0 })
-    .populate({ path: 'channels', select: 'channel_name' })
-    .exec();
-  return res.json(result?.channels);
 };
 
 const updateUser = async (req: Request, res: Response) => {
@@ -135,6 +125,39 @@ const checkSession = async (req: Request, res: Response) => {
   });
 };
 
+const invite = async (req: Request, res: Response) => {
+  const { usernames, channel_id, sender } = req.body;
+  const invite = { channel_id, sender };
+
+  try {
+    const result = await userSchema.updateMany(
+      {
+        username: { $in: usernames },
+        channels: { $ne: channel_id },
+        'invites.channel_id': { $ne: channel_id },
+      },
+      {
+        $push: { invites: invite },
+      },
+    );
+    if (result.modifiedCount === 0) {
+      return res.json(
+        'The users are in the channel or already have an invite pending for this channel.',
+      );
+    }
+    if (result.modifiedCount < usernames.length) {
+      return res.json(
+        `${
+          usernames.length - result.modifiedCount
+        } users are in the channel or already have an invite pending for this channel.`,
+      );
+    }
+    return res.json(`${usernames} have been sent invites to the channel.`);
+  } catch (err) {
+    return res.json(err);
+  }
+};
+
 export const addChannelConnection = async (
   channel_id: string,
   user_id: string,
@@ -145,14 +168,24 @@ export const addChannelConnection = async (
   return response;
 };
 
+export const removeChannelConnection = async (
+  user_id: string,
+  channel_id: string,
+) => {
+  const response = await userSchema.findByIdAndUpdate(user_id, {
+    $pull: { channels: channel_id },
+  });
+  return response;
+};
+
 export default {
   createUser,
   getUser,
   getUsers,
-  getChannels,
   updateUser,
   deleteUser,
   login,
   logout,
   checkSession,
+  invite,
 };

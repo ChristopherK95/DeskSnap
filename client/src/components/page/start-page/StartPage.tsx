@@ -6,6 +6,8 @@ import Table from './table/Table';
 import Edit from './Edit';
 import { useDispatch } from 'react-redux';
 import { setNotif } from '../../../slice/notifSlice';
+import Modal from '../../modal/Modal';
+import InviteForm from './invite-form/InviteForm';
 
 interface User {
   _id: string;
@@ -21,8 +23,7 @@ interface Channels {
 const StartPage = (props: { userId: string }) => {
   const dispatch = useDispatch();
   const { data, isLoading } = useFetch<'channel', Channels[]>({
-    route: 'channel',
-    action: 'getChannelsOverview',
+    action: 'channel/getChannelsOverview',
     payload: { user_id: props.userId },
     key: 'channels-overview',
     options: { refetchOnWindowFocus: false },
@@ -58,9 +59,8 @@ const StartPage = (props: { userId: string }) => {
             label: 'Delete',
             action: async (channel) => {
               const { status } = await fetchOnce<'channel'>({
-                route: 'channel',
-                action: 'removeChannel',
-                payload: { channel_id: channel._id },
+                action: 'channel/removeChannel',
+                payload: { user_id: props.userId, channel_id: channel._id },
               });
               if (status === 200) {
                 dispatch(
@@ -80,6 +80,7 @@ const StartPage = (props: { userId: string }) => {
           },
         ]}
       />
+      <InviteForm />
     </Container>
   );
 };
