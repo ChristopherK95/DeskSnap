@@ -4,6 +4,8 @@ import { Container } from './Styles';
 import { useQueryClient } from 'react-query';
 import Table from './table/Table';
 import Edit from './Edit';
+import { useDispatch } from 'react-redux';
+import { setNotif } from '../../../slice/notifSlice';
 import Modal from '../../modal/Modal';
 import InviteForm from './invite-form/InviteForm';
 
@@ -19,6 +21,7 @@ interface Channels {
 }
 
 const StartPage = (props: { userId: string }) => {
+  const dispatch = useDispatch();
   const { data, isLoading } = useFetch<'channel', Channels[]>({
     action: 'channel/getChannelsOverview',
     payload: { user_id: props.userId },
@@ -55,12 +58,24 @@ const StartPage = (props: { userId: string }) => {
           {
             label: 'Delete',
             action: async (channel) => {
-              await fetchOnce<'channel'>({
+              const { status } = await fetchOnce<'channel'>({
                 action: 'channel/removeChannel',
                 payload: { user_id: props.userId, channel_id: channel._id },
               });
-              queryClient.invalidateQueries('channels-overview');
-              queryClient.invalidateQueries('sidebar-channels');
+              if (status === 200) {
+                dispatch(
+                  setNotif({ message: 'Removed channel successfully!' }),
+                );
+                queryClient.invalidateQueries('channels-overview');
+                queryClient.invalidateQueries('sidebar-channels');
+              } else {
+                dispatch(
+                  setNotif({
+                    message: 'Failed to remove channel!',
+                    error: true,
+                  }),
+                );
+              }
             },
           },
         ]}
