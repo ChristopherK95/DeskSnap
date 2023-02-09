@@ -6,7 +6,7 @@ export const notifSlice = createSlice({
     showNotif: false,
     message: '',
     time: 0,
-    danger: false,
+    error: false,
   },
   reducers: {
     setNotif: (
@@ -14,22 +14,33 @@ export const notifSlice = createSlice({
         showNotif: boolean;
         message: string;
         time: number;
-        danger?: boolean;
+        error?: boolean;
       },
       action: {
-        payload: { message: string; time?: number; danger?: boolean };
+        payload: { message: string; time?: number; error?: boolean };
       },
     ) => {
       return {
         ...action.payload,
         showNotif: true,
         time: action.payload.time ?? 5,
-        danger: Boolean(action.payload.danger),
+        error: Boolean(action.payload.error),
       };
     },
+    removeNotif: (state: {
+      showNotif: boolean;
+      message: string;
+      time: number;
+      error?: boolean;
+    }) => ({
+      message: '',
+      showNotif: false,
+      time: state.time,
+      error: false,
+    }),
   },
 });
 
-export const { setNotif } = notifSlice.actions;
+export const { setNotif, removeNotif } = notifSlice.actions;
 
 export default notifSlice.reducer;

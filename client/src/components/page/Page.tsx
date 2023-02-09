@@ -16,11 +16,9 @@ const HomePage = () => {
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(
-      setNotif({ message: 'ERROR: Failed to add channel', danger: true }),
-    );
-  }, []);
+  // useEffect(() => {
+  //   dispatch(setNotif({ message: 'Logged in!' }));
+  // }, []);
 
   if (!user.id) {
     return <></>;
