@@ -1,6 +1,9 @@
 import { Request, Response } from 'express';
 import userSchema from '../schemas/user-schema';
 import bcrypt from 'bcrypt';
+import { checkUsersExist } from './Channel';
+import { Schema } from 'mongoose';
+import { match } from 'ts-pattern';
 
 const createUser = async (req: Request, res: Response) => {
   const { username, password } = req.body;
@@ -127,55 +130,96 @@ const checkSession = async (req: Request, res: Response) => {
 
 const invite = async (req: Request, res: Response) => {
   const { usernames, channel_id, sender } = req.body;
-  const invite = { channel_id, sender };
+  const invite = { channel: channel_id, sender, seen: false };
+
+  const users = await userSchema.find({ username: { $in: usernames } });
+  let arr: string[] = [];
+  if (users.length > 0) arr = users.map((user) => user.id);
+
+  let existList: string[] | undefined;
+  if (users.length > 0) {
+    existList = await checkUsersExist(channel_id, arr);
+  }
+
+  console.log(existList);
+
+  const alreadyIn = users.filter((user) => existList?.includes(user.id));
+  console.log(alreadyIn);
 
   try {
-    const result = await userSchema.updateMany(
+    await userSchema.updateMany(
       {
         username: { $in: usernames },
-        channels: { $ne: channel_id },
-        'invites.channel_id': { $ne: channel_id },
+        _id: { $nin: existList },
+        'invites.channel': { $ne: channel_id },
       },
       {
         $push: { invites: invite },
       },
     );
-    if (result.modifiedCount === 0) {
-      return res.json(
-        'The users are in the channel or already have an invite pending for this channel.',
-      );
+    if (alreadyIn.length > 1) {
+      return res.json({
+        amount: 'none',
+        message: `${alreadyIn.map((user, i) =>
+          match(i)
+            .with(0, () => user.username)
+            .with(alreadyIn.length - 1, () => ` ${user.username},`)
+            .otherwise(() => ` ${user.username}`),
+        )} are already in the channel`,
+      });
     }
-    if (result.modifiedCount < usernames.length) {
-      return res.json(
-        `${
-          usernames.length - result.modifiedCount
-        } users are in the channel or already have an invite pending for this channel.`,
-      );
+    if (alreadyIn.length === 1) {
+      return res.json({
+        amount: 'none',
+        message: `${alreadyIn.map(
+          (user) => user.username,
+        )} is already in the channel`,
+      });
     }
-    return res.json(`${usernames} have been sent invites to the channel.`);
+    if (usernames.length > 1) {
+      return res.json({
+        amount: 'all',
+        message: 'Invites sent',
+      });
+    }
+    if (usernames.length === 1) {
+      return res.json({ amount: 'all', message: 'Invite sent' });
+    }
   } catch (err) {
     return res.json(err);
   }
 };
 
-export const addChannelConnection = async (
-  channel_id: string,
-  user_id: string,
-) => {
-  const response = await userSchema.findByIdAndUpdate(user_id, {
-    $push: { channels: channel_id },
-  });
-  return response;
+const getInvites = async (req: Request, res: Response) => {
+  const invites = await userSchema
+    .findById(req.body.user_id)
+    .populate({
+      path: 'invites.channel',
+      select: 'channel_name',
+    })
+    .select('invites.sender invites.channel invites.seen -_id')
+    .exec();
+  return res.json(invites?.invites);
 };
 
-export const removeChannelConnection = async (
-  user_id: string,
-  channel_id: string,
-) => {
-  const response = await userSchema.findByIdAndUpdate(user_id, {
-    $pull: { channels: channel_id },
+export const inviteAccepted = async (user_id: string, channel_id: string) => {
+  await userSchema.findByIdAndUpdate(user_id, {
+    $pull: { invites: { channel: channel_id } },
   });
-  return response;
+};
+
+const declineInvite = async (req: Request, res: Response) => {
+  const response = await userSchema.findByIdAndUpdate(req.body.user_id, {
+    $pull: { 'invites.channel': req.body.channel_id },
+  });
+  return res.json(response);
+};
+
+const invitesSeen = async (req: Request, res: Response) => {
+  await userSchema.findByIdAndUpdate(req.body.user_id, {
+    $set: { 'invites.$[].seen': true },
+  });
+  return res.json('Invites set as seen');
 };
 
 export default {
@@ -188,4 +232,7 @@ export default {
   logout,
   checkSession,
   invite,
+  getInvites,
+  declineInvite,
+  invitesSeen,
 };

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import useFetch, { fetchOnce } from '../../hooks/useFetch';
 import { Container } from './Styles';
 import { useQueryClient } from 'react-query';
@@ -8,6 +8,10 @@ import { useDispatch } from 'react-redux';
 import { setNotif } from '../../../slice/notifSlice';
 import Modal from '../../modal/Modal';
 import InviteForm from './invite-form/InviteForm';
+import Invites from './invites/Invites';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
+import { ModalContext } from '../../modal/ModalContext';
 
 interface User {
   _id: string;
@@ -21,16 +25,28 @@ interface Channels {
 }
 
 const StartPage = (props: { userId: string }) => {
+  const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
-  const { data, isLoading } = useFetch<'channel', Channels[]>({
+  const { data, isLoading, isFetching } = useFetch<'channel', Channels[]>({
     action: 'channel/getChannelsOverview',
     payload: { user_id: props.userId },
     key: 'channels-overview',
     options: { refetchOnWindowFocus: false },
   });
+
+  const invitesData = useFetch<'user', Invites[]>({
+    action: 'user/getInvites',
+    payload: { user_id: user.id },
+    key: 'get-invites',
+    options: { refetchOnWindowFocus: false },
+  }).data;
+
+  const [invites, setInvites] = useState<Invites[]>([]);
   const [channels, setChannels] = useState<Channels[]>();
 
   const queryClient = useQueryClient();
+
+  const { setInviteChannelId } = useContext(ModalContext);
 
   useEffect(() => {
     if (data) {
@@ -38,19 +54,35 @@ const StartPage = (props: { userId: string }) => {
     }
   }, [data]);
 
-  if (isLoading) {
+  useEffect(() => {
+    if (invitesData) {
+      setInvites(invitesData);
+    }
+  }, [invitesData]);
+
+  if (isLoading || isFetching) {
     return <Container>Loading..</Container>;
   }
 
   if (!channels || channels?.length === 0) {
-    return <>No channels</>;
+    return (
+      <div>
+        <Invites invites={invites} />
+        No channels
+      </div>
+    );
   }
 
   return (
     <Container>
+      <Invites invites={invites} />
       <Table
         channels={channels}
         actions={[
+          {
+            label: 'Add User',
+            action: (channel) => setInviteChannelId(channel._id),
+          },
           {
             label: <Edit />,
             action: () => console.log('Edit'),

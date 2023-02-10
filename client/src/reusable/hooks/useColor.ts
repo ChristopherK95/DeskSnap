@@ -7,6 +7,8 @@ type Colors = {
   darkGray: '363636';
   red: 'af0202';
   redHover: '990404';
+  acceptGreen: '34cf48';
+  denyRed: 'e05d3d';
 };
 
 const colors: Colors = {
@@ -18,6 +20,8 @@ const colors: Colors = {
   darkGray: '363636',
   red: 'af0202',
   redHover: '990404',
+  acceptGreen: '34cf48',
+  denyRed: 'e05d3d',
 };
 
 export default (color: keyof Colors) => {

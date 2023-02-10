@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import channelSchema from '../schemas/channel-schema';
-import { addChannelConnection, removeChannelConnection } from './User';
+import { inviteAccepted } from './User';
 
 const createChannel = async (req: Request, res: Response) => {
   const { channel_name, user_id } = req.body;
@@ -11,20 +11,18 @@ const createChannel = async (req: Request, res: Response) => {
   });
   try {
     const response = await newChannel.save();
-    const refResp = await addChannelConnection(response.id, user_id);
-    return res.json({ response, refResp });
+    return res.json({ response });
   } catch (err) {
     return res.status(500).json(err);
   }
 };
 
 const removeChannel = async (req: Request, res: Response) => {
-  const { channel_id, user_id } = req.body;
+  const { channel_id } = req.body;
 
   const response = await channelSchema.findByIdAndRemove(channel_id);
   if (response) {
-    await removeChannelConnection(user_id, channel_id);
-    return res.status(200).json();
+    return res.status(200).json(response);
   } else {
     return res.status(500).json({ message: 'Channel not found' });
   }
@@ -75,11 +73,15 @@ const getChannelName = async (req: Request, res: Response) => {
   } else return res.status(404).json({ message: 'Channel not found' });
 };
 
-const addUser = async (req: Request, res: Response) => {
+const acceptInvite = async (req: Request, res: Response) => {
   const { user_id, channel_id } = req.body;
   const response = await channelSchema.findByIdAndUpdate(channel_id, {
     $push: { users: user_id },
   });
+  inviteAccepted(user_id, channel_id);
+  if (res.statusCode === 200) {
+    return res.json('success');
+  }
   return res.json(response);
 };
 
@@ -91,6 +93,18 @@ const removeUser = async (req: Request, res: Response) => {
   return res.json(response);
 };
 
+export const checkUsersExist = async (channel_id: string, users: string[]) => {
+  const existingUsers = await channelSchema.findById({
+    _id: channel_id,
+  });
+  const arr = existingUsers?.users.filter((user) =>
+    users.includes(user.toString()),
+  );
+  console.log('array: ' + arr);
+  console.log('array map: ' + arr?.map((user) => user.toString()));
+  return arr?.map((user) => user.toString());
+};
+
 export default {
   createChannel,
   removeChannel,
@@ -98,6 +112,6 @@ export default {
   getUsers,
   getChannelName,
   getChannelsOverview,
-  addUser,
+  acceptInvite,
   removeUser,
 };

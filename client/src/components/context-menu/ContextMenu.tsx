@@ -11,7 +11,11 @@ const ContextMenu = <T,>(props: {
   useLayoutEffect(() => ref.current.focus(), []);
 
   return (
-    <Container ref={ref} id="context" tabIndex={0} onBlur={() => props.close()}>
+    <Container
+      ref={ref}
+      id="context"
+      tabIndex={0} /*onBlur={() => props.close()}*/
+    >
       {props.actions.map((action, idx) => (
         <ContextItem
           key={idx}
