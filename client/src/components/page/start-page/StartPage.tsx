@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import useFetch, { fetchOnce } from '../../hooks/useFetch';
 import { Container } from './Styles';
 import { useQueryClient } from 'react-query';
@@ -11,6 +11,7 @@ import InviteForm from './invite-form/InviteForm';
 import Invites from './invites/Invites';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
+import { ModalContext } from '../../modal/ModalContext';
 
 interface User {
   _id: string;
@@ -45,6 +46,8 @@ const StartPage = (props: { userId: string }) => {
 
   const queryClient = useQueryClient();
 
+  const { setInviteChannelId } = useContext(ModalContext);
+
   useEffect(() => {
     if (data) {
       setChannels(data);
@@ -76,6 +79,10 @@ const StartPage = (props: { userId: string }) => {
       <Table
         channels={channels}
         actions={[
+          {
+            label: 'Add User',
+            action: (channel) => setInviteChannelId(channel._id),
+          },
           {
             label: <Edit />,
             action: () => console.log('Edit'),

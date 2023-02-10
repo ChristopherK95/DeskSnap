@@ -16,6 +16,16 @@ export const Title = styled.div`
   font-size: 24px;
 `;
 
+export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-height: 400px;
+  overflow: auto;
+  padding-right: 20px;
+`;
+
 export const InputContainer = styled.div`
   display: flex;
   align-items: center;

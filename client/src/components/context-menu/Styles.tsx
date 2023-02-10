@@ -12,6 +12,7 @@ export const Container = styled.div`
   top: 15px;
   box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.3);
   overflow: hidden;
+  width: max-content;
 `;
 
 export const ContextItem = styled.div`

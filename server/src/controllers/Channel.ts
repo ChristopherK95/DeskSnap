@@ -93,6 +93,18 @@ const removeUser = async (req: Request, res: Response) => {
   return res.json(response);
 };
 
+export const checkUsersExist = async (channel_id: string, users: string[]) => {
+  const existingUsers = await channelSchema.findById({
+    _id: channel_id,
+  });
+  const arr = existingUsers?.users.filter((user) =>
+    users.includes(user.toString()),
+  );
+  console.log('array: ' + arr);
+  console.log('array map: ' + arr?.map((user) => user.toString()));
+  return arr?.map((user) => user.toString());
+};
+
 export default {
   createChannel,
   removeChannel,

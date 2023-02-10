@@ -1,6 +1,9 @@
 import { Request, Response } from 'express';
 import userSchema from '../schemas/user-schema';
 import bcrypt from 'bcrypt';
+import { checkUsersExist } from './Channel';
+import { Schema } from 'mongoose';
+import { match } from 'ts-pattern';
 
 const createUser = async (req: Request, res: Response) => {
   const { username, password } = req.body;
@@ -129,30 +132,59 @@ const invite = async (req: Request, res: Response) => {
   const { usernames, channel_id, sender } = req.body;
   const invite = { channel: channel_id, sender, seen: false };
 
+  const users = await userSchema.find({ username: { $in: usernames } });
+  let arr: string[] = [];
+  if (users.length > 0) arr = users.map((user) => user.id);
+
+  let existList: string[] | undefined;
+  if (users.length > 0) {
+    existList = await checkUsersExist(channel_id, arr);
+  }
+
+  console.log(existList);
+
+  const alreadyIn = users.filter((user) => existList?.includes(user.id));
+  console.log(alreadyIn);
+
   try {
-    const result = await userSchema.updateMany(
+    await userSchema.updateMany(
       {
         username: { $in: usernames },
-        channels: { $ne: channel_id },
-        'invites.channel_id': { $ne: channel_id },
+        _id: { $nin: existList },
+        'invites.channel': { $ne: channel_id },
       },
       {
         $push: { invites: invite },
       },
     );
-    if (result.modifiedCount === 0) {
-      return res.json(
-        'The users are in the channel or already have an invite pending for this channel.',
-      );
+    if (alreadyIn.length > 1) {
+      return res.json({
+        amount: 'none',
+        message: `${alreadyIn.map((user, i) =>
+          match(i)
+            .with(0, () => user.username)
+            .with(alreadyIn.length - 1, () => ` ${user.username},`)
+            .otherwise(() => ` ${user.username}`),
+        )} are already in the channel`,
+      });
     }
-    if (result.modifiedCount < usernames.length) {
-      return res.json(
-        `${
-          usernames.length - result.modifiedCount
-        } users are in the channel or already have an invite pending for this channel.`,
-      );
+    if (alreadyIn.length === 1) {
+      return res.json({
+        amount: 'none',
+        message: `${alreadyIn.map(
+          (user) => user.username,
+        )} is already in the channel`,
+      });
     }
-    return res.json(`${usernames} have been sent invites to the channel.`);
+    if (usernames.length > 1) {
+      return res.json({
+        amount: 'all',
+        message: 'Invites sent',
+      });
+    }
+    if (usernames.length === 1) {
+      return res.json({ amount: 'all', message: 'Invite sent' });
+    }
   } catch (err) {
     return res.json(err);
   }
