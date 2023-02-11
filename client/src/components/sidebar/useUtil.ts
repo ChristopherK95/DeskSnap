@@ -22,7 +22,6 @@ export default (props: {
       action: 'channel/createChannel',
       payload: { channel_name: channelName, user_id: user.id },
     });
-    console.log(channel.status);
     if (channel.status === 204 || channel.status === 200) {
       dispatch(setNotif({ message: 'Channel created!' }));
       queryClient.invalidateQueries('channels-overview');

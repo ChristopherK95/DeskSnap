@@ -7,6 +7,7 @@ const Input = (props: {
   style?: CSSProperties;
   type: React.HTMLInputTypeAttribute;
   onChange: (value: string) => void;
+  onKeyEnter?: () => void;
 }) => {
   return (
     <Container style={props.style}>
@@ -14,6 +15,7 @@ const Input = (props: {
         type={props.type}
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
+        onKeyDown={(e) => e.key === 'Enter' && props.onKeyEnter?.()}
       />
       <Label empty={props.value === ''}>{props.label}</Label>
     </Container>

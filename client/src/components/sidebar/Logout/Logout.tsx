@@ -4,11 +4,11 @@ import { useDispatch } from 'react-redux';
 import { setUser } from '../../../slice/userSlice';
 import { fetchOnce } from '../../hooks/useFetch';
 import { useNavigate } from 'react-router-dom';
-import Modal from '../../modal/Modal';
+import Popup from '../../popup/Popup';
 import { useState } from 'react';
 
 const Logout = () => {
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showPopup, setShowPopup] = useState<boolean>(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const logout = async () => {
@@ -23,11 +23,11 @@ const Logout = () => {
 
   return (
     <>
-      {showModal && (
-        <Modal
-          onClose={() => setShowModal(false)}
+      {showPopup && (
+        <Popup
+          onClose={() => setShowPopup(false)}
           onConfirm={logout}
-          showModal={showModal}
+          showPopup={showPopup}
           danger={true}
           buttonText="Logout"
         >
@@ -39,9 +39,9 @@ const Logout = () => {
               <div>Are you sure you want to log out?</div>
             </Text>
           </LogoutModal>
-        </Modal>
+        </Popup>
       )}
-      <Container onClick={() => setShowModal(true)}>
+      <Container onClick={() => setShowPopup(true)}>
         <LogoutLogo />
       </Container>
     </>

@@ -6,12 +6,11 @@ import Table from './table/Table';
 import Edit from './Edit';
 import { useDispatch } from 'react-redux';
 import { setNotif } from '../../../slice/notifSlice';
-import Modal from '../../modal/Modal';
 import InviteForm from './invite-form/InviteForm';
 import Invites from './invites/Invites';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { ModalContext } from '../../modal/ModalContext';
+import { PopupContext } from '../../popup/PopupContext';
 
 interface User {
   _id: string;
@@ -46,7 +45,7 @@ const StartPage = (props: { userId: string }) => {
 
   const queryClient = useQueryClient();
 
-  const { setInviteChannelId } = useContext(ModalContext);
+  const { setInviteChannelId } = useContext(PopupContext);
 
   useEffect(() => {
     if (data) {

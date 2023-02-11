@@ -2,33 +2,45 @@ import { useEffect, useRef } from 'react';
 import Button from '../../reusable/component/Button/Button';
 import { BackDrop, ButtonContainer, Cancel, Window } from './Styles';
 
-const Modal = (props: {
+const Popup = (props: {
   children: React.ReactNode;
   size?: { height: number | string; width: number | string };
-  showModal: boolean;
+  showPopup: boolean;
   buttonText?: string;
   danger?: boolean;
   onClose: () => void;
   onConfirm: () => void;
 }) => {
   const ref = useRef({} as HTMLDivElement);
-  const handleBlur = (e: React.FocusEvent<HTMLDivElement, Element>) => {
-    if (!e.currentTarget.contains(e.relatedTarget)) {
-      props.onClose();
-    }
-  };
+
+  // const handleBlur = (e: React.FocusEvent<HTMLDivElement, Element>) => {
+  //   if (!e.currentTarget.contains(e.relatedTarget)) {
+  //     props.onClose();
+  //   }
+  // };
 
   useEffect(() => {
     ref.current?.focus();
-  }, [props.showModal]);
+  }, [props.showPopup]);
+
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (!ref.current.contains(e.target as HTMLElement)) {
+        props.onClose();
+      }
+    };
+    window.addEventListener('mousedown', onClick);
+
+    return () => window.removeEventListener('mousedown', onClick);
+  }, []);
 
   return (
-    <BackDrop show={props.showModal}>
+    <BackDrop show={props.showPopup}>
       <Window
         ref={ref}
         size={props.size}
         tabIndex={1}
-        onBlur={(e) => handleBlur(e)}
+        // onBlur={(e) => handleBlur(e)}
       >
         {props.children}
         <ButtonContainer>
@@ -48,4 +60,4 @@ const Modal = (props: {
   );
 };
 
-export default Modal;
+export default Popup;

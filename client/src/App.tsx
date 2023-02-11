@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from './slice/userSlice';
 import { useEffect } from 'react';
 import { RootState } from './store';
-import ModalProvider from './components/modal/ModalContext';
+import ModalProvider from './components/popup/PopupContext';
 
 const queryClient = new QueryClient();
 

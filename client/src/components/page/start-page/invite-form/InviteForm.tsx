@@ -6,13 +6,13 @@ import { setNotif } from '../../../../slice/notifSlice';
 import { RootState } from '../../../../store';
 import { fetchOnce } from '../../../hooks/useFetch';
 import Input from '../../../input/Input';
-import Modal from '../../../modal/Modal';
-import { ModalContext } from '../../../modal/ModalContext';
+import Popup from '../../../popup/Popup';
+import { PopupContext } from '../../../popup/PopupContext';
 import RemoveIcon from './RemoveIcon';
 import { Form, InputContainer, RemoveInput, Title, Container } from './Styles';
 
 const InviteForm = () => {
-  const { inviteChannelId, setInviteChannelId } = useContext(ModalContext);
+  const { inviteChannelId, setInviteChannelId } = useContext(PopupContext);
   const user = useSelector((state: RootState) => state.user);
   const [usernames, setUsernames] = useState<string[]>(['']);
 
@@ -56,11 +56,14 @@ const InviteForm = () => {
   };
 
   useEffect(() => {
-    containerRef.current.scrollTop = containerRef.current.scrollHeight;
-  }, [usernames]);
+    if (containerRef.current)
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+  }, [usernames, containerRef.current]);
+
+  if (!inviteChannelId) return null;
 
   return (
-    <Modal
+    <Popup
       onClose={() => {
         setInviteChannelId(undefined);
         setUsernames(['']);
@@ -69,7 +72,7 @@ const InviteForm = () => {
         invite();
         setUsernames(['']);
       }}
-      showModal={Boolean(inviteChannelId)}
+      showPopup={Boolean(inviteChannelId)}
       size={{ width: 400, height: 'auto' }}
     >
       <Form>
@@ -82,6 +85,10 @@ const InviteForm = () => {
                   label="username"
                   value={input}
                   onChange={(value) => updateInputs(i, value)}
+                  onKeyEnter={() => {
+                    invite();
+                    setUsernames(['']);
+                  }}
                   type={'text'}
                   style={{ width: '100%' }}
                 />
@@ -98,7 +105,7 @@ const InviteForm = () => {
           Add another
         </Button>
       </Form>
-    </Modal>
+    </Popup>
   );
 };
 

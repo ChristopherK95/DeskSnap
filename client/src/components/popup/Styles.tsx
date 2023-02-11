@@ -16,7 +16,7 @@ export const BackDrop = styled.div<{ show: boolean }>`
 export const Window = styled.div<{
   size?: { height: number | string; width: number | string };
 }>`
-  background-color: #2d3250;
+  background-color: ${useColor('gray')};
   border-radius: 8px 8px 0 0;
   font-family: RobotoMedium;
   ${(p) => p.size && `height: ${p.size.height}px; width: ${p.size.width}px;`}
@@ -34,7 +34,7 @@ export const ButtonContainer = styled.div`
   display: flex;
   padding: 0 10px;
   justify-content: end;
-  background-color: #23273d;
+  background-color: ${useColor('darkGray')};
   border-radius: 0 0px 10px 10px;
   align-items: center;
   gap: 20px;
