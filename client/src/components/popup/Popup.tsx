@@ -34,7 +34,6 @@ const Popup = (props: {
         ref={ref}
         size={props.size}
         tabIndex={1}
-        // onBlur={(e) => handleBlur(e)}
       >
         {props.children}
         <ButtonContainer>
