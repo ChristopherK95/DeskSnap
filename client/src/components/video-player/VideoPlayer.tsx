@@ -9,8 +9,10 @@ const VideoPlayer = () => {
   const [paused, setPaused] = useState<boolean>(true);
   const [duration, setDuration] = useState<number>(0);
   const [currentTime, setCurrentTime] = useState<number>(0);
-  const videoRef = useRef({} as HTMLVideoElement);
   const [videoSrc, setVideoSrc] = useState<string>();
+  const [stillCursor, setStillCursor] = useState<boolean>(false);
+  const videoRef = useRef({} as HTMLVideoElement);
+  let timeout: NodeJS.Timeout;
 
   const togglePlay = () => {
     if (videoRef.current.paused) {
@@ -43,6 +45,20 @@ const VideoPlayer = () => {
 
   //   setVideoSrc(url);
   // };
+
+  const mouseStill = () => {
+    // console.log(stillCursor);
+    if (stillCursor) {
+      // console.log('show');
+      setStillCursor(false);
+    }
+    clearTimeout(timeout);
+    if (!stillCursor) {
+      timeout = setTimeout(() => {
+        setStillCursor(true);
+      }, 2000);
+    }
+  };
 
   useLayoutEffect(() => {
     const onKeyUp = (e: KeyboardEvent) => {
@@ -82,6 +98,7 @@ const VideoPlayer = () => {
           onCanPlay={(e) => setDuration(e.currentTarget.duration)}
           onPlay={() => setPaused(false)}
           onPause={() => setPaused(true)}
+          onMouseMove={mouseStill}
           loop
           src={VideoFile}
         >
@@ -94,6 +111,7 @@ const VideoPlayer = () => {
           max={duration}
           changeTime={rewind}
           paused={paused}
+          stillCursor={stillCursor}
           tempPause={tempPause}
           videoRef={videoRef.current}
         />

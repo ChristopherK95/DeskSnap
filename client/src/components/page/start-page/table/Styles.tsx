@@ -29,7 +29,9 @@ export const Row = styled.tr<{ index: number }>`
 export const Header = styled.th`
   background-color: ${() => useColor('black')};
   font-size: 22px;
-  padding: 5px 10px;
+  padding: 5px 0px 5px 15px;
+  text-align: left;
+
   :not(:last-child) {
     border-right: 2px solid ${() => useColor('gray')};
   }
