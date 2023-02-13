@@ -13,12 +13,6 @@ const Popup = (props: {
 }) => {
   const ref = useRef({} as HTMLDivElement);
 
-  // const handleBlur = (e: React.FocusEvent<HTMLDivElement, Element>) => {
-  //   if (!e.currentTarget.contains(e.relatedTarget)) {
-  //     props.onClose();
-  //   }
-  // };
-
   useEffect(() => {
     ref.current?.focus();
   }, [props.showPopup]);
