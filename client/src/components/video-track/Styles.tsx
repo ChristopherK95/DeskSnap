@@ -1,7 +1,11 @@
 import styled from 'styled-components';
 import useColor from '../../reusable/hooks/useColor';
 
-export const Container = styled.div<{ pressed: boolean }>`
+export const Container = styled.div<{
+  pressed: boolean;
+  stillCursor: boolean;
+  hover: boolean;
+}>`
   position: absolute;
   bottom: 0px;
   width: calc(100% - 20px);
@@ -11,15 +15,21 @@ export const Container = styled.div<{ pressed: boolean }>`
   user-select: none;
   display: flex;
   align-items: end;
-  bac :active {
+  :active {
     opacity: 1;
   }
 
+  ${(p) => p.stillCursor && !p.hover && 'padding-bottom: -1px !important;'}
+
   :hover {
-    padding-bottom: 40px;
-    #thumb {
-      opacity: 1;
-    }
+    ${(p) =>
+      !p.stillCursor &&
+      ` 
+        padding-bottom: 40px !important;
+        #thumb {
+          opacity: 1;
+        }
+      `}
   }
 
   ${(p) => p.pressed && 'padding-bottom: 40px;'}
