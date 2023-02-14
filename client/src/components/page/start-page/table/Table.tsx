@@ -1,5 +1,5 @@
-import { useContext } from 'react';
-import { ModalContext } from '../../../modal/ModalContext';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../store';
 import Ellipsis from '../Ellipsis';
 import { Table as StyledTable, Cell, Header, Row, Title } from './Styles';
 
@@ -7,7 +7,7 @@ interface User {
   _id: string;
   username: string;
 }
-interface Channel {
+export interface Channel {
   _id: string;
   channel_name: string;
   users: User[];
@@ -18,6 +18,17 @@ const Table = (props: {
   channels: Channel[];
   actions: { label: React.ReactNode; action: (channel: Channel) => void }[];
 }) => {
+  const user = useSelector((state: RootState) => state.user);
+
+  const setActions = (channel: Channel) => {
+    const arr = props.actions.map((obj) =>
+      channel.owner.username !== user.username && obj.label === 'Delete'
+        ? { ...obj, label: 'Leave' }
+        : obj,
+    );
+    return arr;
+  };
+
   return (
     <StyledTable>
       <thead>
@@ -47,7 +58,7 @@ const Table = (props: {
                 justifyContent: 'center',
               }}
             >
-              <Ellipsis channel={channel} actions={props.actions} />
+              <Ellipsis channel={channel} actions={setActions(channel)} />
             </Cell>
           </Row>
         ))}
