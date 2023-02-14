@@ -144,7 +144,6 @@ const invite = async (req: Request, res: Response) => {
   console.log(existList);
 
   const alreadyIn = users.filter((user) => existList?.includes(user.id));
-  console.log(alreadyIn);
 
   try {
     await userSchema.updateMany(

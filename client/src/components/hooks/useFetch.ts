@@ -14,7 +14,8 @@ type Channel =
   | 'channel/getChannels'
   | 'channel/getUsers'
   | 'channel/getChannelsOverview'
-  | 'channel/acceptInvite';
+  | 'channel/acceptInvite'
+  | 'channel/removeUser';
 
 type Url =
   | 'url/createUrl'

@@ -11,17 +11,9 @@ import Invites, { Invite } from './invites/Invites';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { PopupContext } from '../../popup/PopupContext';
-
-interface User {
-  _id: string;
-  username: string;
-}
-interface Channels {
-  _id: string;
-  channel_name: string;
-  users: User[];
-  owner: User;
-}
+import Modal from '../../../reusable/components/Modal/Modal';
+import Users from './Users/Users';
+import { Channels } from './types';
 
 const StartPage = (props: { userId: string }) => {
   const user = useSelector((state: RootState) => state.user);
@@ -42,6 +34,7 @@ const StartPage = (props: { userId: string }) => {
 
   const [invites, setInvites] = useState<Invite[]>([]);
   const [channels, setChannels] = useState<Channels[]>();
+  const [showUsers, setShowUsers] = useState<number>();
 
   const queryClient = useQueryClient();
 
@@ -59,9 +52,9 @@ const StartPage = (props: { userId: string }) => {
     }
   }, [invitesData]);
 
-  if (isLoading || isFetching) {
-    return <Container>Loading..</Container>;
-  }
+  // if (isLoading || isFetching) {
+  //   return <Container>Loading..</Container>;
+  // }
 
   if (!channels || channels?.length === 0) {
     return (
@@ -76,6 +69,7 @@ const StartPage = (props: { userId: string }) => {
     <Container>
       {invites.length > 0 && <Invites invites={invites} />}
       <Table
+        setShowUsers={setShowUsers}
         channels={channels}
         actions={[
           {
@@ -111,6 +105,15 @@ const StartPage = (props: { userId: string }) => {
           },
         ]}
       />
+      {showUsers !== undefined && (
+        <Modal onClose={() => setShowUsers(undefined)}>
+          <Users
+            channel={channels[showUsers]}
+            currentUser={user}
+            setShowUsers={setShowUsers}
+          />
+        </Modal>
+      )}
       <InviteForm />
     </Container>
   );

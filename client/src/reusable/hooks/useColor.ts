@@ -9,6 +9,7 @@ type Colors = {
   redHover: '990404';
   acceptGreen: '34cf48';
   denyRed: 'e05d3d';
+  error: 'ea512e';
 };
 
 const colors: Colors = {
@@ -22,6 +23,7 @@ const colors: Colors = {
   redHover: '990404',
   acceptGreen: '34cf48',
   denyRed: 'e05d3d',
+  error: 'ea512e',
 };
 
 export default (color: keyof Colors) => {

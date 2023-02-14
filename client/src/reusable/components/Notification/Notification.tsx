@@ -2,9 +2,9 @@ import styled from 'styled-components';
 import useColor from '../../hooks/useColor';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import SuccessIcon from '../../../svgs/SuccessIcon';
-import ErrorIcon from '../../../svgs/ErrorIcon';
+import ErrorIcon from '../../../svgs/Cross';
 import { useDispatch } from 'react-redux';
 import { removeNotif } from '../../../slice/notifSlice';
 
@@ -37,6 +37,7 @@ const Container = styled.div<{ error?: boolean }>`
 
   svg {
     width: 50px;
+    ${(p) => p.error && `fill: ${useColor('error')}`}
   }
 `;
 
