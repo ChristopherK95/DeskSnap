@@ -10,7 +10,7 @@ import {
   Row,
   StyledIcon,
 } from './Styles';
-import useFetch, { fetchOnce } from '../../../hooks/useFetch';
+import { fetchOnce } from '../../../hooks/useFetch';
 import Deny from '../../../../svgs/Deny';
 import Accept from '../../../../svgs/Accept';
 import useColor from '../../../../reusable/hooks/useColor';
@@ -18,7 +18,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store';
 import { useQueryClient } from 'react-query';
 
-interface Invites {
+export interface Invite {
   channel: {
     _id: string;
     channel_name: string;
@@ -43,7 +43,7 @@ const Icon = (props: { read: boolean }) => {
   );
 };
 
-const InvitesList = (props: { invites: Invites[] }) => {
+const InvitesList = (props: { invites: Invite[] }) => {
   const queryClient = useQueryClient();
   const user = useSelector((state: RootState) => state.user);
 
@@ -105,7 +105,7 @@ const InvitesList = (props: { invites: Invites[] }) => {
   );
 };
 
-const Invites = (props: { invites: Invites[] }) => {
+const Invites = (props: { invites: Invite[] }) => {
   const { invites } = props;
   const user = useSelector((state: RootState) => state.user);
   const [read, setRead] = useState<boolean>(false);

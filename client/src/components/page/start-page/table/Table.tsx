@@ -1,4 +1,3 @@
-import { useContext } from 'react';
 import Ellipsis from '../Ellipsis';
 import { Table as StyledTable, Cell, Header, Row, Title } from './Styles';
 

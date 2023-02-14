@@ -7,7 +7,7 @@ import Edit from './Edit';
 import { useDispatch } from 'react-redux';
 import { setNotif } from '../../../slice/notifSlice';
 import InviteForm from './invite-form/InviteForm';
-import Invites from './invites/Invites';
+import Invites, { Invite } from './invites/Invites';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { PopupContext } from '../../popup/PopupContext';
@@ -33,14 +33,14 @@ const StartPage = (props: { userId: string }) => {
     options: { refetchOnWindowFocus: false },
   });
 
-  const invitesData = useFetch<'user', Invites[]>({
+  const invitesData = useFetch<'user', Invite[]>({
     action: 'user/getInvites',
     payload: { user_id: user.id },
     key: 'get-invites',
     options: { refetchOnWindowFocus: false },
   }).data;
 
-  const [invites, setInvites] = useState<Invites[]>([]);
+  const [invites, setInvites] = useState<Invite[]>([]);
   const [channels, setChannels] = useState<Channels[]>();
 
   const queryClient = useQueryClient();
@@ -74,7 +74,7 @@ const StartPage = (props: { userId: string }) => {
 
   return (
     <Container>
-      <Invites invites={invites} />
+      {invites.length > 0 && <Invites invites={invites} />}
       <Table
         channels={channels}
         actions={[
