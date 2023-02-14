@@ -7,6 +7,7 @@ const AddChannelForm = (props: {
   errorMessage: string;
   setChannelName: (val: string) => void;
   setActiveChannel: (id: string) => void;
+  onKeyEnter: () => void;
 }) => {
   return (
     <Container>
@@ -16,6 +17,7 @@ const AddChannelForm = (props: {
         value={props.channelName}
         type="text"
         onChange={props.setChannelName}
+        onKeyEnter={props.onKeyEnter}
       />
       {props.errorMessage != '' && <div>{props.errorMessage}</div>}
     </Container>

@@ -10,7 +10,7 @@ import InviteForm from './invite-form/InviteForm';
 import Invites, { Invite } from './invites/Invites';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { ModalContext } from '../../modal/ModalContext';
+import { PopupContext } from '../../popup/PopupContext';
 
 interface User {
   _id: string;
@@ -45,7 +45,7 @@ const StartPage = (props: { userId: string }) => {
 
   const queryClient = useQueryClient();
 
-  const { setInviteChannelId } = useContext(ModalContext);
+  const { setInviteChannelId } = useContext(PopupContext);
 
   useEffect(() => {
     if (data) {

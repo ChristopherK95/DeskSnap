@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export const ModalContext = React.createContext<{
+export const PopupContext = React.createContext<{
   showLogout: boolean;
   setShowLogout: (b: boolean) => void;
   inviteChannelId: string | undefined;
@@ -16,13 +16,13 @@ export const ModalContext = React.createContext<{
   setShowAddChannel: () => {},
 });
 
-const ModalProvider = (props: { children: React.ReactNode }) => {
+const PopupProvider = (props: { children: React.ReactNode }) => {
   const [showLogout, setShowLogout] = useState<boolean>(false);
   const [inviteChannelId, setInviteChannelId] = useState<string>();
   const [showAddChannel, setShowAddChannel] = useState<boolean>(false);
 
   return (
-    <ModalContext.Provider
+    <PopupContext.Provider
       value={{
         showLogout,
         setShowLogout,
@@ -33,8 +33,8 @@ const ModalProvider = (props: { children: React.ReactNode }) => {
       }}
     >
       {props.children}
-    </ModalContext.Provider>
+    </PopupContext.Provider>
   );
 };
 
-export default ModalProvider;
+export default PopupProvider;

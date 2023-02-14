@@ -8,7 +8,7 @@ import {
 } from './Styles';
 import HomeLogo from '../../svgs/Home';
 import { SidebarContext } from './SidebarContext';
-import Modal from '../modal/Modal';
+import Popup from '../popup/Popup';
 import AddChannelForm from './add-channel-form/AddChannelForm';
 import useFetch from '../hooks/useFetch';
 import Channel from './channel/Channel';
@@ -24,7 +24,7 @@ interface ChannelType {
 
 const Sidebar = () => {
   const { activeChannel, setActiveChannel } = useContext(SidebarContext);
-  const [showModal, setShowModal] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const [channels, setChannels] = useState<ChannelType[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [channelName, setChannelName] = useState('');
@@ -65,22 +65,22 @@ const Sidebar = () => {
         <Channel key={i} idx={i} channel={c} />
       ))}
       <StyledChannel>
-        <AddChannel onClick={() => setShowModal(true)}>+</AddChannel>
+        <AddChannel onClick={() => setShowPopup(true)}>+</AddChannel>
       </StyledChannel>
       <LogoutButton>
         <Logout />
       </LogoutButton>
-      {showModal && (
-        <Modal
+      {showPopup && (
+        <Popup
           onClose={() => {
-            setShowModal(false);
+            setShowPopup(false);
             setChannelName('');
           }}
           onConfirm={() => {
             addChannel();
             setChannelName('');
           }}
-          showModal={showModal}
+          showPopup={showPopup}
         >
           <AddChannelForm
             user={user}
@@ -88,8 +88,13 @@ const Sidebar = () => {
             errorMessage={errorMessage}
             setActiveChannel={(id: string) => setActiveChannel(id)}
             setChannelName={setChannelName}
+            onKeyEnter={() => {
+              addChannel();
+              setChannelName('');
+              setShowPopup(false);
+            }}
           />
-        </Modal>
+        </Popup>
       )}
     </Container>
   );

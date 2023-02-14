@@ -2,9 +2,9 @@ type Colors = {
   white: 'ffffff';
   orange: 'fa7646';
   lightOrange: 'ff8e38';
-  black: '252222';
-  gray: '424242';
-  darkGray: '363636';
+  black: '151515';
+  gray: '2f2f2f';
+  darkGray: '222';
   red: 'af0202';
   redHover: '990404';
   acceptGreen: '34cf48';
@@ -15,9 +15,9 @@ const colors: Colors = {
   white: 'ffffff',
   orange: 'fa7646',
   lightOrange: 'ff8e38',
-  black: '252222',
-  gray: '424242',
-  darkGray: '363636',
+  black: '151515',
+  gray: '2f2f2f',
+  darkGray: '222',
   red: 'af0202',
   redHover: '990404',
   acceptGreen: '34cf48',
