@@ -7,7 +7,7 @@ interface User {
   _id: string;
   username: string;
 }
-export interface Channel {
+interface Channel {
   _id: string;
   channel_name: string;
   users: User[];
