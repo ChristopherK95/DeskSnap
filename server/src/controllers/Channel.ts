@@ -18,9 +18,20 @@ const createChannel = async (req: Request, res: Response) => {
 };
 
 const removeChannel = async (req: Request, res: Response) => {
-  const { channel_id } = req.body;
+  const { user_id, channel_id } = req.body;
 
-  const response = await channelSchema.findByIdAndRemove(channel_id);
+  const channel = await channelSchema.findById(channel_id);
+  let response;
+  if (channel?.owner._id.toString() === user_id) {
+    response = channel?.remove();
+  }
+  if (channel && channel?.owner._id.toString() !== user_id) {
+    const users = channel?.users.filter(
+      (user) => user._id.toString() !== user_id,
+    );
+    channel.users = users;
+    response = channel.save();
+  }
   if (response) {
     return res.status(200).json(response);
   } else {
