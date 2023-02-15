@@ -15,7 +15,6 @@ import LeaveOrDelete from './leave-or-delete-channel/LeaveOrDelete';
 
 const StartPage = (props: { userId: string }) => {
   const user = useSelector((state: RootState) => state.user);
-  // const dispatch = useDispatch();
   const { data, isLoading, isFetching } = useFetch<'channel', Channel[]>({
     action: 'channel/getChannelsOverview',
     payload: { user_id: props.userId },
@@ -80,7 +79,7 @@ const StartPage = (props: { userId: string }) => {
           {
             label: 'Delete',
             action: async (channel) => {
-              setLeaveOrDeleteChannel(channel as Channel);
+              setLeaveOrDeleteChannel(channel);
             },
           },
         ]}
