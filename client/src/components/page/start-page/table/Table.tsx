@@ -17,6 +17,7 @@ interface Channel {
 const Table = (props: {
   channels: Channel[];
   actions: { label: React.ReactNode; action: (channel: Channel) => void }[];
+  setShowUsers: (channel: number | undefined) => void;
 }) => {
   const user = useSelector((state: RootState) => state.user);
 
@@ -46,8 +47,13 @@ const Table = (props: {
         {props.channels.map((channel, idx) => (
           <Row key={idx} index={idx}>
             <Cell>{channel.channel_name}</Cell>
-            <Cell style={{ cursor: 'pointer' }}>
-              {channel.users.map((user) => user.username)}
+            <Cell
+              style={{ cursor: 'pointer' }}
+              onClick={() =>
+                props.setShowUsers(props.channels.indexOf(channel))
+              }
+            >
+              {channel.users.map((user) => `${user.username} `)}
             </Cell>
             <Cell>{channel.owner.username}</Cell>
             <Cell

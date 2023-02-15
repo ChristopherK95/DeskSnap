@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import Button from '../../../../reusable/component/Button/Button';
+import Button from '../../../../reusable/components/Button/Button';
 import { setNotif } from '../../../../slice/notifSlice';
 import { RootState } from '../../../../store';
 import { fetchOnce } from '../../../hooks/useFetch';

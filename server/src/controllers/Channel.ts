@@ -111,8 +111,6 @@ export const checkUsersExist = async (channel_id: string, users: string[]) => {
   const arr = existingUsers?.users.filter((user) =>
     users.includes(user.toString()),
   );
-  console.log('array: ' + arr);
-  console.log('array map: ' + arr?.map((user) => user.toString()));
   return arr?.map((user) => user.toString());
 };
 

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
-import Button from '../../reusable/component/Button/Button';
+import Button from '../../reusable/components/Button/Button';
+import OnBlurWrapper from '../../reusable/components/OnBlurWrapper/OnBlurWrapper';
 import { BackDrop, ButtonContainer, Cancel, Window } from './Styles';
 
 const Popup = (props: {
@@ -29,12 +30,8 @@ const Popup = (props: {
   }, []);
 
   return (
-    <BackDrop show={props.showPopup}>
-      <Window
-        ref={ref}
-        size={props.size}
-        tabIndex={1}
-      >
+    <OnBlurWrapper onClose={props.onClose}>
+      <Window ref={ref} size={props.size} tabIndex={1}>
         {props.children}
         <ButtonContainer>
           <Cancel onClick={props.onClose}>Cancel</Cancel>
@@ -49,7 +46,7 @@ const Popup = (props: {
           </Button>
         </ButtonContainer>
       </Window>
-    </BackDrop>
+    </OnBlurWrapper>
   );
 };
 

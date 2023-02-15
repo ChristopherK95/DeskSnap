@@ -1,4 +1,4 @@
-const ErrorIcon = () => {
+const Cross = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -14,7 +14,6 @@ const ErrorIcon = () => {
           cx="118.282"
           cy="145.91"
           r="45.759"
-          fill="#ea512e"
           stroke="none"
           strokeWidth="8.165"
         ></circle>
@@ -42,4 +41,4 @@ const ErrorIcon = () => {
   );
 };
 
-export default ErrorIcon;
+export default Cross;

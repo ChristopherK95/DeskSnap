@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { Container, ContextItem } from './Styles';
 
 const ContextMenu = <T,>(props: {
@@ -10,12 +10,19 @@ const ContextMenu = <T,>(props: {
 
   useLayoutEffect(() => ref.current.focus(), []);
 
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (!ref.current.contains(e.target as HTMLElement)) {
+        props.close();
+      }
+    };
+    window.addEventListener('mousedown', onClick);
+
+    return () => window.removeEventListener('mousedown', onClick);
+  }, []);
+
   return (
-    <Container
-      ref={ref}
-      id="context"
-      tabIndex={0} /*onBlur={() => props.close()}*/
-    >
+    <Container ref={ref} id="context" tabIndex={0}>
       {props.actions.map((action, idx) => (
         <ContextItem
           key={idx}
