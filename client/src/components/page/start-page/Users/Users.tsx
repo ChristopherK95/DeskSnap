@@ -1,11 +1,11 @@
 import { useQueryClient } from 'react-query';
 import ErrorIcon from '../../../../svgs/Cross';
 import { fetchOnce } from '../../../hooks/useFetch';
-import { Channels } from '../types';
+import { Channel } from '../types';
 import { Close, Container, Kick, List, Owner, Title, User } from './Styles';
 
 const Users = (props: {
-  channel: Channels;
+  channel: Channel;
   currentUser: {
     id: string;
     username: string;
@@ -35,7 +35,7 @@ const Users = (props: {
             )}
             {props.channel.owner.username === props.currentUser.username &&
               user.username !== props.channel.owner.username && (
-                <Kick onClick={() => kick(user._id)}>Kick</Kick>
+                <Kick onClick={() => kick(user.id)}>Kick</Kick>
               )}
           </User>
         ))}

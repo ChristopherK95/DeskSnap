@@ -88,6 +88,7 @@ const InviteForm = () => {
                   onKeyEnter={() => {
                     invite();
                     setUsernames(['']);
+                    setInviteChannelId(undefined);
                   }}
                   type={'text'}
                   style={{ width: '100%' }}

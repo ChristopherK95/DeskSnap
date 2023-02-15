@@ -1,8 +1,9 @@
 export interface User {
-  _id: string;
+  id: string;
   username: string;
+  isLoggedIn: boolean;
 }
-export interface Channels {
+export interface Channel {
   _id: string;
   channel_name: string;
   users: User[];

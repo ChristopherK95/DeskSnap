@@ -12,6 +12,7 @@ export const Title = styled.th`
   font-size: 30px;
   height: 60px;
   border-radius: 5px 5px 0 0;
+  text-shadow: -2px 1px 1px rgba(0, 0, 0, 0.6);
 `;
 
 export const Table = styled.table`
