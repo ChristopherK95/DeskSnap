@@ -1,18 +1,8 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store';
 import Ellipsis from '../Ellipsis';
+import { Channel } from '../types';
 import { Table as StyledTable, Cell, Header, Row, Title } from './Styles';
-
-interface User {
-  _id: string;
-  username: string;
-}
-interface Channel {
-  _id: string;
-  channel_name: string;
-  users: User[];
-  owner: User;
-}
 
 const Table = (props: {
   channels: Channel[];

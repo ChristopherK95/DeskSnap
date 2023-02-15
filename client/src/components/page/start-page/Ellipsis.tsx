@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import EllipsisIcon from '../../../svgs/Ellipsis';
 import { useState } from 'react';
 import ContextMenu from '../../context-menu/ContextMenu';
+import { Channel } from './types';
 
 const Icon = styled.div`
   width: 30px;
@@ -14,18 +15,6 @@ const Icon = styled.div`
     }
   }
 `;
-
-interface User {
-  _id: string;
-  username: string;
-}
-
-interface Channel {
-  _id: string;
-  channel_name: string;
-  users: User[];
-  owner: User;
-}
 
 const Ellipsis = (props: {
   channel: Channel;

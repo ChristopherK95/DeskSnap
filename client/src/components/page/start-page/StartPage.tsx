@@ -1,11 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
-import useFetch, { fetchOnce } from '../../hooks/useFetch';
+import useFetch from '../../hooks/useFetch';
 import { Container } from './Styles';
-import { useQueryClient } from 'react-query';
 import Table from './table/Table';
 import Edit from './Edit';
-import { useDispatch } from 'react-redux';
-import { setNotif } from '../../../slice/notifSlice';
 import InviteForm from './invite-form/InviteForm';
 import Invites, { Invite } from './invites/Invites';
 import { useSelector } from 'react-redux';
@@ -13,12 +10,13 @@ import { RootState } from '../../../store';
 import { PopupContext } from '../../popup/PopupContext';
 import Modal from '../../../reusable/components/Modal/Modal';
 import Users from './Users/Users';
-import { Channels } from './types';
+import { Channel } from './types';
+import LeaveOrDelete from './leave-or-delete-channel/LeaveOrDelete';
 
 const StartPage = (props: { userId: string }) => {
   const user = useSelector((state: RootState) => state.user);
-  const dispatch = useDispatch();
-  const { data, isLoading, isFetching } = useFetch<'channel', Channels[]>({
+  // const dispatch = useDispatch();
+  const { data, isLoading, isFetching } = useFetch<'channel', Channel[]>({
     action: 'channel/getChannelsOverview',
     payload: { user_id: props.userId },
     key: 'channels-overview',
@@ -33,12 +31,11 @@ const StartPage = (props: { userId: string }) => {
   }).data;
 
   const [invites, setInvites] = useState<Invite[]>([]);
-  const [channels, setChannels] = useState<Channels[]>();
+  const [channels, setChannels] = useState<Channel[]>();
   const [showUsers, setShowUsers] = useState<number>();
 
-  const queryClient = useQueryClient();
-
-  const { setInviteChannelId } = useContext(PopupContext);
+  const { setInviteChannelId, setLeaveOrDeleteChannel } =
+    useContext(PopupContext);
 
   useEffect(() => {
     if (data) {
@@ -83,24 +80,7 @@ const StartPage = (props: { userId: string }) => {
           {
             label: 'Delete',
             action: async (channel) => {
-              const { status } = await fetchOnce<'channel'>({
-                action: 'channel/removeChannel',
-                payload: { user_id: props.userId, channel_id: channel._id },
-              });
-              if (status === 200) {
-                dispatch(
-                  setNotif({ message: 'Removed channel successfully!' }),
-                );
-                queryClient.invalidateQueries('channels-overview');
-                queryClient.invalidateQueries('sidebar-channels');
-              } else {
-                dispatch(
-                  setNotif({
-                    message: 'Failed to remove channel!',
-                    error: true,
-                  }),
-                );
-              }
+              setLeaveOrDeleteChannel(channel as Channel);
             },
           },
         ]}
@@ -114,6 +94,7 @@ const StartPage = (props: { userId: string }) => {
           />
         </Modal>
       )}
+      <LeaveOrDelete user={user} />
       <InviteForm />
     </Container>
   );
