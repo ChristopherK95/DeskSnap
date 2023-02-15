@@ -2,7 +2,14 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store';
 import Ellipsis from '../Ellipsis';
 import { Channel } from '../types';
-import { Table as StyledTable, Cell, Header, Row, Title } from './Styles';
+import {
+  Table as StyledTable,
+  Cell,
+  Header,
+  Row,
+  Title,
+  UsersCell,
+} from './Styles';
 
 const Table = (props: {
   channels: Channel[];
@@ -38,12 +45,14 @@ const Table = (props: {
           <Row key={idx} index={idx}>
             <Cell>{channel.channel_name}</Cell>
             <Cell
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: 'pointer', maxWidth: '150px' }}
               onClick={() =>
                 props.setShowUsers(props.channels.indexOf(channel))
               }
             >
-              {channel.users.map((user) => `${user.username} `)}
+              <UsersCell>
+                {channel.users.map((user) => `${user.username} `)}
+              </UsersCell>
             </Cell>
             <Cell>{channel.owner.username}</Cell>
             <Cell

@@ -43,3 +43,11 @@ export const Cell = styled.td`
   font-size: 20px;
   padding: 5px 0 5px 15px;
 `;
+
+export const UsersCell = styled.div`
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding-right: 10px;
+`;
