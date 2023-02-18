@@ -23,22 +23,17 @@ import usePopup from './user-popup/usePopup';
 
 const UserInfo = () => {
   const user = useSelector((state: RootState) => state.user);
-  const [showPopup, setShowPopup] = useState<
-    'Username' | 'Email' | 'Password'
-  >();
+  const [showPopup, setShowPopup] = useState<'Username' | 'Password'>();
   const [showDeleteAccount, setShowDeleteAccount] = useState(false);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [username, setUsername] = useState(user.username);
-  const [email, setEmail] = useState('');
 
   const { changeUsername, changePassword, deleteAccount } = useFunctions();
 
   const popup = usePopup({
     username,
     setUsername,
-    email,
-    setEmail,
     password,
     setPassword,
     confirmPassword,
@@ -57,20 +52,6 @@ const UserInfo = () => {
           </Value>
           <ButtonContainer>
             <Button onClick={() => setShowPopup('Username')} size="normal">
-              Change
-            </Button>
-          </ButtonContainer>
-        </Category>
-        <HR />
-        <Category>
-          <Label>
-            <Span>Email</Span>
-          </Label>
-          <Value>
-            <Span>zoil@placeholder.com</Span>
-          </Value>
-          <ButtonContainer>
-            <Button onClick={() => setShowPopup('Email')} size="normal">
               Change
             </Button>
           </ButtonContainer>

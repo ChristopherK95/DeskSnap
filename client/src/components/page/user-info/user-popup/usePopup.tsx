@@ -4,8 +4,6 @@ import UserPopup from './UserPopup';
 const usePopup = (params: {
   username: string;
   setUsername: (val: string) => void;
-  email: string;
-  setEmail: (val: string) => void;
   password: string;
   setPassword: (val: string) => void;
   confirmPassword: string;
@@ -14,15 +12,13 @@ const usePopup = (params: {
   const {
     username,
     setUsername,
-    email,
-    setEmail,
     password,
     setPassword,
     confirmPassword,
     setConfirmPassword,
   } = params;
 
-  const getPopup = (val: 'Username' | 'Email' | 'Password') => {
+  const getPopup = (val: 'Username' | 'Password') => {
     return match(val)
       .with('Username', () => (
         <UserPopup
@@ -31,16 +27,6 @@ const usePopup = (params: {
             label: 'Enter username',
             value: username,
             onChange: setUsername,
-          }}
-        />
-      ))
-      .with('Email', () => (
-        <UserPopup
-          popup={{
-            title: 'Change email',
-            label: 'Enter email',
-            value: email,
-            onChange: setEmail,
           }}
         />
       ))
