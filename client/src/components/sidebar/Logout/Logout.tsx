@@ -1,4 +1,4 @@
-import { Container, LogoutModal, Text, Title } from './Styles';
+import { Container, LogoutContainer, Text, Title } from './Styles';
 import LogoutLogo from '../../../svgs/Logout';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../../slice/userSlice';
@@ -9,8 +9,10 @@ import { useState } from 'react';
 
 const Logout = () => {
   const [showPopup, setShowPopup] = useState<boolean>(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const logout = async () => {
     await fetchOnce<'user'>({
       action: 'user/logout',
@@ -31,14 +33,14 @@ const Logout = () => {
           danger={true}
           buttonText="Logout"
         >
-          <LogoutModal>
+          <LogoutContainer>
             <Title>
               <h2>Logging out</h2>
             </Title>
             <Text>
               <div>Are you sure you want to log out?</div>
             </Text>
-          </LogoutModal>
+          </LogoutContainer>
         </Popup>
       )}
       <Container onClick={() => setShowPopup(true)}>

@@ -17,6 +17,7 @@ export const StyledButton = styled.button<{
     font-size: 16px;
   `;
   }}
+  width: fit-content;
   background-color: ${(p) =>
     p.danger ? useColor('red') : useColor('lightOrange')};
   font-family: RobotoBold;

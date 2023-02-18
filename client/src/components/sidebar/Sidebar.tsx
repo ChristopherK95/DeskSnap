@@ -67,6 +67,12 @@ const Sidebar = () => {
       <StyledChannel>
         <AddChannel onClick={() => setShowPopup(true)}>+</AddChannel>
       </StyledChannel>
+      <div
+        style={{ cursor: 'pointer' }}
+        onClick={() => setActiveChannel('profile')}
+      >
+        Profile
+      </div>
       <LogoutButton>
         <Logout />
       </LogoutButton>
