@@ -18,9 +18,11 @@ const createUser = async (req: Request, res: Response) => {
   newUser.save((err, doc) => {
     if (err?.message.split(' ', 2)[0] === 'E11000') {
       return res.status(500).json({ message: 'Duplicate username' });
-    } else {
-      return res.status(201).json(doc);
     }
+    if (err) {
+      return res.status(500).json(err);
+    }
+    return res.status(201).json(doc);
   });
 };
 
@@ -30,37 +32,55 @@ const getUser = async (req: Request, res: Response) => {
   const user = await userSchema.findById(user_id);
   if (user) {
     return res.status(200).json({ user });
-  } else {
-    return res.status(404).json({ message: 'User not found' });
   }
+  return res.status(404).json({ message: 'User not found' });
 };
 
 const getUsers = async (req: Request, res: Response) => {
   const users = await userSchema.find();
   if (users.length > 0) {
     return res.status(200).json(users);
-  } else {
-    return res.status(500).json({ message: 'No users found' });
   }
+  return res.status(500).json({ message: 'No users found' });
 };
 
-const updateUser = async (req: Request, res: Response) => {
-  const { user_id, username, password } = req.body;
+const changeUsername = async (req: Request, res: Response) => {
+  const { user_id, username } = req.body;
 
-  const user = await userSchema.findById(user_id).exec();
-  if (!user) return res.status(404).json({ message: 'User not found' });
-  if (!bcrypt.compareSync(password, user.password)) {
-    user.password = password;
-  }
-  if (username !== user.username) {
-    user.username = username;
-  }
-  try {
-    const response = await user.save();
-    return res.json(response);
-  } catch (err) {
-    return res.status(500).json({ err });
-  }
+  userSchema.findByIdAndUpdate(
+    user_id,
+    {
+      username: username,
+    },
+    (err, doc) => {
+      if (err?.message.split(' ', 2)[0] === 'E11000') {
+        return res.status(500).json({ message: 'Duplicate username' });
+      }
+      if (err) {
+        return res.status(500).json(err);
+      }
+      return res.status(201).json(doc);
+    },
+  );
+};
+
+const changePassword = async (req: Request, res: Response) => {
+  const { user_id, password } = req.body;
+
+  const cryptedPassword = bcrypt.hashSync(password, 10);
+
+  userSchema.findByIdAndUpdate(
+    user_id,
+    {
+      password: cryptedPassword,
+    },
+    (err, doc) => {
+      if (err) {
+        return res.status(500).json(err);
+      }
+      return res.status(201).json(doc);
+    },
+  );
 };
 
 const deleteUser = async (req: Request, res: Response) => {
@@ -69,7 +89,8 @@ const deleteUser = async (req: Request, res: Response) => {
     const response = await userSchema.findByIdAndDelete(user_id);
     if (response != null) {
       return res.json(response);
-    } else return res.json({ message: 'User not found' });
+    }
+    return res.json({ message: 'User not found' });
   } catch (err) {
     return res.json(err);
   }
@@ -140,8 +161,6 @@ const invite = async (req: Request, res: Response) => {
   if (users.length > 0) {
     existList = await checkUsersExist(channel_id, arr);
   }
-
-  console.log(existList);
 
   const alreadyIn = users.filter((user) => existList?.includes(user.id));
 
@@ -225,7 +244,8 @@ export default {
   createUser,
   getUser,
   getUsers,
-  updateUser,
+  changeUsername,
+  changePassword,
   deleteUser,
   login,
   logout,

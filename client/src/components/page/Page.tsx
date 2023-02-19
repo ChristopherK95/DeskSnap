@@ -9,6 +9,7 @@ import { RootState } from '../../store';
 import NotificationProvider from '../../reusable/components/Notification/Notification';
 import { useDispatch } from 'react-redux';
 import { setNotif } from '../../slice/notifSlice';
+import UserInfo from './user-info/UserInfo';
 
 const HomePage = () => {
   // const a = useQuery('getChannels', () => axios.post('getChannels', {userId: }))
@@ -28,9 +29,9 @@ const HomePage = () => {
     <NotificationProvider>
       <Container>
         <Sidebar />
-        {activeChannel === 'home' ? (
-          <StartPage userId={user.id} />
-        ) : (
+        {activeChannel === 'home' && <StartPage userId={user.id} />}
+        {activeChannel === 'profile' && <UserInfo />}
+        {activeChannel !== 'home' && activeChannel !== 'profile' && (
           <Content>
             <VideoPlayer />
           </Content>

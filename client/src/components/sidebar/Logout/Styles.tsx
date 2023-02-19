@@ -14,7 +14,7 @@ export const Container = styled.div`
   }
 `;
 
-export const LogoutModal = styled.div`
+export const LogoutContainer = styled.div`
   width: 400px;
   height: 200px;
   display: grid;
