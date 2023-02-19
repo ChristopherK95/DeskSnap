@@ -18,9 +18,11 @@ const createUser = async (req: Request, res: Response) => {
   newUser.save((err, doc) => {
     if (err?.message.split(' ', 2)[0] === 'E11000') {
       return res.status(500).json({ message: 'Duplicate username' });
-    } else if (err) {
+    } 
+    if (err) {
       return res.status(500).json(err);
-    } else return res.status(201).json(doc);
+    } 
+    return res.status(201).json(doc);
   });
 };
 
