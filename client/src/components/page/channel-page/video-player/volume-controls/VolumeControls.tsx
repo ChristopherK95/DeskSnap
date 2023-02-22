@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Volume, VolumeContainer } from './Styles';
 import VolumeIcon from './icons/VolumeIcon';
-import Tooltip from '../../tooltip/Tooltip';
+import Tooltip from '../../../../tooltip/Tooltip';
 
 const VolumeControls = (props: {
   volume: number;

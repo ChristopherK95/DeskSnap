@@ -9,3 +9,12 @@ export interface Channel {
   users: User[];
   owner: User;
 }
+
+export interface Invite {
+  channel: {
+    _id: string;
+    channel_name: string;
+  };
+  sender: string;
+  seen: boolean;
+}

@@ -4,7 +4,7 @@ import useColor from '../../reusable/hooks/useColor';
 export const Container = styled.div`
   width: 70px;
   height: 100%;
-  background-color: ${() => useColor('black')};
+  background-color: ${useColor('black')};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,7 +22,7 @@ export const StyledChannel = styled.div<{ selected?: boolean }>`
 
   :after {
     content: '';
-    background-color: ${() => useColor('white')};
+    background-color: ${useColor('white')};
     width: 4px;
     height: 60%;
     border-radius: 3px;
@@ -47,7 +47,7 @@ export const Home = styled.div<{ selected: boolean }>`
   transition: background-color 0.3s ease;
 
   :hover {
-    background-color: ${() => useColor('gray')};
+    background-color: ${useColor('gray')};
 
     div:last-child {
       opacity: 1;
@@ -57,18 +57,30 @@ export const Home = styled.div<{ selected: boolean }>`
   }
 `;
 
-export const AddChannel = styled.div`
+export const CreateChannel = styled.div`
   cursor: pointer;
   font-size: 40px;
   :hover {
-    color: ${() => useColor('lightOrange')};
+    color: ${useColor('lightOrange')};
+  }
+`;
+
+export const MiscContainer = styled.div`
+  position: absolute;
+  bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+`;
+
+export const Profile = styled.div`
+  cursor: pointer;
+  :hover {
+    color: ${useColor('lightOrange')};
   }
 `;
 
 export const LogoutButton = styled.div`
-  position: absolute;
-  bottom: 10px;
-  justify-self: end;
   width: 70px;
   height: 70px;
 `;

@@ -1,9 +1,9 @@
-import VideoFile from '../../assets/test2.mp4';
+import VideoFile from '../../../../assets/test2.mp4';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import StateIndicator from '../../state-indicator/StateIndicator';
 import { Video, VideoContaier } from './Styles';
 import { match } from 'ts-pattern';
-import VideoTrack from '../video-track/VideoTrack';
+import StateIndicator from '../../../../state-indicator/StateIndicator';
+import VideoTrack from './video-track/VideoTrack';
 
 const VideoPlayer = () => {
   const [paused, setPaused] = useState<boolean>(true);
@@ -26,6 +26,7 @@ const VideoPlayer = () => {
   const tempPause = (mouseDown: boolean) => {
     if (mouseDown) {
       videoRef.current.pause();
+      videoRef.current.requestFullscreen();
     } else videoRef.current.play();
   };
 

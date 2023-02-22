@@ -1,15 +1,17 @@
 import { useContext, useEffect, useState } from 'react';
 import {
-  AddChannel,
   StyledChannel,
   Container,
   Home,
   LogoutButton,
+  Profile,
+  CreateChannel,
+  MiscContainer,
 } from './Styles';
 import HomeLogo from '../../svgs/Home';
 import { SidebarContext } from './SidebarContext';
 import Popup from '../popup/Popup';
-import AddChannelForm from './add-channel-form/AddChannelForm';
+import AddChannelForm from './add-channel-form/CreateChannelForm';
 import useFetch from '../hooks/useFetch';
 import Channel from './channel/Channel';
 import { useSelector } from 'react-redux';
@@ -65,17 +67,13 @@ const Sidebar = () => {
         <Channel key={i} idx={i} channel={c} />
       ))}
       <StyledChannel>
-        <AddChannel onClick={() => setShowPopup(true)}>+</AddChannel>
+        <CreateChannel onClick={() => setShowPopup(true)}>+</CreateChannel>
       </StyledChannel>
-      <div
-        style={{ cursor: 'pointer' }}
-        onClick={() => setActiveChannel('profile')}
-      >
-        Profile
-      </div>
-      <LogoutButton>
-        <Logout />
-      </LogoutButton>
+      <MiscContainer>
+        <LogoutButton>
+          <Logout />
+        </LogoutButton>
+      </MiscContainer>
       {showPopup && (
         <Popup
           onClose={() => {
