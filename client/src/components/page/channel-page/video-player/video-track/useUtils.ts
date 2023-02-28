@@ -15,7 +15,7 @@ export const useUtils = (params: {
   const [tempPaused, setTempPaused] = useState<boolean>(false);
 
   const updateTime = (x: number) => {
-    let newValue = ((x - 80) / trackRef.clientWidth) * max;
+    let newValue = (x / trackRef.clientWidth) * max;
     if (newValue > max) newValue = max;
     if (newValue < 0) newValue = 0;
     changeTime(newValue);
@@ -84,7 +84,7 @@ export const useUtils = (params: {
   const mouseMove = (e: MouseEvent) => {
     if (thumbDown) {
       // params.setThumbPos(e.clientX - 80);
-      updateTime(e.clientX);
+      updateTime(e.offsetX);
     }
   };
 

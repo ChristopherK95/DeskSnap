@@ -27,4 +27,9 @@ export const StyledButton = styled.button<{
     background-color: ${(p) =>
       p.danger ? useColor('redHover') : useColor('orange')};
   }
+  :active {
+    transform: scale(0.95);
+    box-shadow: none;
+  }
+  transition: all 0.2s;
 `;

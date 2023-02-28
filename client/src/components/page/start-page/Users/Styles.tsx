@@ -48,22 +48,3 @@ export const Kick = styled.div`
   }
   color: ${useColor('denyRed')};
 `;
-
-export const Close = styled.div`
-  position: absolute;
-  top: -25px;
-  right: -25px;
-  cursor: pointer;
-  :hover {
-    text-decoration: underline;
-  }
-  svg {
-    width: 25px;
-    fill: ${useColor('orange')};
-  }
-  :hover {
-    svg {
-      fill: ${useColor('lightOrange')};
-    }
-  }
-`;

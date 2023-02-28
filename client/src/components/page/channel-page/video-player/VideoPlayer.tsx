@@ -26,7 +26,7 @@ const VideoPlayer = () => {
   const tempPause = (mouseDown: boolean) => {
     if (mouseDown) {
       videoRef.current.pause();
-      videoRef.current.requestFullscreen();
+      // videoRef.current.requestFullscreen();
     } else videoRef.current.play();
   };
 
@@ -83,6 +83,7 @@ const VideoPlayer = () => {
         setCurrentTime(videoRef.current.currentTime);
       }
     }, 20);
+
     return () => clearInterval(interval);
   }, [paused, duration]);
 

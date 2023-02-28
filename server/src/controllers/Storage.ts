@@ -1,9 +1,8 @@
 import { format } from 'util';
 import { Request, Response, NextFunction } from 'express';
-import { Storage, GetSignedUrlConfig } from '@google-cloud/storage';
+import { Storage, GetSignedUrlConfig, File } from '@google-cloud/storage';
 import { config } from 'dotenv';
-import { nanoid } from 'nanoid';
-
+import multer, { Multer } from 'multer';
 config();
 
 const storage = new Storage({
@@ -12,7 +11,7 @@ const storage = new Storage({
 
 const bucket = storage.bucket(process.env.BUCKET_ID);
 
-const uploadFile = (req: Request, res: Response, next: NextFunction) => {
+export const uploadFile = (req: Request, res: Response, next: NextFunction) => {
   if (!req.file) {
     res.status(400).json({ message: 'No file uploaded.' });
     return;
@@ -44,7 +43,38 @@ const uploadFile = (req: Request, res: Response, next: NextFunction) => {
   blobStream.end(req.file.buffer);
 };
 
-const deleteFile = async (req: Request, res: Response, next: NextFunction) => {
+export const uploadFiles = async (files: Express.Multer.File[]) => {
+  const arr: Promise<string>[] = [];
+  if (Array.isArray(files))
+    files.forEach((file) => {
+      arr.push(
+        new Promise((resolve, reject) => {
+          const blob = bucket.file(file.originalname);
+
+          const blobStream = blob.createWriteStream({
+            resumable: false,
+          });
+
+          blobStream.on('error', (err) => {
+            reject(err);
+          });
+
+          blobStream.on('finish', async () => {
+            const publicUrl = format(
+              `https://storage.googleapus.com/${bucket.name}/${blob.name}`,
+            );
+            resolve(publicUrl);
+          });
+
+          blobStream.end(file.buffer);
+        }),
+      );
+    });
+  const result = await Promise.all(arr);
+  return result;
+};
+
+const deleteFile = async (req: Request, res: Response) => {
   try {
     const response = await bucket.file(req.body.fileName).delete();
     res.status(200).json({ response });
@@ -68,4 +98,4 @@ export const getSignedUrl = async (fileName: string) => {
   }
 };
 
-export default { uploadFile, deleteFile, getSignedUrl };
+export default { uploadFile, uploadFiles, deleteFile, getSignedUrl };

@@ -1,6 +1,13 @@
 import mongoose from 'mongoose';
 
-export const urlSchema = new mongoose.Schema(
+export interface Url {
+  channel_id: string;
+  file_name: string;
+  date: Date;
+  seen: mongoose.Types.Array<string>;
+}
+
+export const urlSchema = new mongoose.Schema<Url>(
   {
     channel_id: {
       type: String,
@@ -15,11 +22,11 @@ export const urlSchema = new mongoose.Schema(
       required: true,
     },
     seen: {
-      type: Array<string>,
+      type: [String],
       required: true,
     },
   },
-  { collection: 'url' }
+  { collection: 'url' },
 );
 
 export default mongoose.model('url', urlSchema);

@@ -1,8 +1,7 @@
 import { useQueryClient } from 'react-query';
-import ErrorIcon from '../../../../svgs/Cross';
 import { fetchOnce } from '../../../hooks/useFetch';
 import { Channel } from '../types';
-import { Close, Container, Kick, List, Owner, Title, User } from './Styles';
+import { Container, Kick, List, Owner, Title, User } from './Styles';
 
 const Users = (props: {
   channel: Channel;
@@ -40,9 +39,6 @@ const Users = (props: {
           </User>
         ))}
       </List>
-      <Close onClick={() => props.setShowUsers(undefined)}>
-        <ErrorIcon />
-      </Close>
     </Container>
   );
 };
