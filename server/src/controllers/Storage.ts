@@ -2,7 +2,6 @@ import { format } from 'util';
 import { Request, Response, NextFunction } from 'express';
 import { Storage, GetSignedUrlConfig, File } from '@google-cloud/storage';
 import { config } from 'dotenv';
-import multer, { Multer } from 'multer';
 config();
 
 const storage = new Storage({
