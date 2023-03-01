@@ -31,7 +31,7 @@ const createUrl = async (req: Request, res: Response) => {
           channel_id: channel_id,
           file_name: file.originalname,
           date: date,
-          seen: [],
+          seen: [user_id],
         }),
       );
     });
