@@ -1,7 +1,7 @@
 import Input from '../../input/Input';
 import { Container, Title } from './Styles';
 
-const AddChannelForm = (props: {
+const CreateChannelForm = (props: {
   user: { id: string; username: string };
   channelName: string;
   errorMessage: string;
@@ -24,4 +24,4 @@ const AddChannelForm = (props: {
   );
 };
 
-export default AddChannelForm;
+export default CreateChannelForm;

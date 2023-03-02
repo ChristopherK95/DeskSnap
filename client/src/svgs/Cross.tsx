@@ -1,6 +1,7 @@
-const Cross = () => {
+const Cross = (props: { onClick?: () => void }) => {
   return (
     <svg
+      onClick={props.onClick}
       xmlns="http://www.w3.org/2000/svg"
       version="1.1"
       viewBox="0 0 91.517 91.517"

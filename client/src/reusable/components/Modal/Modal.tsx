@@ -1,5 +1,6 @@
 import OnBlurWrapper from '../OnBlurWrapper/OnBlurWrapper';
-import { Window } from './Styles';
+import { Close, Window } from './Styles';
+import Cross from '../../../svgs/Cross';
 
 const Modal = (props: {
   children: React.ReactNode;
@@ -10,6 +11,9 @@ const Modal = (props: {
     <OnBlurWrapper onClose={props.onClose}>
       <Window size={props.size} tabIndex={1}>
         {props.children}
+        <Close onClick={props.onClose}>
+          <Cross />
+        </Close>
       </Window>
     </OnBlurWrapper>
   );

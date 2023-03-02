@@ -1,27 +1,48 @@
 import { Request, Response } from 'express';
-import urlSchema from '../schemas/url-schema';
-import { getSignedUrl } from './Storage';
-
-interface Url {
-  url: string;
-  channel_id: string;
-  date: Date;
-  seen: string;
-}
+import urlSchema, { Url } from '../schemas/url-schema';
+import { getSignedUrl, uploadFiles } from './Storage';
 
 const createUrl = async (req: Request, res: Response) => {
-  const { channel_id, file_name, date, seen } = req.body;
+  const { channel_id, user_id, date } = req.body;
 
-  const newUrl = new urlSchema({
-    channel_id,
-    file_name,
-    date,
-    seen,
-  });
+  if (!req.files) {
+    return res.json({ message: 'No files' });
+  }
 
-  const response = await newUrl.save();
+  const urlArray: Url[] = [];
+  if (Array.isArray(req.files))
+    req.files.forEach((file, index) => {
+      file.originalname =
+        user_id +
+        '_' +
+        new Date()
+          .toLocaleDateString('en-se', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+          })
+          .replace(', ', '_')
+          .replaceAll(':', '-') +
+        '_' +
+        index;
+
+      urlArray.push(
+        new urlSchema({
+          channel_id: channel_id,
+          file_name: file.originalname,
+          date: date,
+          seen: [user_id],
+        }),
+      );
+    });
+
+  const uploadRes = await uploadFiles(req.files as Express.Multer.File[]);
+
+  const response = await urlSchema.insertMany(urlArray);
   if (response != null) {
-    return res.status(201).json({ message: 'Object created', response });
+    return res
+      .status(201)
+      .json({ message: 'Object created', response, uploadRes });
   } else {
     return res.status(500).json({ message: 'Object could not be created' });
   }

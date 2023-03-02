@@ -17,15 +17,7 @@ import useColor from '../../../../reusable/hooks/useColor';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store';
 import { useQueryClient } from 'react-query';
-
-export interface Invite {
-  channel: {
-    _id: string;
-    channel_name: string;
-  };
-  sender: string;
-  seen: boolean;
-}
+import { Invite } from '../types';
 
 const Icon = (props: { read: boolean }) => {
   if (props.read) {

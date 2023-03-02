@@ -5,7 +5,9 @@ type Colors = {
   black: '151515';
   gray: '2f2f2f';
   darkGray: '222';
+  lightGray: '5b5b5b';
   red: 'af0202';
+  peach: 'ff564e';
   redHover: '990404';
   acceptGreen: '34cf48';
   denyRed: 'e05d3d';
@@ -19,7 +21,9 @@ const colors: Colors = {
   black: '151515',
   gray: '2f2f2f',
   darkGray: '222',
+  lightGray: '5b5b5b',
   red: 'af0202',
+  peach: 'ff564e',
   redHover: '990404',
   acceptGreen: '34cf48',
   denyRed: 'e05d3d',

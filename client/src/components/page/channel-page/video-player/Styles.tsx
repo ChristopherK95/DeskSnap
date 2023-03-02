@@ -2,13 +2,14 @@ import styled from 'styled-components';
 
 export const VideoContaier = styled.div`
   position: relative;
-  height: 100%;
   width: 100%;
-  box-shadow: -3px 3px 3px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.2);
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: black;
+  border-radius: 8px;
+  overflow: hidden;
 
   :hover {
     #slider {

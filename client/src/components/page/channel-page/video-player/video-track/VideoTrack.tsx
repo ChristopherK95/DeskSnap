@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Backdrop, Container, Progress, Thumb, Track } from './Styles';
 import { useUtils } from './useUtils';
 import Time from './Time';
-import VolumeControls from '../video-player/volume-controls/VolumeControls';
+import VolumeControls from '../volume-controls/VolumeControls';
 
 const VideoTrack = (props: {
   progress: number;

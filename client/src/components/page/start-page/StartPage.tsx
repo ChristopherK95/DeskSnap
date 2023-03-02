@@ -1,20 +1,23 @@
 import { useContext, useEffect, useState } from 'react';
 import useFetch from '../../hooks/useFetch';
-import { Container } from './Styles';
+import { Container, Profile } from './Styles';
 import Table from './table/Table';
 import Edit from './Edit';
 import InviteForm from './invite-form/InviteForm';
-import Invites, { Invite } from './invites/Invites';
+import Invites from './invites/Invites';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { PopupContext } from '../../popup/PopupContext';
 import Modal from '../../../reusable/components/Modal/Modal';
 import Users from './Users/Users';
-import { Channel } from './types';
+import { Channel, Invite } from './types';
 import LeaveOrDelete from './leave-or-delete-channel/LeaveOrDelete';
+import { SidebarContext } from '../../sidebar/SidebarContext';
 
 const StartPage = (props: { userId: string }) => {
   const user = useSelector((state: RootState) => state.user);
+  const { setActiveChannel } = useContext(SidebarContext);
+
   const { data, isLoading, isFetching } = useFetch<'channel', Channel[]>({
     action: 'channel/getChannelsOverview',
     payload: { user_id: props.userId },
@@ -84,6 +87,9 @@ const StartPage = (props: { userId: string }) => {
           },
         ]}
       />
+      <Profile onClick={() => setActiveChannel('profile')}>
+        {user.username}
+      </Profile>
       {showUsers !== undefined && (
         <Modal onClose={() => setShowUsers(undefined)}>
           <Users
