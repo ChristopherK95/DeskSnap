@@ -75,7 +75,6 @@ export const Thumb = styled.div<{ pressed: boolean }>`
   transform: ${(p) =>
     p.pressed ? 'translateX(-50%) scale(150%)' : 'translateX(-50%)'};
   opacity: ${(p) => (p.pressed ? 1 : 0)} !important;
-  opacity: 0;
   transition: opacity 0.3s ease, height 0.3s ease, width 0.3s ease;
   display: flex;
   justify-content: center;
