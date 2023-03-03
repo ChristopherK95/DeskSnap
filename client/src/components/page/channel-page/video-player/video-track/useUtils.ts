@@ -65,7 +65,7 @@ export const useUtils = (params: {
         tempPause(true);
       }
       setThumbDown(true);
-      updateTime(e.clientX);
+      updateTime(e.clientX - trackRef.getBoundingClientRect().x);
       thumbRef.focus();
     }
   };
@@ -84,12 +84,12 @@ export const useUtils = (params: {
   const mouseMove = (e: MouseEvent) => {
     if (thumbDown) {
       // params.setThumbPos(e.clientX - 80);
-      updateTime(e.offsetX);
+      updateTime(e.clientX - trackRef.getBoundingClientRect().x);
     }
   };
 
   const mouseClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    updateTime(e.clientX);
+    updateTime(e.clientX - trackRef.getBoundingClientRect().x);
   };
 
   return {

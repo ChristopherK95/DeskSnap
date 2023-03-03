@@ -4,7 +4,7 @@ import useColor from '../../../../../reusable/hooks/useColor';
 export const Container = styled.div<{
   pressed: boolean;
   stillCursor: boolean;
-  hover: boolean;
+  showBar: boolean;
 }>`
   position: absolute;
   bottom: 0px;
@@ -19,18 +19,10 @@ export const Container = styled.div<{
     opacity: 1;
   }
 
-  ${(p) => p.stillCursor && !p.hover && 'padding-bottom: -1px !important;'}
+  ${(p) => p.stillCursor && !p.showBar && 'padding-bottom: 0px !important;'}
 
-  :hover {
-    ${(p) =>
-      !p.stillCursor &&
-      ` 
-        padding-bottom: 40px !important;
-        #thumb {
-          opacity: 1;
-        }
-      `}
-  }
+  ${(p) => p.showBar && ' padding-bottom: 40px !important;'}
+  
 
   ${(p) => p.pressed && 'padding-bottom: 40px;'}
 `;
@@ -44,6 +36,10 @@ export const Track = styled.div`
   display: flex;
   align-items: center;
   user-select: none;
+  :hover ~ #thumb {
+    opacity: 1 !important;
+  }
+
   :hover ~ #tooltip {
     opacity: 1;
   }
@@ -78,11 +74,14 @@ export const Thumb = styled.div<{ pressed: boolean }>`
   border-radius: 100%;
   transform: ${(p) =>
     p.pressed ? 'translateX(-50%) scale(150%)' : 'translateX(-50%)'};
-  opacity: ${(p) => (p.pressed ? 1 : 0)};
+  opacity: ${(p) => (p.pressed ? 1 : 0)} !important;
   transition: opacity 0.3s ease, height 0.3s ease, width 0.3s ease;
   display: flex;
   justify-content: center;
   cursor: pointer;
+  :hover {
+    opacity: 1;
+  }
 
   ${(p) => p.pressed && '& ~ #tooltip { opacity: 1; }'}
 

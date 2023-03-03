@@ -18,7 +18,7 @@ const VideoTrack = (props: {
   const thumbRef = useRef({} as HTMLDivElement);
   const [volume, setVolume] = useState<number>(1);
   const [prevVolume, setPrevVolume] = useState<number>(0);
-  const [trackHover, setTrackHover] = useState<boolean>(false);
+  const [showBar, setShowBar] = useState<boolean>(false);
 
   const { formatTime, mouseDown, mouseUp, mouseMove, mouseClick, thumbDown } =
     useUtils({
@@ -63,11 +63,11 @@ const VideoTrack = (props: {
     <Container
       ref={trackRef}
       id={'slider'}
-      onMouseOver={() => setTrackHover(true)}
-      onMouseLeave={() => setTrackHover(false)}
+      onMouseOver={() => setShowBar(true)}
+      onMouseLeave={() => setShowBar(false)}
       pressed={thumbDown}
       stillCursor={props.stillCursor}
-      hover={trackHover}
+      showBar={showBar}
     >
       <Track id={'track'} onClick={mouseClick}>
         <Backdrop id={'backdrop'} />
@@ -81,11 +81,12 @@ const VideoTrack = (props: {
         id={'thumb'}
         style={{
           transform: `translateX(${
-            (props.progress / 100) * trackRef.current.clientWidth
+            (props.progress / 100) * trackRef.current.clientWidth -
+            thumbRef.current.clientWidth / 2
           }px)`,
         }}
         pressed={thumbDown}
-      ></Thumb>
+      />
       <VolumeControls
         volume={volume}
         muted={props.videoRef.muted}
