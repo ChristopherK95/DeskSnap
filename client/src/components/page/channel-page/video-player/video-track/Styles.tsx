@@ -90,3 +90,22 @@ export const Thumb = styled.div<{ pressed: boolean }>`
     transform: translate(0);
   }
 `;
+
+export const FullscreenButton = styled.div`
+  position: absolute;
+  right: 0;
+  top: 15px;
+  gap: 10px;
+  cursor: pointer;
+  svg {
+    width: 25px;
+    fill: ${useColor('fadedWhite')};
+    transition: all 0.3s;
+  }
+
+  :hover {
+    svg {
+      fill: ${useColor('white')};
+    }
+  }
+`;

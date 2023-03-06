@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const VideoContaier = styled.div`
+export const VideoContaier = styled.div<{ stillCursor: boolean }>`
   position: relative;
   width: 100%;
   box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.2);
@@ -10,7 +10,7 @@ export const VideoContaier = styled.div`
   background-color: black;
   border-radius: 8px;
   overflow: hidden;
-
+  cursor: ${(p) => (p.stillCursor ? 'none' : 'default')};
   :hover {
     #slider {
       padding: 10px 0 40px 0;

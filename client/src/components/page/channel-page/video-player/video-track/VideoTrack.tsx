@@ -1,8 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
-import { Backdrop, Container, Progress, Thumb, Track } from './Styles';
+import {
+  Backdrop,
+  Container,
+  FullscreenButton,
+  Progress,
+  Thumb,
+  Track,
+} from './Styles';
 import { useUtils } from './useUtils';
 import Time from './Time';
 import VolumeControls from '../volume-controls/VolumeControls';
+import Minimize from '../../../../../svgs/Minimize';
+import Fullscreen from '../../../../../svgs/Fullscreen';
 
 const VideoTrack = (props: {
   progress: number;
@@ -10,9 +19,12 @@ const VideoTrack = (props: {
   max: number;
   paused: boolean;
   videoRef: HTMLVideoElement;
+  containerRef: HTMLDivElement;
   stillCursor: boolean;
+  fullscreen: boolean;
   changeTime: (time: number) => void;
   tempPause: (pause: boolean) => void;
+  toggleFullscreen: () => void;
 }) => {
   const trackRef = useRef({} as HTMLDivElement);
   const thumbRef = useRef({} as HTMLDivElement);
@@ -98,6 +110,9 @@ const VideoTrack = (props: {
         timeElapsed={formatTime(Math.round(props.currentTime))}
         duration={formatTime(Math.round(props.max))}
       />
+      <FullscreenButton onClick={props.toggleFullscreen}>
+        {props.fullscreen ? <Minimize /> : <Fullscreen />}
+      </FullscreenButton>
     </Container>
   );
 };

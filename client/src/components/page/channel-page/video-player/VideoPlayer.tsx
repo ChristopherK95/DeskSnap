@@ -5,22 +5,38 @@ import { match } from 'ts-pattern';
 import StateIndicator from '../../../../state-indicator/StateIndicator';
 import VideoTrack from './video-track/VideoTrack';
 
+let timeOut: NodeJS.Timeout;
+
 const VideoPlayer = () => {
   const [paused, setPaused] = useState<boolean>(true);
   const [duration, setDuration] = useState<number>(0);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [videoSrc, setVideoSrc] = useState<string>();
   const [stillCursor, setStillCursor] = useState<boolean>(false);
+  const [fullscreen, setFullscreen] = useState<boolean>(false);
+
+  const containerRef = useRef({} as HTMLDivElement);
   const videoRef = useRef({} as HTMLVideoElement);
   let timeout: NodeJS.Timeout;
 
-  const togglePlay = () => {
-    if (videoRef.current.paused) {
-      videoRef.current.play();
-    } else {
-      videoRef.current.pause();
-    }
-    setPaused(videoRef.current.paused);
+  const togglePlay = (e?: React.MouseEvent<HTMLVideoElement, MouseEvent>) => {
+    if (e) e.preventDefault();
+    if (timeOut) clearTimeout(timeOut);
+    timeOut = setTimeout(() => {
+      clearTimeout(timeOut);
+      if (videoRef.current.paused) {
+        videoRef.current.play();
+      } else {
+        videoRef.current.pause();
+      }
+      setPaused(videoRef.current.paused);
+    }, 200);
+  };
+
+  const doubleClick = (e: React.MouseEvent<HTMLVideoElement, MouseEvent>) => {
+    e.preventDefault();
+    clearTimeout(timeOut);
+    toggleFullcreen();
   };
 
   const tempPause = (mouseDown: boolean) => {
@@ -35,6 +51,12 @@ const VideoPlayer = () => {
       setCurrentTime(n);
       videoRef.current.currentTime = n;
     }
+  };
+
+  const toggleFullcreen = () => {
+    if (!fullscreen) containerRef.current.requestFullscreen();
+    else document.exitFullscreen();
+    setFullscreen(!fullscreen);
   };
 
   // const loadFile = async () => {
@@ -65,11 +87,12 @@ const VideoPlayer = () => {
     const onKeyUp = (e: KeyboardEvent) => {
       match(e)
         .with({ code: 'Space' }, () => togglePlay())
+        .with({ code: 'KeyF' }, () => toggleFullcreen())
         .otherwise(() => {});
     };
     window.addEventListener('keyup', onKeyUp, false);
     return () => window.removeEventListener('keyup', onKeyUp, false);
-  }, []);
+  }, [fullscreen]);
 
   useLayoutEffect(() => {
     if (!duration || paused) return;
@@ -93,10 +116,11 @@ const VideoPlayer = () => {
 
   return (
     <>
-      <VideoContaier>
+      <VideoContaier ref={containerRef} stillCursor={stillCursor}>
         <Video
           ref={videoRef}
           onClick={togglePlay}
+          onDoubleClick={doubleClick}
           onCanPlay={(e) => setDuration(e.currentTarget.duration)}
           onPlay={() => setPaused(false)}
           onPause={() => setPaused(true)}
@@ -114,8 +138,11 @@ const VideoPlayer = () => {
           changeTime={rewind}
           paused={paused}
           stillCursor={stillCursor}
+          fullscreen={fullscreen}
           tempPause={tempPause}
           videoRef={videoRef.current}
+          containerRef={containerRef.current}
+          toggleFullscreen={toggleFullcreen}
         />
       </VideoContaier>
     </>

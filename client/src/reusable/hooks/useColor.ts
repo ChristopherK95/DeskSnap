@@ -1,5 +1,6 @@
 type Colors = {
   white: 'ffffff';
+  fadedWhite: 'bbbbbb';
   orange: 'fa7646';
   lightOrange: 'ff8e38';
   black: '151515';
@@ -16,6 +17,7 @@ type Colors = {
 
 const colors: Colors = {
   white: 'ffffff',
+  fadedWhite: 'bbbbbb',
   orange: 'fa7646',
   lightOrange: 'ff8e38',
   black: '151515',
