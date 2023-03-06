@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const VideoContaier = styled.div<{ stillCursor: boolean }>`
+export const VideoContaier = styled.div`
   position: relative;
   width: 100%;
   box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.2);
@@ -10,7 +10,6 @@ export const VideoContaier = styled.div<{ stillCursor: boolean }>`
   background-color: black;
   border-radius: 8px;
   overflow: hidden;
-  cursor: ${(p) => (p.stillCursor ? 'none' : 'default')};
   :hover {
     #slider {
       padding: 10px 0 40px 0;
@@ -27,9 +26,10 @@ export const VideoContaier = styled.div<{ stillCursor: boolean }>`
   }
 `;
 
-export const Video = styled.video`
+export const Video = styled.video<{ stillCursor: boolean }>`
   user-select: none;
   width: 100%;
   max-height: 100%;
   background-color: black;
+  cursor: ${(p) => (p.stillCursor ? 'none' : 'default')};
 `;

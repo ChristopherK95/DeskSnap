@@ -70,9 +70,7 @@ const VideoPlayer = () => {
   // };
 
   const mouseStill = () => {
-    // console.log(stillCursor);
     if (stillCursor) {
-      // console.log('show');
       setStillCursor(false);
     }
     clearTimeout(timeout);
@@ -116,9 +114,10 @@ const VideoPlayer = () => {
 
   return (
     <>
-      <VideoContaier ref={containerRef} stillCursor={stillCursor}>
+      <VideoContaier ref={containerRef}>
         <Video
           ref={videoRef}
+          stillCursor={stillCursor}
           onClick={togglePlay}
           onDoubleClick={doubleClick}
           onCanPlay={(e) => setDuration(e.currentTarget.duration)}
