@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import useColor from '../../../../../../reusable/hooks/useColor';
 
 const Container = styled.div<{
   volume: number;
@@ -14,23 +15,23 @@ const Container = styled.div<{
 
   :hover {
     #volume {
-      fill: white;
+      fill: ${useColor('white')};
     }
     #volume-low,
     #volume-high,
     #mute {
-      stroke: white;
+      stroke: ${useColor('white')};
     }
   }
 
   #volume {
-    fill: #bbbbbb;
+    fill: ${useColor('fadedWhite')};
     transition: fill 0.3s ease;
   }
   #volume-high,
   #volume-low,
   #mute {
-    stroke: #bbbbbb;
+    stroke: ${useColor('fadedWhite')};
     transition: stroke-opacity 0.5s ease, stroke 0.3s ease;
   }
 
