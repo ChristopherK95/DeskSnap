@@ -114,7 +114,7 @@ const VideoPlayer = () => {
 
   return (
     <>
-      <VideoContaier ref={containerRef}>
+      <VideoContainer ref={containerRef}>
         <Video
           ref={videoRef}
           stillCursor={stillCursor}
