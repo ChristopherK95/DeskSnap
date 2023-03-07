@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const VideoContaier = styled.div`
+export const VideoContainer = styled.div`
   position: relative;
   width: 100%;
   box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.2);
