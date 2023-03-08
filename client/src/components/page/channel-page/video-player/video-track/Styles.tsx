@@ -80,7 +80,7 @@ export const Thumb = styled.div<{ pressed: boolean }>`
   justify-content: center;
   cursor: pointer;
   :hover {
-    opacity: 1;
+    opacity: 1 !important;
   }
 
   ${(p) => p.pressed && '& ~ #tooltip { opacity: 1; }'}
