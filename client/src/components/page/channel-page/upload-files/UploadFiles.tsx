@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import Button from '../../../../reusable/components/Button/Button';
@@ -22,6 +22,7 @@ import {
   Files,
   FileSize,
   InputContainer,
+  Loader,
   Menu,
   Submit,
 } from './Styles';
@@ -32,12 +33,14 @@ const UploadFiles = (props: {
 }) => {
   const [files, setFiles] = useState<File[]>([]);
   const [dragActive, setDragActive] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const { activeChannel } = useContext(SidebarContext);
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
 
   const upload = async () => {
+    setUploading(true);
     const data = new FormData();
     const date = new Date();
     files.forEach((file) => {
@@ -70,6 +73,7 @@ const UploadFiles = (props: {
         }),
       );
     props.setShowModal(false);
+    setUploading(false);
   };
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
@@ -91,7 +95,7 @@ const UploadFiles = (props: {
         wrongFormat++;
         continue;
       }
-      if (file.size > 100 * 1024 * 1024) {
+      if (file.size > 25 * 1024 * 1024) {
         tooLarge++;
         continue;
       }
@@ -203,7 +207,11 @@ const UploadFiles = (props: {
           </Files>
           {files.length > 0 && (
             <Submit>
-              <Button onClick={() => upload()}>Upload</Button>
+              {!uploading ? (
+                <Button onClick={() => upload()}>Upload</Button>
+              ) : (
+                <Loader />
+              )}
             </Submit>
           )}
         </DropContainer>

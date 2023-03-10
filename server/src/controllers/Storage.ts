@@ -73,12 +73,12 @@ export const uploadFiles = async (files: Express.Multer.File[]) => {
   return result;
 };
 
-const deleteFile = async (req: Request, res: Response) => {
+export const deleteFile = async (filename: string) => {
   try {
-    const response = await bucket.file(req.body.fileName).delete();
-    res.status(200).json({ response });
+    const response = await bucket.file(filename).delete();
+    return { success: true, message: response };
   } catch (err) {
-    res.status(500).json({ err });
+    return { success: false, message: err };
   }
 };
 
@@ -86,7 +86,7 @@ export const getSignedUrl = async (fileName: string) => {
   const options: GetSignedUrlConfig = {
     version: 'v4',
     action: 'read',
-    expires: Date.now() + 1 * 60 * 1000,
+    expires: Date.now() + 10 * 60 * 1000,
   };
 
   try {

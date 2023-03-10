@@ -33,6 +33,9 @@ axios.interceptors.response.use(
     if (err.response.status === 401) {
       return err.response;
     }
+    if (err.response.status === 404) {
+      return err.response;
+    }
     if (err.response.status === 500) {
       return err.response;
     }
