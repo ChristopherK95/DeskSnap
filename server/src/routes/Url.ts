@@ -5,7 +5,7 @@ import Multer from 'multer';
 const multer = Multer({
   storage: Multer.memoryStorage(),
   limits: {
-    fileSize: 100 * 1024 * 1024,
+    fileSize: 25 * 1024 * 1024,
   },
 });
 

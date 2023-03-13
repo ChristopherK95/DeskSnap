@@ -1,29 +1,49 @@
 import VideoFile from '../../../../assets/test2.mp4';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Video, VideoContaier } from './Styles';
+import {
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
+import { Next, Video, VideoContainer } from './Styles';
 import { match } from 'ts-pattern';
 import StateIndicator from '../../../../state-indicator/StateIndicator';
 import VideoTrack from './video-track/VideoTrack';
+import { SidebarContext } from '../../../sidebar/SidebarContext';
+import { fetchOnce } from '../../../hooks/useFetch';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../store';
+import Button from '../../../../reusable/components/Button/Button';
+import { url } from 'inspector';
 
-let timeOut: NodeJS.Timeout;
+interface Url {
+  _id: string;
+  file_name: string;
+}
 
 const VideoPlayer = () => {
   const [paused, setPaused] = useState<boolean>(true);
   const [duration, setDuration] = useState<number>(0);
   const [currentTime, setCurrentTime] = useState<number>(0);
-  const [videoSrc, setVideoSrc] = useState<string>();
+  const [urlList, setUrlList] = useState<Url[]>([]);
+  const [activeVideo, setActiveVideo] = useState<string>();
   const [stillCursor, setStillCursor] = useState<boolean>(false);
   const [fullscreen, setFullscreen] = useState<boolean>(false);
+
+  const channel = useContext(SidebarContext).activeChannel;
+  const user = useSelector((state: RootState) => state.user);
 
   const containerRef = useRef({} as HTMLDivElement);
   const videoRef = useRef({} as HTMLVideoElement);
   let timeout: NodeJS.Timeout;
+  let clickTimer: NodeJS.Timeout;
 
   const togglePlay = (e?: React.MouseEvent<HTMLVideoElement, MouseEvent>) => {
     if (e) e.preventDefault();
-    if (timeOut) clearTimeout(timeOut);
-    timeOut = setTimeout(() => {
-      clearTimeout(timeOut);
+    if (clickTimer) clearTimeout(clickTimer);
+    clickTimer = setTimeout(() => {
+      clearTimeout(clickTimer);
       if (videoRef.current.paused) {
         videoRef.current.play();
       } else {
@@ -35,7 +55,7 @@ const VideoPlayer = () => {
 
   const doubleClick = (e: React.MouseEvent<HTMLVideoElement, MouseEvent>) => {
     e.preventDefault();
-    clearTimeout(timeOut);
+    clearTimeout(clickTimer);
     toggleFullcreen();
   };
 
@@ -59,15 +79,58 @@ const VideoPlayer = () => {
     setFullscreen(!fullscreen);
   };
 
-  // const loadFile = async () => {
-  //   const url: string = (
-  //     await axios.post('http://localhost:3000/storage/downloadFile', {
-  //       fileName: 'test.mp4',
-  //     })
-  //   ).data;
+  const getFiles = async () => {
+    const res = await fetchOnce<
+      'url',
+      {
+        url: { _id: string; file_name: string }[];
+        signedUrl: string[];
+      }
+    >({
+      action: 'url/getUrlsNotSeen',
+      payload: { channel_id: channel, user_id: user.id },
+    });
 
-  //   setVideoSrc(url);
-  // };
+    if (typeof res.data === 'string') {
+      return;
+    }
+    if (res.data) {
+      setUrlList(res.data.url);
+      setActiveVideo(res.data.signedUrl[0]);
+    }
+  };
+
+  const getNext = async () => {
+    let next;
+    if (urlList.length > 1) {
+      next = await fetchOnce<'url'>({
+        action: 'url/getNextUrl',
+        payload: {
+          nextFile: urlList[1].file_name,
+          prevFile: urlList[0].file_name,
+          user_id: user.id,
+          channel_id: channel,
+        },
+      });
+      const arr = urlList.slice(1);
+      setUrlList(arr);
+      setActiveVideo(next.data[0]);
+    }
+
+    if (urlList.length === 1) {
+      next = await fetchOnce<'url'>({
+        action: 'url/getNextUrl',
+        payload: {
+          prevFile: urlList[0].file_name,
+          user_id: user.id,
+          channel_id: channel,
+        },
+      });
+      const arr = urlList.slice(1);
+      setUrlList(arr);
+      setActiveVideo(undefined);
+    }
+  };
 
   const mouseStill = () => {
     if (stillCursor) {
@@ -110,11 +173,20 @@ const VideoPlayer = () => {
 
   useEffect(() => {
     videoRef.current.load();
-  }, [videoSrc]);
+  }, [activeVideo]);
+
+  useEffect(() => {
+    getFiles();
+  }, []);
 
   return (
     <>
       <VideoContainer ref={containerRef}>
+        {urlList.length > 0 && (
+          <Next onClick={getNext}>
+            {urlList.length === 1 ? 'Finish' : 'Next'}
+          </Next>
+        )}
         <Video
           ref={videoRef}
           stillCursor={stillCursor}
@@ -125,7 +197,7 @@ const VideoPlayer = () => {
           onPause={() => setPaused(true)}
           onMouseMove={mouseStill}
           loop
-          src={VideoFile}
+          src={activeVideo}
         >
           {/* {videoSrc && <source src={} type="video/mp4" />} */}
         </Video>
@@ -143,7 +215,7 @@ const VideoPlayer = () => {
           containerRef={containerRef.current}
           toggleFullscreen={toggleFullcreen}
         />
-      </VideoContaier>
+      </VideoContainer>
     </>
   );
 };

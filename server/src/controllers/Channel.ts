@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { Types } from 'mongoose';
 import channelSchema from '../schemas/channel-schema';
 import { inviteAccepted } from './User';
 
@@ -112,6 +113,13 @@ export const checkUsersExist = async (channel_id: string, users: string[]) => {
     users.includes(user.toString()),
   );
   return arr?.map((user) => user.toString());
+};
+
+export const getUserAmount = async (channel_id: string) => {
+  const users = await channelSchema
+    .findById<Types.ObjectId[]>(channel_id)
+    .select({ users: 1, _id: 0 });
+  return users?.length;
 };
 
 export default {

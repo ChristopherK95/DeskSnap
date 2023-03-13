@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
+import { Types } from 'mongoose';
 import urlSchema, { Url } from '../schemas/url-schema';
-import { getSignedUrl, uploadFiles } from './Storage';
+import { getUserAmount } from './Channel';
+import { deleteFile, getSignedUrl, uploadFiles } from './Storage';
 
 const createUrl = async (req: Request, res: Response) => {
   const { channel_id, user_id, date } = req.body;
@@ -62,7 +64,7 @@ const getUrlsNotSeen = async (req: Request, res: Response) => {
   if (url.length > 0) {
     const signedUrl = await getSignedUrl(url[0].file_name);
     return res.status(200).json({ url, signedUrl });
-  } else return res.status(404).json({ message: 'File not found' });
+  } else return res.json('No files found');
 };
 
 const getUrlsByChannelId = async (req: Request, res: Response) => {
@@ -86,10 +88,19 @@ const nextVideo = async (req: Request, res: Response) => {
       { returnOriginal: false },
     )
     .exec();
+
+  const userAmount = await getUserAmount(channel_id);
+  const seen = await urlSchema
+    .findOne<Types.Array<string>>({ channel_id })
+    .select({ seen: 1, _id: 0 });
+  if (seen?.length === userAmount) {
+    await deleteFile(prevFile);
+  }
+
   if (nextFile) {
     const signedUrl = getSignedUrl(nextFile);
     return res.json(signedUrl);
-  } else return res.status(404).json({ message: 'Not found' });
+  } else return res.json('No more urls');
 };
 
 const removeUrl = async (req: Request, res: Response) => {
