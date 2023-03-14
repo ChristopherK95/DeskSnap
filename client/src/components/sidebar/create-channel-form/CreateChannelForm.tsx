@@ -11,7 +11,7 @@ const CreateChannelForm = (props: {
 }) => {
   return (
     <Container>
-      <Title>Add Channel</Title>
+      <Title>Create Channel</Title>
       <Input
         label="Channel Name"
         value={props.channelName}

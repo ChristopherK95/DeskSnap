@@ -63,6 +63,13 @@ export const CreateChannel = styled.div`
   :hover {
     color: ${useColor('lightOrange')};
   }
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 55px;
+  width: 55px;
+  position: relative;
 `;
 
 export const MiscContainer = styled.div`
@@ -81,6 +88,11 @@ export const Profile = styled.div`
 `;
 
 export const LogoutButton = styled.div`
-  width: 70px;
-  height: 70px;
+  width: 55px;
+  height: 50px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
 `;

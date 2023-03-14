@@ -10,7 +10,7 @@ export const Container = styled.div`
   svg {
     transition: fill 0.3s ease;
     fill: #ff9060;
-    width: 45px;
+    width: 50px;
   }
 `;
 

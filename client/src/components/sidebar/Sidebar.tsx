@@ -11,13 +11,14 @@ import {
 import HomeLogo from '../../svgs/Home';
 import { SidebarContext } from './SidebarContext';
 import Popup from '../popup/Popup';
-import AddChannelForm from './add-channel-form/CreateChannelForm';
+import CreateChannelForm from './create-channel-form/CreateChannelForm';
 import useFetch from '../hooks/useFetch';
 import Channel from './channel/Channel';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import Logout from './Logout/Logout';
 import useUtil from './useUtil';
+import Tooltip from '../tooltip/Tooltip';
 
 interface ChannelType {
   _id: string;
@@ -30,6 +31,7 @@ const Sidebar = () => {
   const [channels, setChannels] = useState<ChannelType[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [channelName, setChannelName] = useState('');
+  const [showTooltip, setShowTooltip] = useState<'create' | 'logout'>();
 
   const user = useSelector((state: RootState) => state.user);
 
@@ -67,11 +69,30 @@ const Sidebar = () => {
         <Channel key={i} idx={i} channel={c} />
       ))}
       <StyledChannel>
-        <CreateChannel onClick={() => setShowPopup(true)}>+</CreateChannel>
+        <CreateChannel
+          onClick={() => setShowPopup(true)}
+          onMouseEnter={() => setShowTooltip('create')}
+          onMouseLeave={() => setShowTooltip(undefined)}
+        >
+          +
+          <Tooltip
+            direction={'right'}
+            value={'Create channel'}
+            visible={showTooltip === 'create'}
+          />
+        </CreateChannel>
       </StyledChannel>
       <MiscContainer>
-        <LogoutButton>
+        <LogoutButton
+          onMouseEnter={() => setShowTooltip('logout')}
+          onMouseLeave={() => setShowTooltip(undefined)}
+        >
           <Logout />
+          <Tooltip
+            direction={'right'}
+            value={'Logout'}
+            visible={showTooltip === 'logout'}
+          />
         </LogoutButton>
       </MiscContainer>
       {showPopup && (
@@ -86,7 +107,7 @@ const Sidebar = () => {
           }}
           showPopup={showPopup}
         >
-          <AddChannelForm
+          <CreateChannelForm
             user={user}
             channelName={channelName}
             errorMessage={errorMessage}
