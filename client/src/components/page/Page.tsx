@@ -10,12 +10,20 @@ import { useDispatch } from 'react-redux';
 import { setNotif } from '../../slice/notifSlice';
 import UserInfo from './user-info/UserInfo';
 import ChannelPage from './channel-page/ChannelPage';
+import { io } from 'socket.io-client';
 
 const HomePage = () => {
   // const a = useQuery('getChannels', () => axios.post('getChannels', {userId: }))
   const { activeChannel } = useContext(SidebarContext);
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const socket = io('localhost:3000');
+    socket.on('connect', () => {
+      console.log('connected');
+    });
+  }, []);
 
   // useEffect(() => {
   //   dispatch(setNotif({ message: 'Logged in!' }));
