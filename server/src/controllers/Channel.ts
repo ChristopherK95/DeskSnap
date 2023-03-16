@@ -10,12 +10,15 @@ const createChannel = async (req: Request, res: Response) => {
     users: [user_id],
     owner: user_id,
   });
-  try {
-    const response = await newChannel.save();
-    return res.json({ response });
-  } catch (err) {
-    return res.status(500).json(err);
-  }
+  newChannel.save((err, doc) => {
+    if (err?.message.split(' ', 2)[0] === 'E11000') {
+      return res.status(500).json({ message: 'Duplicate channelname' });
+    }
+    if (err) {
+      return res.status(500).json(err);
+    }
+    return res.status(201).json(doc);
+  });
 };
 
 const removeChannel = async (req: Request, res: Response) => {
