@@ -7,6 +7,7 @@ export const channelSchema = new mongoose.Schema(
       minLength: 3,
       maxLength: 20,
       required: true,
+      unique: true,
     },
     owner: {
       type: Schema.Types.ObjectId,

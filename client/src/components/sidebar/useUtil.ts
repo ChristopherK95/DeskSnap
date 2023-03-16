@@ -6,9 +6,8 @@ import { setNotif } from '../../slice/notifSlice';
 export default (props: {
   channelName: string;
   user: { id: string; username: string };
-  setErrorMessage: (err: string) => void;
 }) => {
-  const { channelName, user, setErrorMessage } = props;
+  const { channelName, user } = props;
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
 
@@ -28,8 +27,12 @@ export default (props: {
       queryClient.invalidateQueries('sidebar-channels');
     }
     if (channel.status === 500) {
-      dispatch(setNotif({ message: 'Failed to create channel!', error: true }));
-      setErrorMessage(channel.data.message);
+      dispatch(
+        setNotif({
+          message: `Failed to create channel! ${channel.data.message}`,
+          error: true,
+        }),
+      );
     }
   };
 

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import Button from '../../reusable/components/Button/Button';
 import OnBlurWrapper from '../../reusable/components/OnBlurWrapper/OnBlurWrapper';
-import { BackDrop, ButtonContainer, Cancel, Window } from './Styles';
+import { ButtonContainer, Cancel, Window } from './Styles';
 
 const Popup = (props: {
   children: React.ReactNode;

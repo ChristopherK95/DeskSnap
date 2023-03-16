@@ -1,10 +1,9 @@
-import Input from '../../input/Input';
+import Input from '../../../input/Input';
 import { Container, Title } from './Styles';
 
 const CreateChannelForm = (props: {
   user: { id: string; username: string };
   channelName: string;
-  errorMessage: string;
   setChannelName: (val: string) => void;
   setActiveChannel: (id: string) => void;
   onKeyEnter: () => void;
@@ -19,7 +18,6 @@ const CreateChannelForm = (props: {
         onChange={props.setChannelName}
         onKeyEnter={props.onKeyEnter}
       />
-      {props.errorMessage != '' && <div>{props.errorMessage}</div>}
     </Container>
   );
 };

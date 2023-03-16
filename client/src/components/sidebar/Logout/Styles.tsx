@@ -30,3 +30,13 @@ export const Text = styled.div`
   display: flex;
   padding: 0 20px;
 `;
+
+export const LogoutButton = styled.div`
+  width: 55px;
+  height: 50px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+`;
