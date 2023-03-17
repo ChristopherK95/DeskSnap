@@ -13,6 +13,7 @@ import Users from './Users/Users';
 import { Channel, Invite } from './types';
 import LeaveOrDelete from './leave-or-delete-channel/LeaveOrDelete';
 import { SidebarContext } from '../../sidebar/SidebarContext';
+import EditChannel from './edit-channel/EditChannel';
 
 const StartPage = (props: { userId: string }) => {
   const user = useSelector((state: RootState) => state.user);
@@ -36,7 +37,7 @@ const StartPage = (props: { userId: string }) => {
   const [channels, setChannels] = useState<Channel[]>();
   const [showUsers, setShowUsers] = useState<number>();
 
-  const { setInviteChannelId, setLeaveOrDeleteChannel } =
+  const { setInviteChannelId, setLeaveOrDeleteChannel, setShowEdit } =
     useContext(PopupContext);
 
   useEffect(() => {
@@ -77,7 +78,7 @@ const StartPage = (props: { userId: string }) => {
           },
           {
             label: <Edit />,
-            action: () => console.log('Edit'),
+            action: (channel) => setShowEdit(channel),
           },
           {
             label: 'Delete',
@@ -99,6 +100,7 @@ const StartPage = (props: { userId: string }) => {
           />
         </Modal>
       )}
+      <EditChannel />
       <LeaveOrDelete user={user} />
       <InviteForm />
     </Container>

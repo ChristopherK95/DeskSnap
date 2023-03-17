@@ -10,6 +10,8 @@ export const PopupContext = React.createContext<{
   setShowAddChannel: (b: boolean) => void;
   leaveOrDeleteChannel: Channel | undefined;
   setLeaveOrDeleteChannel: (b: Channel | undefined) => void;
+  showEdit: Channel | undefined;
+  setShowEdit: (channel: Channel | undefined) => void;
 }>({
   showLogout: false,
   setShowLogout: () => {},
@@ -19,6 +21,8 @@ export const PopupContext = React.createContext<{
   setShowAddChannel: () => {},
   leaveOrDeleteChannel: undefined,
   setLeaveOrDeleteChannel: () => {},
+  showEdit: undefined,
+  setShowEdit: () => {},
 });
 
 const PopupProvider = (props: { children: React.ReactNode }) => {
@@ -26,6 +30,7 @@ const PopupProvider = (props: { children: React.ReactNode }) => {
   const [inviteChannelId, setInviteChannelId] = useState<string>();
   const [showAddChannel, setShowAddChannel] = useState<boolean>(false);
   const [leaveOrDeleteChannel, setLeaveOrDeleteChannel] = useState<Channel>();
+  const [showEdit, setShowEdit] = useState<Channel>();
 
   return (
     <PopupContext.Provider
@@ -38,6 +43,8 @@ const PopupProvider = (props: { children: React.ReactNode }) => {
         setShowAddChannel,
         leaveOrDeleteChannel,
         setLeaveOrDeleteChannel,
+        showEdit,
+        setShowEdit,
       }}
     >
       {props.children}

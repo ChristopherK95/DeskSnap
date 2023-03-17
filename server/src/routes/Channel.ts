@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.post('/createChannel', channelController.createChannel);
 router.post('/removeChannel', channelController.removeChannel);
+router.post('/updateChannelName', channelController.updateChannelName);
 router.post('/getChannelName', channelController.getChannelName);
 router.post('/getChannels', channelController.getChannelsByUserId);
 router.post('/getUsers', channelController.getUsers);

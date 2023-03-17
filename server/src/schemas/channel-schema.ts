@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 
 export const channelSchema = new mongoose.Schema(
   {
@@ -7,16 +7,15 @@ export const channelSchema = new mongoose.Schema(
       minLength: 3,
       maxLength: 20,
       required: true,
-      unique: true,
     },
     owner: {
-      type: Schema.Types.ObjectId,
+      type: Types.ObjectId,
       required: true,
       ref: 'user',
     },
     users: [
       {
-        type: Schema.Types.ObjectId,
+        type: Types.ObjectId,
         required: true,
         ref: 'user',
       },
