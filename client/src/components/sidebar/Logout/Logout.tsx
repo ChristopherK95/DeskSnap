@@ -1,4 +1,10 @@
-import { Container, LogoutContainer, Text, Title } from './Styles';
+import {
+  Container,
+  LogoutButton,
+  LogoutContainer,
+  Text,
+  Title,
+} from './Styles';
 import LogoutLogo from '../../../svgs/Logout';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../../slice/userSlice';
@@ -6,9 +12,11 @@ import { fetchOnce } from '../../hooks/useFetch';
 import { useNavigate } from 'react-router-dom';
 import Popup from '../../popup/Popup';
 import { useState } from 'react';
+import Tooltip from '../../tooltip/Tooltip';
 
 const Logout = () => {
   const [showPopup, setShowPopup] = useState<boolean>(false);
+  const [showTooltip, setShowTooltip] = useState<boolean>(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -25,6 +33,15 @@ const Logout = () => {
 
   return (
     <>
+      <LogoutButton
+        onMouseEnter={() => setShowTooltip(true)}
+        onMouseLeave={() => setShowTooltip(false)}
+      >
+        <Container onClick={() => setShowPopup(true)}>
+          <LogoutLogo />
+        </Container>
+        <Tooltip direction={'right'} value={'Logout'} visible={showTooltip} />
+      </LogoutButton>
       {showPopup && (
         <Popup
           onClose={() => setShowPopup(false)}
@@ -43,9 +60,6 @@ const Logout = () => {
           </LogoutContainer>
         </Popup>
       )}
-      <Container onClick={() => setShowPopup(true)}>
-        <LogoutLogo />
-      </Container>
     </>
   );
 };

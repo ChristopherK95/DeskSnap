@@ -10,7 +10,7 @@ export const Container = styled.div`
   svg {
     transition: fill 0.3s ease;
     fill: #ff9060;
-    width: 45px;
+    width: 50px;
   }
 `;
 
@@ -29,4 +29,14 @@ export const Title = styled.div`
 export const Text = styled.div`
   display: flex;
   padding: 0 20px;
+`;
+
+export const LogoutButton = styled.div`
+  width: 55px;
+  height: 50px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
 `;

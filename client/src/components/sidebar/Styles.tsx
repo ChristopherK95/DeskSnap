@@ -57,14 +57,6 @@ export const Home = styled.div<{ selected: boolean }>`
   }
 `;
 
-export const CreateChannel = styled.div`
-  cursor: pointer;
-  font-size: 40px;
-  :hover {
-    color: ${useColor('lightOrange')};
-  }
-`;
-
 export const MiscContainer = styled.div`
   position: absolute;
   bottom: 10px;
@@ -78,9 +70,4 @@ export const Profile = styled.div`
   :hover {
     color: ${useColor('lightOrange')};
   }
-`;
-
-export const LogoutButton = styled.div`
-  width: 70px;
-  height: 70px;
 `;

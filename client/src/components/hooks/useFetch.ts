@@ -10,6 +10,7 @@ type Storage = 'storage/uploadFile' | 'storage/deleteFile';
 type Channel =
   | 'channel/createChannel'
   | 'channel/removeChannel'
+  | 'channel/updateChannelName'
   | 'channel/getChannelName'
   | 'channel/getChannels'
   | 'channel/getUsers'

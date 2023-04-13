@@ -10,12 +10,13 @@ const createChannel = async (req: Request, res: Response) => {
     users: [user_id],
     owner: user_id,
   });
-  try {
-    const response = await newChannel.save();
-    return res.json({ response });
-  } catch (err) {
-    return res.status(500).json(err);
-  }
+
+  newChannel.save((err, doc) => {
+    if (err) {
+      return res.status(500).json(err.message);
+    }
+    return res.json(doc);
+  });
 };
 
 const removeChannel = async (req: Request, res: Response) => {
@@ -23,13 +24,11 @@ const removeChannel = async (req: Request, res: Response) => {
 
   const channel = await channelSchema.findById(channel_id);
   let response;
-  if (channel?.owner._id.toString() === user_id) {
+  if (channel?.owner.toString() === user_id) {
     response = channel?.remove();
   }
-  if (channel && channel?.owner._id.toString() !== user_id) {
-    const users = channel?.users.filter(
-      (user) => user._id.toString() !== user_id,
-    );
+  if (channel && channel?.owner.toString() !== user_id) {
+    const users = channel?.users.filter((user) => user.toString() !== user_id);
     channel.users = users;
     response = channel.save();
   }
@@ -37,6 +36,23 @@ const removeChannel = async (req: Request, res: Response) => {
     return res.status(200).json(response);
   } else {
     return res.status(500).json({ message: 'Channel not found' });
+  }
+};
+
+const updateChannelName = async (req: Request, res: Response) => {
+  const { channel_id, channel_name } = req.body;
+
+  try {
+    await channelSchema.findByIdAndUpdate(
+      channel_id,
+      { channel_name: channel_name },
+      {
+        returnOriginal: false,
+      },
+    );
+    return res.json('Success');
+  } catch (err) {
+    return res.status(500).json(err);
   }
 };
 
@@ -125,6 +141,7 @@ export const getUserAmount = async (channel_id: string) => {
 export default {
   createChannel,
   removeChannel,
+  updateChannelName,
   getChannelsByUserId,
   getUsers,
   getChannelName,

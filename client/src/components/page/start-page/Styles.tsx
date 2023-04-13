@@ -12,12 +12,13 @@ export const Container = styled.div`
 
 export const Profile = styled.div`
   position: absolute;
-  left: 30px;
-  top: 30px;
-  font-size: 30px;
+  left: 40px;
+  top: 40px;
+  font-size: 40px;
   cursor: pointer;
   :hover {
     color: ${useColor('lightOrange')};
   }
+  transition: all 0.2s ease-in-out;
   text-transform: capitalize;
 `;

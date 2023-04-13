@@ -1,23 +1,13 @@
 import { useContext, useEffect, useState } from 'react';
-import {
-  StyledChannel,
-  Container,
-  Home,
-  LogoutButton,
-  Profile,
-  CreateChannel,
-  MiscContainer,
-} from './Styles';
+import { StyledChannel, Container, Home, MiscContainer } from './Styles';
 import HomeLogo from '../../svgs/Home';
 import { SidebarContext } from './SidebarContext';
-import Popup from '../popup/Popup';
-import AddChannelForm from './add-channel-form/CreateChannelForm';
 import useFetch from '../hooks/useFetch';
 import Channel from './channel/Channel';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import Logout from './Logout/Logout';
-import useUtil from './useUtil';
+import CreateChannel from './create-channel/CreateChannel';
 
 interface ChannelType {
   _id: string;
@@ -26,14 +16,9 @@ interface ChannelType {
 
 const Sidebar = () => {
   const { activeChannel, setActiveChannel } = useContext(SidebarContext);
-  const [showPopup, setShowPopup] = useState(false);
   const [channels, setChannels] = useState<ChannelType[]>([]);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [channelName, setChannelName] = useState('');
 
   const user = useSelector((state: RootState) => state.user);
-
-  const { addChannel } = useUtil({ channelName, user, setErrorMessage });
 
   const { data } = useFetch<'channel', { _id: string; channel_name: string }[]>(
     {
@@ -67,39 +52,11 @@ const Sidebar = () => {
         <Channel key={i} idx={i} channel={c} />
       ))}
       <StyledChannel>
-        <CreateChannel onClick={() => setShowPopup(true)}>+</CreateChannel>
+        <CreateChannel setActiveChannel={setActiveChannel} user={user} />
       </StyledChannel>
       <MiscContainer>
-        <LogoutButton>
-          <Logout />
-        </LogoutButton>
+        <Logout />
       </MiscContainer>
-      {showPopup && (
-        <Popup
-          onClose={() => {
-            setShowPopup(false);
-            setChannelName('');
-          }}
-          onConfirm={() => {
-            addChannel();
-            setChannelName('');
-          }}
-          showPopup={showPopup}
-        >
-          <AddChannelForm
-            user={user}
-            channelName={channelName}
-            errorMessage={errorMessage}
-            setActiveChannel={(id: string) => setActiveChannel(id)}
-            setChannelName={setChannelName}
-            onKeyEnter={() => {
-              addChannel();
-              setChannelName('');
-              setShowPopup(false);
-            }}
-          />
-        </Popup>
-      )}
     </Container>
   );
 };
