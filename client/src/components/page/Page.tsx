@@ -10,24 +10,39 @@ import { useDispatch } from 'react-redux';
 import { setNotif } from '../../slice/notifSlice';
 import UserInfo from './user-info/UserInfo';
 import ChannelPage from './channel-page/ChannelPage';
-import { io } from 'socket.io-client';
+import { useQueryClient } from 'react-query';
+import {socket} from '../../socket'
+import { createContext } from 'react';
+import { fetchOnce } from '../hooks/useFetch';
 
 const HomePage = () => {
   // const a = useQuery('getChannels', () => axios.post('getChannels', {userId: }))
   const { activeChannel } = useContext(SidebarContext);
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    const socket = io('localhost:3000');
-    socket.on('connect', () => {
-      console.log('connected');
-    });
-  }, []);
+  const queryClient = useQueryClient();
 
   // useEffect(() => {
   //   dispatch(setNotif({ message: 'Logged in!' }));
   // }, []);
+
+  const getUserChannels = async () => {
+    return await fetchOnce<'channel'>({action: 'channel/getChannels', payload: {user_id: user.id}});
+  }
+
+  useEffect(() => {
+    if(!user.id) {return};
+    socket.on('connect', () => {
+      console.log('styck');
+      //const channels = await getUserChannels();
+      console.log('connect:' );
+      console.log(user);
+      socket.emit('establish', user.username, []);
+      socket.on('receive_invite', () => {
+        queryClient.invalidateQueries('get-invites');
+      })
+    })
+  }, [user]);
 
   if (!user.id) {
     return <></>;

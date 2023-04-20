@@ -18,7 +18,6 @@ declare module "http" {
     }
   }
 }
-
 //interface SessionIncomingMessage extends IncomingMessage {
 //  session: SessionData
 //};
@@ -36,49 +35,22 @@ export const sockets = (
     cors: {
       origin: ['http://localhost:1420', 'http://127.0.0.1:1420'],
       methods: ['POST', 'GET', 'OPTIONS', 'HEAD'],
+      credentials: true,
     }
   });
 
-  let clients: Array<{username: string, socketId: string}> = []
-
-  const wrap = (middleware: any) => (socket: Socket, next: any) => middleware(socket.request, {}, next);
+  const wrap = (expressMiddleware: any) => (socket: Socket, next: any) => expressMiddleware(socket.request, {}, next);
   io.use(wrap(sessionMiddleware));
-
   //io.use((socket, next) => {
   //  sessionMiddleware(socket.request as Request, {} as Response, next as NextFunction);
   //});
-  //io.engine.use(sessionMiddleware);
-  
+  //io.engine.use(wrapper(sessionMiddleware));
 
-  io.on('connection', (socket: Socket) => {
-    console.log('a user connected\n');
-    console.log(clients);
-
-    socket.on('establish', (username: string, channels: string[]) => {
-      const index = clients.findIndex(client => client.username === username)
-      if(index === -1 && username !== '') clients.push({username: username, socketId: socket.id});
-      //if(channels.length > 0){
-      //  console.log('joining:', channels);
-      //  socket.join(channels);
-      //}
-    });
-
-    socket.on('disconnect', () => {
-      console.log('disconnect');
-      clients = clients.filter(client => (client.username !== '' || client.socketId !== socket.id));
-    });
-
+  io.on('connection', (socket) => {
+    console.log('a user connected\n', io.sockets);
     socket.on('send-invite', (users: string[]) => {
-      console.log(users);
-      for(const user of users) {
-        const client = clients.find(obj => obj.username === user);
-        if(client) io.to(client.socketId).emit('receive_invite');
-      }
-    });
-
-    socket.on('new_videos', (room: string) => {
-      console.log('vidoes to:', room);
-      socket.to(room).emit('video_update');
+      console.log(socket);
+      socket.to(users).emit('receive-invite');
     });
   });
 

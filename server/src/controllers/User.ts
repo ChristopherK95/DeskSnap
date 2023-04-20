@@ -228,7 +228,7 @@ export const inviteAccepted = async (user_id: string, channel_id: string) => {
 
 const declineInvite = async (req: Request, res: Response) => {
   const response = await userSchema.findByIdAndUpdate(req.body.user_id, {
-    $pull: { 'invites.channel': req.body.channel_id },
+    $pull: { invites: {channel: req.body.channel_id } },
   });
   return res.json(response);
 };

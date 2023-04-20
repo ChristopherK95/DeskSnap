@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import Button from '../../../../reusable/components/Button/Button';
 import Modal from '../../../../reusable/components/Modal/Modal';
 import { setNotif } from '../../../../slice/notifSlice';
+import { socket } from '../../../../socket';
 import { RootState } from '../../../../store';
 import FolderIcon from '../../../../svgs/FolderIcon';
 import Plus from '../../../../svgs/Plus';
@@ -62,6 +63,7 @@ const UploadFiles = (props: {
               : 'Video/Image uploaded',
         }),
       );
+      socket.emit('new_videos', activeChannel);
     } else
       dispatch(
         setNotif({
