@@ -1,7 +1,7 @@
 import { createServer, IncomingMessage } from 'http';
-import { Server, Socket} from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import express, { Express, NextFunction, Request, Response } from 'express';
-import session, {Session, SessionData} from 'express-session';
+import session, { Session, SessionData } from 'express-session';
 import { Schema } from 'mongoose';
 
 type User = {
@@ -10,12 +10,12 @@ type User = {
   password: string;
 };
 
-declare module "http" {
+declare module 'http' {
   interface IncomingMessage {
     session: Session & {
-      user: User,
-      isLoggedIn: boolean,
-    }
+      user: User;
+      isLoggedIn: boolean;
+    };
   }
 }
 
@@ -29,34 +29,35 @@ declare module "http" {
 
 export const sockets = (
   app: Express,
-  sessionMiddleware: ReturnType<typeof session> 
-) => { 
+  sessionMiddleware: ReturnType<typeof session>,
+) => {
   const httpServer = createServer(app);
   const io = new Server(httpServer, {
     cors: {
       origin: ['http://localhost:1420', 'http://127.0.0.1:1420'],
       methods: ['POST', 'GET', 'OPTIONS', 'HEAD'],
-    }
+    },
   });
 
-  let clients: Array<{username: string, socketId: string}> = []
+  let clients: Array<{ username: string; socketId: string }> = [];
 
-  const wrap = (middleware: any) => (socket: Socket, next: any) => middleware(socket.request, {}, next);
+  const wrap = (middleware: any) => (socket: Socket, next: any) =>
+    middleware(socket.request, {}, next);
   io.use(wrap(sessionMiddleware));
 
   //io.use((socket, next) => {
   //  sessionMiddleware(socket.request as Request, {} as Response, next as NextFunction);
   //});
   //io.engine.use(sessionMiddleware);
-  
 
   io.on('connection', (socket: Socket) => {
-    console.log('a user connected\n');
-    console.log(clients);
-
     socket.on('establish', (username: string, channels: string[]) => {
-      const index = clients.findIndex(client => client.username === username)
-      if(index === -1 && username !== '') clients.push({username: username, socketId: socket.id});
+      console.log(username, 'connected');
+      const index = clients.findIndex((client) => client.username === username);
+      if (index === -1 && username !== '') {
+        clients.push({ username: username, socketId: socket.id });
+        console.log(clients);
+      }
       //if(channels.length > 0){
       //  console.log('joining:', channels);
       //  socket.join(channels);
@@ -64,15 +65,17 @@ export const sockets = (
     });
 
     socket.on('disconnect', () => {
-      console.log('disconnect');
-      clients = clients.filter(client => (client.username !== '' || client.socketId !== socket.id));
+      clients = clients.filter((client) => {
+        if(client.socketId === socket.id) console.log(client.username, 'disconnected');
+        return client.socketId !== socket.id;
+      });
     });
 
     socket.on('send-invite', (users: string[]) => {
       console.log(users);
-      for(const user of users) {
-        const client = clients.find(obj => obj.username === user);
-        if(client) io.to(client.socketId).emit('receive_invite');
+      for (const user of users) {
+        const client = clients.find((obj) => obj.username === user);
+        if (client) io.to(client.socketId).emit('receive_invite');
       }
     });
 
@@ -83,4 +86,4 @@ export const sockets = (
   });
 
   httpServer.listen(3000);
-}  
+};

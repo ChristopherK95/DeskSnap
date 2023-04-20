@@ -11,7 +11,7 @@ import { setNotif } from '../../slice/notifSlice';
 import UserInfo from './user-info/UserInfo';
 import ChannelPage from './channel-page/ChannelPage';
 import { useQueryClient } from 'react-query';
-import {socket} from '../../socket'
+import { socket } from '../../socket';
 import { createContext } from 'react';
 import { fetchOnce } from '../hooks/useFetch';
 
@@ -27,21 +27,31 @@ const HomePage = () => {
   // }, []);
 
   const getUserChannels = async () => {
-    return await fetchOnce<'channel'>({action: 'channel/getChannels', payload: {user_id: user.id}});
-  }
+    return await fetchOnce<'channel'>({
+      action: 'channel/getChannels',
+      payload: { user_id: user.id },
+    });
+  };
 
   useEffect(() => {
-    if(!user.id) {return};
+    if (!user.id) {
+      return;
+    }
+
+    socket.connect();
+
     socket.on('connect', () => {
-      console.log('styck');
       //const channels = await getUserChannels();
-      console.log('connect:' );
       console.log(user);
       socket.emit('establish', user.username, []);
       socket.on('receive_invite', () => {
         queryClient.invalidateQueries('get-invites');
-      })
-    })
+      });
+    });
+
+    socket.on('disconnect', () => {
+      console.log('disconnected');
+    });
   }, [user]);
 
   if (!user.id) {
