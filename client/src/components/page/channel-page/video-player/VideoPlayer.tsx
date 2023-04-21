@@ -177,11 +177,11 @@ const VideoPlayer = () => {
     videoRef.current.load();
   }, [activeVideo]);
 
-  //useEffect(() => {
-  //  socket.on('video_update', () => {
-  //    getFiles();
-  //  })
-  //}, []);
+  useEffect(() => {
+    socket.on('video_update', () => {
+      getFiles();
+    })
+  }, []);
 
   useEffect(() => {
     getFiles();

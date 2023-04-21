@@ -51,28 +51,29 @@ export const sockets = (
   //io.engine.use(sessionMiddleware);
 
   io.on('connection', (socket: Socket) => {
-    socket.on('establish', (username: string, channels: string[]) => {
+    socket.on('establish', (username: string, channels: Array<{_id: string, channel_name: string}>) => {
       console.log(username, 'connected');
       const index = clients.findIndex((client) => client.username === username);
       if (index === -1 && username !== '') {
         clients.push({ username: username, socketId: socket.id });
-        console.log(clients);
       }
-      //if(channels.length > 0){
-      //  console.log('joining:', channels);
-      //  socket.join(channels);
-      //}
+      console.log(channels);
+      if(channels){
+        const rooms = channels.map(channel => channel._id);
+        socket.join(rooms);
+      }
     });
 
     socket.on('disconnect', () => {
       clients = clients.filter((client) => {
-        if(client.socketId === socket.id) console.log(client.username, 'disconnected');
+        if(client.socketId === socket.id) {
+          console.log(client.username, 'disconnected')
+        };
         return client.socketId !== socket.id;
       });
     });
 
     socket.on('send-invite', (users: string[]) => {
-      console.log(users);
       for (const user of users) {
         const client = clients.find((obj) => obj.username === user);
         if (client) io.to(client.socketId).emit('receive_invite');
@@ -80,7 +81,6 @@ export const sockets = (
     });
 
     socket.on('new_videos', (room: string) => {
-      console.log('vidoes to:', room);
       socket.to(room).emit('video_update');
     });
   });

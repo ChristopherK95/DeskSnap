@@ -40,10 +40,10 @@ const HomePage = () => {
 
     socket.connect();
 
-    socket.on('connect', () => {
-      //const channels = await getUserChannels();
-      console.log(user);
-      socket.emit('establish', user.username, []);
+    socket.on('connect', async () => {
+      const channels = await getUserChannels();
+      console.log(channels.data);
+      socket.emit('establish', user.username, channels.data);
       socket.on('receive_invite', () => {
         queryClient.invalidateQueries('get-invites');
       });
