@@ -11,6 +11,7 @@ import path from 'path';
 import session from 'express-session';
 import MongoDBSession from 'connect-mongodb-session';
 import cookieParser from 'cookie-parser';
+import {sockets} from './sockets/index';
 
 type User = {
   id: Schema.Types.ObjectId;
@@ -27,7 +28,7 @@ declare module 'express-session' {
 
 config();
 const MongoDBStore = MongoDBSession(session);
-
+console.log(__dirname);
 const credentials = path.join(__dirname, 'mongo-cert.pem');
 
 const app = express();
@@ -53,7 +54,7 @@ app.use(
   }),
 );
 
-app.use(
+const sessionMiddleware = 
   session({
     cookie: {
       httpOnly: false,
@@ -64,10 +65,12 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store: store,
-  }),
-);
+  });
+
+app.use(sessionMiddleware);   
 
 app.use(cookieParser());
+
 
 /** Connect to MongoDB */
 try {
@@ -89,4 +92,5 @@ app.use('/storage/', storageRoutes);
 app.use('/url/', urlRoutes);
 app.use('/channel/', channelRoutes);
 
-app.listen(3000, () => console.log('Server listening on port 3000'));
+sockets(app, sessionMiddleware);
+//app.listen(3000, () => console.log('Server listening on port 3000'));

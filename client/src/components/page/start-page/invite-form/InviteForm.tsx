@@ -10,6 +10,7 @@ import Popup from '../../../popup/Popup';
 import { PopupContext } from '../../../popup/PopupContext';
 import RemoveIcon from './RemoveIcon';
 import { Form, InputContainer, RemoveInput, Title, Container } from './Styles';
+import { socket } from '../../../../socket';
 
 const InviteForm = () => {
   const { inviteChannelId, setInviteChannelId } = useContext(PopupContext);
@@ -32,10 +33,9 @@ const InviteForm = () => {
     });
     if (res.data.amount === 'none') {
       dispatch(setNotif({ message: res.data.message, error: true }));
-    } else if (res.data.amount === 'some') {
-      dispatch(setNotif({ message: res.data.message }));
     } else {
       dispatch(setNotif({ message: res.data.message }));
+      socket.emit('send-invite', arr);
     }
   };
 

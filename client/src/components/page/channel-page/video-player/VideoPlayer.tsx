@@ -16,6 +16,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store';
 import Button from '../../../../reusable/components/Button/Button';
 import { url } from 'inspector';
+import {socket} from '../../../../socket';
 
 interface Url {
   _id: string;
@@ -132,6 +133,7 @@ const VideoPlayer = () => {
     }
   };
 
+  
   const mouseStill = () => {
     if (stillCursor) {
       setStillCursor(false);
@@ -174,6 +176,12 @@ const VideoPlayer = () => {
   useEffect(() => {
     videoRef.current.load();
   }, [activeVideo]);
+
+  useEffect(() => {
+    socket.on('video_update', () => {
+      getFiles();
+    })
+  }, []);
 
   useEffect(() => {
     getFiles();
