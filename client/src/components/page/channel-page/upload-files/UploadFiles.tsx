@@ -63,7 +63,6 @@ const UploadFiles = (props: {
               : 'Video/Image uploaded',
         }),
       );
-      console.log(activeChannel);
       socket.emit('new_videos', activeChannel);
     } else
       dispatch(

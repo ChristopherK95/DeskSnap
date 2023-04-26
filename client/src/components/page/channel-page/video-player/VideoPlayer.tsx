@@ -178,7 +178,6 @@ const VideoPlayer = () => {
 
   useEffect(() => {
     socket.on('video_update', (channel: string) => {
-      console.log(channel);
       getFiles();
       dispatch(setNotif({message: `New videos on ${channel}`}));
     });

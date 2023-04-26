@@ -64,7 +64,6 @@ export const sockets = (
         if (index === -1 && username !== '') {
           clients.push({ username: username, socketId: socket.id });
         }
-        console.log(channels);
         if (channels) {
           const rooms = channels.map((channel) => channel._id);
           socket.join(rooms);
@@ -89,7 +88,6 @@ export const sockets = (
     });
 
     socket.on('new_videos', (channel: { id: string; channelName: string }) => {
-      console.log(channel);
       socket.to(channel.id).emit('video_update', channel.channelName);
     });
   });
