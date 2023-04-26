@@ -5,7 +5,7 @@ const CreateChannelForm = (props: {
   user: { id: string; username: string };
   channelName: string;
   setChannelName: (val: string) => void;
-  setActiveChannel: (id: string) => void;
+  setActiveChannel: (channel: {id: string, channelName: string}) => void;
   onKeyEnter: () => void;
 }) => {
   return (

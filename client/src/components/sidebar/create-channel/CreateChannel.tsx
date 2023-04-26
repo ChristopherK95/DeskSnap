@@ -5,13 +5,18 @@ import useUtil from '../useUtil';
 import CreateChannelForm from './create-channel-form/CreateChannelForm';
 import { Container } from './Styles';
 
+interface Channel {
+    id: string;
+    channelName: string;
+  }
+
 const CreateChannel = (props: {
   user: {
     id: string;
     username: string;
     isLoggedIn: boolean;
   };
-  setActiveChannel: (value: string) => void;
+  setActiveChannel: (channel: Channel) => void;
 }) => {
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
@@ -50,7 +55,7 @@ const CreateChannel = (props: {
           <CreateChannelForm
             user={user}
             channelName={channelName}
-            setActiveChannel={(id: string) => setActiveChannel(id)}
+            setActiveChannel={(channel: {id: string, channelName: string}) => setActiveChannel(channel)}
             setChannelName={setChannelName}
             onKeyEnter={() => {
               addChannel();
