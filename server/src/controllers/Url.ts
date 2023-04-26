@@ -98,7 +98,7 @@ const nextVideo = async (req: Request, res: Response) => {
   }
 
   if (nextFile) {
-    const signedUrl = getSignedUrl(nextFile);
+    const signedUrl = await getSignedUrl(nextFile);
     return res.json(signedUrl);
   } else return res.json('No more urls');
 };

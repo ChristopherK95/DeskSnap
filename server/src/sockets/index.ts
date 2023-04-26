@@ -68,7 +68,7 @@ export const sockets = (
       clients = clients.filter((client) => {
         if(client.socketId === socket.id) {
           console.log(client.username, 'disconnected')
-        };
+        }
         return client.socketId !== socket.id;
       });
     });
