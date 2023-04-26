@@ -1,4 +1,3 @@
-import VideoFile from '../../../../assets/test2.mp4';
 import {
   useContext,
   useEffect,
@@ -14,9 +13,9 @@ import { SidebarContext } from '../../../sidebar/SidebarContext';
 import { fetchOnce } from '../../../hooks/useFetch';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store';
-import Button from '../../../../reusable/components/Button/Button';
-import { url } from 'inspector';
 import { socket } from '../../../../socket';
+import { useDispatch } from 'react-redux';
+import { setNotif } from '../../../../slice/notifSlice';
 
 interface Url {
   _id: string;
@@ -34,6 +33,7 @@ const VideoPlayer = () => {
 
   const channel = useContext(SidebarContext).activeChannel;
   const user = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
 
   const containerRef = useRef({} as HTMLDivElement);
   const videoRef = useRef({} as HTMLVideoElement);
@@ -89,7 +89,7 @@ const VideoPlayer = () => {
       }
     >({
       action: 'url/getUrlsNotSeen',
-      payload: { channel_id: channel, user_id: user.id },
+      payload: { channel_id: channel.id, user_id: user.id },
     });
 
     if (typeof res.data === 'string') {
@@ -110,7 +110,7 @@ const VideoPlayer = () => {
           nextFile: urlList[1].file_name,
           prevFile: urlList[0].file_name,
           user_id: user.id,
-          channel_id: channel,
+          channel_id: channel.id,
         },
       });
       const arr = urlList.slice(1);
@@ -124,7 +124,7 @@ const VideoPlayer = () => {
         payload: {
           prevFile: urlList[0].file_name,
           user_id: user.id,
-          channel_id: channel,
+          channel_id: channel.id,
         },
       });
       const arr = urlList.slice(1);
@@ -177,8 +177,9 @@ const VideoPlayer = () => {
   }, [activeVideo]);
 
   useEffect(() => {
-    socket.on('video_update', () => {
+    socket.on('video_update', (channel: string) => {
       getFiles();
+      dispatch(setNotif({message: `New videos on ${channel}`}));
     });
   }, []);
 

@@ -7,19 +7,16 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import NotificationProvider from '../../reusable/components/Notification/Notification';
 import { useDispatch } from 'react-redux';
-import { setNotif } from '../../slice/notifSlice';
 import UserInfo from './user-info/UserInfo';
 import ChannelPage from './channel-page/ChannelPage';
 import { useQueryClient } from 'react-query';
 import { socket } from '../../socket';
-import { createContext } from 'react';
 import { fetchOnce } from '../hooks/useFetch';
 
 const HomePage = () => {
   // const a = useQuery('getChannels', () => axios.post('getChannels', {userId: }))
   const { activeChannel } = useContext(SidebarContext);
   const user = useSelector((state: RootState) => state.user);
-  const dispatch = useDispatch();
   const queryClient = useQueryClient();
 
   // useEffect(() => {
@@ -42,7 +39,6 @@ const HomePage = () => {
 
     socket.on('connect', async () => {
       const channels = await getUserChannels();
-      console.log(channels.data);
       socket.emit('establish', user.username, channels.data);
       socket.on('receive_invite', () => {
         queryClient.invalidateQueries('get-invites');
@@ -62,9 +58,9 @@ const HomePage = () => {
     <NotificationProvider>
       <Container>
         <Sidebar />
-        {activeChannel === 'home' && <StartPage userId={user.id} />}
-        {activeChannel === 'profile' && <UserInfo />}
-        {activeChannel !== 'home' && activeChannel !== 'profile' && (
+        {activeChannel.channelName === 'home' && <StartPage userId={user.id} />}
+        {activeChannel.channelName === 'profile' && <UserInfo />}
+        {activeChannel.channelName !== 'home' && activeChannel.channelName !== 'profile' && (
           <ChannelPage />
         )}
       </Container>

@@ -47,7 +47,7 @@ const UploadFiles = (props: {
     files.forEach((file) => {
       data.append('files', file);
     });
-    data.append('channel_id', activeChannel);
+    data.append('channel_id', activeChannel.id);
     data.append('user_id', user.id);
     data.append('date', date.toLocaleDateString());
     const res = await fetchOnce<'url'>({

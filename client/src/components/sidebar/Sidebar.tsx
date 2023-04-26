@@ -40,10 +40,10 @@ const Sidebar = () => {
   }
   return (
     <Container>
-      <StyledChannel selected={activeChannel === 'home'}>
+      <StyledChannel selected={activeChannel.channelName === 'home'}>
         <Home
-          selected={activeChannel === 'home'}
-          onClick={() => setActiveChannel('home')}
+          selected={activeChannel.channelName === 'home'}
+          onClick={() => setActiveChannel({id: '', channelName: 'home'})}
         >
           <HomeLogo />
         </Home>

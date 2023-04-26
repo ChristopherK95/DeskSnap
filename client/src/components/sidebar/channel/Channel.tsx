@@ -14,12 +14,12 @@ const Channel = (props: { channel: Channel; idx: number }) => {
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
 
   return (
-    <StyledChannel key={idx} selected={activeChannel === channel._id}>
+    <StyledChannel key={idx} selected={activeChannel.id === channel._id}>
       <Circle
-        selected={activeChannel === channel._id}
+        selected={activeChannel.id=== channel._id}
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
-        onClick={() => setActiveChannel(channel._id)}
+        onClick={() => setActiveChannel({id: channel._id, channelName: channel.channel_name})}
       >
         {channel.channel_name[0]}
         <Tooltip
