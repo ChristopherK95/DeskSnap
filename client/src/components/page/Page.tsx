@@ -40,9 +40,14 @@ const HomePage = () => {
     socket.on('connect', async () => {
       const channels = await getUserChannels();
       socket.emit('establish', user.username, channels.data);
+
       socket.on('receive_invite', () => {
         queryClient.invalidateQueries('get-invites');
       });
+
+      socket.on('user_added', () => {
+          queryClient.invalidateQueries('channels-overview');
+        })
     });
 
     socket.on('disconnect', () => {
