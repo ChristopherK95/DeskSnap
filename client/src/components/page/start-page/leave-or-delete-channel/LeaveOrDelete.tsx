@@ -1,17 +1,16 @@
 import { Container, Text, Title } from './Styles';
-import { useDispatch } from 'react-redux';
 import { useContext } from 'react';
 import Popup from '../../../popup/Popup';
 import { fetchOnce } from '../../../hooks/useFetch';
 import { User } from '../types';
 import { PopupContext } from '../../../popup/PopupContext';
-import { setNotif } from '../../../../slice/notifSlice';
 import { useQueryClient } from 'react-query';
+import useNotify from '../../../../reusable/hooks/use-notify';
 
 const LeaveOrDelete = (props: { user: User }) => {
   const { leaveOrDeleteChannel, setLeaveOrDeleteChannel } =
     useContext(PopupContext);
-  const dispatch = useDispatch();
+  const notify = useNotify();
   const queryClient = useQueryClient();
 
   const leaveOrDelete = async () => {
@@ -23,16 +22,11 @@ const LeaveOrDelete = (props: { user: User }) => {
       },
     });
     if (status === 200) {
-      dispatch(setNotif({ message: 'Removed channel successfully!' }));
+      notify('Removed channel successfully!');
       queryClient.invalidateQueries('channels-overview');
       queryClient.invalidateQueries('sidebar-channels');
     } else {
-      dispatch(
-        setNotif({
-          message: 'Failed to remove channel!',
-          error: true,
-        }),
-      );
+      notify('Failed to remove channel!', undefined, true);
     }
   };
   return (

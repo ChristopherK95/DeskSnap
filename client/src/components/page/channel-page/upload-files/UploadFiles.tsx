@@ -1,9 +1,10 @@
-import { useContext, useRef, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+import { match } from 'ts-pattern';
 import Button from '../../../../reusable/components/Button/Button';
 import Modal from '../../../../reusable/components/Modal/Modal';
-import { setNotif } from '../../../../slice/notifSlice';
+import useNotify from '../../../../reusable/hooks/use-notify';
 import { socket } from '../../../../socket';
 import { RootState } from '../../../../store';
 import FolderIcon from '../../../../svgs/FolderIcon';
@@ -37,7 +38,7 @@ const UploadFiles = (props: {
   const [uploading, setUploading] = useState(false);
 
   const { activeChannel } = useContext(SidebarContext);
-  const dispatch = useDispatch();
+  const notify = useNotify();
   const user = useSelector((state: RootState) => state.user);
 
   const upload = async () => {
@@ -55,25 +56,19 @@ const UploadFiles = (props: {
       payload: data,
     });
     if (res.status === 201) {
-      dispatch(
-        setNotif({
-          message:
-            files.length > 1
-              ? 'Videos/Images uploaded!'
-              : 'Video/Image uploaded',
-        }),
+      notify(
+        files.length > 1 ? 'Videos/Images uploaded!' : 'Video/Image uploaded',
       );
       socket.emit('new_videos', activeChannel);
-    } else
-      dispatch(
-        setNotif({
-          message:
-            files.length > 1
-              ? 'Videos/Images could not be uploaded!'
-              : 'Video/Image could not be uploaded',
-          error: true,
-        }),
+    } else {
+      notify(
+        files.length > 1
+          ? 'Videos/Images could not be uploaded!'
+          : 'Video/Image could not be uploaded',
+        undefined,
+        true,
       );
+    }
     props.setShowModal(false);
     setUploading(false);
   };
@@ -105,19 +100,21 @@ const UploadFiles = (props: {
     }
 
     if (tooLarge > 0 || wrongFormat > 0) {
-      let text = '';
-      if (wrongFormat > 1)
-        text += wrongFormat + ' files were not correct file type!';
-      if (wrongFormat === 1)
-        text += wrongFormat + ' file was not correct file type!';
-      if (tooLarge > 1) text += tooLarge + ' files exceeded 100 MB!';
-      if (tooLarge === 1) text += tooLarge + ' file exceeded 100 MB!';
-      dispatch(
-        setNotif({
-          message: text,
-          error: true,
-        }),
-      );
+      const text = match({ tooLarge: tooLarge > 0, wrongFormat: wrongFormat > 0 })
+        .with(
+          { tooLarge: true, wrongFormat: true },
+          () => ' files were not correct file type and files exceeded 100 MB!',
+        )
+        .with(
+          { tooLarge: true, wrongFormat: false },
+          () => ' files exceeded 100 MB!',
+        )
+        .with(
+          { tooLarge: false, wrongFormat: true },
+          () => ' files were not correct file type!',
+        )
+        .otherwise(() => '');
+      notify(text, undefined, true);
     }
 
     return arr;

@@ -1,7 +1,6 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useQueryClient } from 'react-query';
-import { useDispatch } from 'react-redux';
-import { setNotif } from '../../../../slice/notifSlice';
+import useNotify from '../../../../reusable/hooks/use-notify';
 import { fetchOnce } from '../../../hooks/useFetch';
 import Input from '../../../input/Input';
 import Popup from '../../../popup/Popup';
@@ -12,7 +11,7 @@ const EditChannel = () => {
   const [channelName, setChannelName] = useState<string>('');
 
   const { showEdit, setShowEdit } = useContext(PopupContext);
-  const dispatch = useDispatch();
+  const notify = useNotify();
   const queryClient = useQueryClient();
 
   const confirm = async () => {
@@ -21,10 +20,10 @@ const EditChannel = () => {
       payload: { channel_id: showEdit?._id, channel_name: channelName },
     });
     if (response.status === 500) {
-      dispatch(setNotif({ message: response.data, error: true }));
+      notify(response.data, undefined, true);
       return;
     }
-    dispatch(setNotif({ message: 'Channel name updated!' }));
+    notify('Channel name updated!');
     queryClient.invalidateQueries('channels-overview');
     queryClient.invalidateQueries('sidebar-channels');
   };

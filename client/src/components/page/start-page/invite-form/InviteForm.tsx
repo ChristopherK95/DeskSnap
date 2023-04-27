@@ -1,8 +1,6 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import Button from '../../../../reusable/components/Button/Button';
-import { setNotif } from '../../../../slice/notifSlice';
 import { RootState } from '../../../../store';
 import { fetchOnce } from '../../../hooks/useFetch';
 import Input from '../../../input/Input';
@@ -11,13 +9,14 @@ import { PopupContext } from '../../../popup/PopupContext';
 import RemoveIcon from './RemoveIcon';
 import { Form, InputContainer, RemoveInput, Title, Container } from './Styles';
 import { socket } from '../../../../socket';
+import useNotify from '../../../../reusable/hooks/use-notify';
 
 const InviteForm = () => {
   const { inviteChannelId, setInviteChannelId } = useContext(PopupContext);
   const user = useSelector((state: RootState) => state.user);
   const [usernames, setUsernames] = useState<string[]>(['']);
 
-  const dispatch = useDispatch();
+  const notify = useNotify();
   const containerRef = useRef({} as HTMLDivElement);
 
   const invite = async () => {
@@ -32,9 +31,9 @@ const InviteForm = () => {
       },
     });
     if (res.data.amount === 'none') {
-      dispatch(setNotif({ message: res.data.message, error: true }));
+      notify(res.data.message, undefined, true);
     } else {
-      dispatch(setNotif({ message: res.data.message }));
+      notify(res.data.message);
       socket.emit('send-invite', arr);
     }
   };

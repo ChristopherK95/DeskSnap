@@ -1,7 +1,6 @@
 import { useQueryClient } from 'react-query';
 import { fetchOnce } from '../hooks/useFetch';
-import { useDispatch } from 'react-redux';
-import { setNotif } from '../../slice/notifSlice';
+import useNotify from '../../reusable/hooks/use-notify';
 
 export default (props: {
   channelName: string;
@@ -9,7 +8,7 @@ export default (props: {
 }) => {
   const { channelName, user } = props;
   const queryClient = useQueryClient();
-  const dispatch = useDispatch();
+  const notify = useNotify();
 
   const addChannel = async () => {
     if (channelName.length > 15) return;
@@ -26,17 +25,12 @@ export default (props: {
       channel.status === 200 ||
       channel.status === 201
     ) {
-      dispatch(setNotif({ message: 'Channel created!' }));
+      notify('Channel created!');
       queryClient.invalidateQueries('channels-overview');
       queryClient.invalidateQueries('sidebar-channels');
     }
     if (channel.status === 500) {
-      dispatch(
-        setNotif({
-          message: `Failed to create channel! ${channel.data.message}`,
-          error: true,
-        }),
-      );
+      notify(`Failed to create channel! ${channel.data.message}`, undefined, true);
     }
   };
 
