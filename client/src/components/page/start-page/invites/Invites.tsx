@@ -13,7 +13,7 @@ import {
 import { fetchOnce } from '../../../hooks/useFetch';
 import Deny from '../../../../svgs/Deny';
 import Accept from '../../../../svgs/Accept';
-import useColor from '../../../../reusable/hooks/useColor';
+import useColor from '../../../../reusable/hooks/use-color';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store';
 import { useQueryClient } from 'react-query';

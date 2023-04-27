@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import useColor from '../../../../reusable/hooks/useColor';
+import useColor from '../../../../reusable/hooks/use-color';
 
 const Icon = styled.svg`
   fill: ${useColor('red')};

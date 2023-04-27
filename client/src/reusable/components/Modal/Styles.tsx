@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import useColor from '../../hooks/useColor';
+import useColor from '../../hooks/use-color';
 
 export const Window = styled.div<{
   size?: { height: number | string; width: number | string };

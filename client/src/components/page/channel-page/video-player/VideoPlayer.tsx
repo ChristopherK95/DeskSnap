@@ -16,6 +16,7 @@ import { RootState } from '../../../../store';
 import { socket } from '../../../../socket';
 import { useDispatch } from 'react-redux';
 import { setNotif } from '../../../../slice/notifSlice';
+import useNotify from '../../../../reusable/hooks/use-notify';
 
 interface Url {
   _id: string;
@@ -34,6 +35,8 @@ const VideoPlayer = () => {
   const channel = useContext(SidebarContext).activeChannel;
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
+
+  const notify = useNotify()
 
   const containerRef = useRef({} as HTMLDivElement);
   const videoRef = useRef({} as HTMLVideoElement);
@@ -179,7 +182,8 @@ const VideoPlayer = () => {
   useEffect(() => {
     socket.on('video_update', (channel: string) => {
       getFiles();
-      dispatch(setNotif({message: `New videos on ${channel}`}));
+      notify(`New videos on ${channel}`)
+      // dispatch(setNotif({message: `New videos on ${channel}`}));
     });
   }, []);
 

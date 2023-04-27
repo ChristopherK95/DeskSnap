@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import { Direction } from './Tooltip';
 import { match } from 'ts-pattern';
-import useColor from '../../reusable/hooks/useColor';
+import useColor from '../../reusable/hooks/use-color';
 
 const right = css`
   position: absolute;
