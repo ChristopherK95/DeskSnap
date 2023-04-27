@@ -48,7 +48,7 @@ const InvitesList = (props: { invites: Invite[] }) => {
     if (response.status === 200) {
       queryClient.invalidateQueries('channels-overview');
       queryClient.invalidateQueries('get-invites');
-      socket.emit('invite_accepted', user.username, channel_id);
+      socket.emit('invite_accepted', channel_id);
     }
   };
 

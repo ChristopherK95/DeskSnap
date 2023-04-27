@@ -91,12 +91,9 @@ export const sockets = (
       socket.to(channel.id).emit('video_update', channel.channelName);
     });
 
-    socket.on(
-      'invite_accepted',
-      (username: string, channel_id: string) => {
-        socket.to(channel_id).emit('user_added');
-      },
-    );
+    socket.on('invite_accepted', (channel_id: string) => {
+      socket.to(channel_id).emit('user_added');
+    });
   });
 
   httpServer.listen(3000);
