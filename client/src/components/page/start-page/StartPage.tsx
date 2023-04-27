@@ -88,7 +88,7 @@ const StartPage = (props: { userId: string }) => {
           },
         ]}
       />
-      <Profile onClick={() => setActiveChannel('profile')}>
+      <Profile onClick={() => setActiveChannel({id: '', channelName: 'profile'})}>
         {user.username}
       </Profile>
       {showUsers !== undefined && (

@@ -18,6 +18,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store';
 import { useQueryClient } from 'react-query';
 import { Invite } from '../types';
+import { socket } from '../../../../socket';
 
 const Icon = (props: { read: boolean }) => {
   if (props.read) {
@@ -47,6 +48,7 @@ const InvitesList = (props: { invites: Invite[] }) => {
     if (response.status === 200) {
       queryClient.invalidateQueries('channels-overview');
       queryClient.invalidateQueries('get-invites');
+      socket.emit('invite_accepted', channel_id);
     }
   };
 
