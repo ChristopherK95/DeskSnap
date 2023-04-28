@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import useColor from '../../hooks/useColor';
+import useColor from '../../hooks/use-color';
 
 export const StyledButton = styled.button<{
   size: 'small' | 'normal';

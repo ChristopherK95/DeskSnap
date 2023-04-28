@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import useColor from '../../reusable/hooks/useColor';
+import useColor from '../../reusable/hooks/use-color';
 
 export const BackDrop = styled.div<{ show: boolean }>`
   display: ${(p) => (p.show ? 'flex' : 'none')};

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import useColor from '../../hooks/useColor';
+import useColor from '../../hooks/use-color';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { useEffect } from 'react';

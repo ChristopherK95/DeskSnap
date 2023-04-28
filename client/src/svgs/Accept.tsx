@@ -1,4 +1,4 @@
-import useColor from '../reusable/hooks/useColor';
+import useColor from '../reusable/hooks/use-color';
 
 const Accept = (props: { onClick: () => void }) => {
   return (

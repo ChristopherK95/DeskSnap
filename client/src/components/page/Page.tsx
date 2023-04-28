@@ -1,12 +1,11 @@
 import { useContext, useEffect } from 'react';
-import { Container, Content } from './Styles';
+import { Container } from './Styles';
 import Sidebar from '../sidebar/Sidebar';
 import { SidebarContext } from '../sidebar/SidebarContext';
 import StartPage from './start-page/StartPage';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import NotificationProvider from '../../reusable/components/Notification/Notification';
-import { useDispatch } from 'react-redux';
 import UserInfo from './user-info/UserInfo';
 import ChannelPage from './channel-page/ChannelPage';
 import { useQueryClient } from 'react-query';
@@ -18,10 +17,6 @@ const HomePage = () => {
   const { activeChannel } = useContext(SidebarContext);
   const user = useSelector((state: RootState) => state.user);
   const queryClient = useQueryClient();
-
-  // useEffect(() => {
-  //   dispatch(setNotif({ message: 'Logged in!' }));
-  // }, []);
 
   const getUserChannels = async () => {
     return await fetchOnce<'channel'>({
@@ -46,8 +41,8 @@ const HomePage = () => {
       });
 
       socket.on('user_added', () => {
-          queryClient.invalidateQueries('channels-overview');
-        })
+        queryClient.invalidateQueries('channels-overview');
+      });
     });
 
     socket.on('disconnect', () => {
@@ -65,9 +60,8 @@ const HomePage = () => {
         <Sidebar />
         {activeChannel.channelName === 'home' && <StartPage userId={user.id} />}
         {activeChannel.channelName === 'profile' && <UserInfo />}
-        {activeChannel.channelName !== 'home' && activeChannel.channelName !== 'profile' && (
-          <ChannelPage />
-        )}
+        {activeChannel.channelName !== 'home' &&
+          activeChannel.channelName !== 'profile' && <ChannelPage />}
       </Container>
     </NotificationProvider>
   );
