@@ -6,6 +6,7 @@ import { User } from '../types';
 import { PopupContext } from '../../../popup/PopupContext';
 import { useQueryClient } from 'react-query';
 import useNotify from '../../../../reusable/hooks/use-notify';
+import { socket } from '../../../../socket';
 
 const LeaveOrDelete = (props: { user: User }) => {
   const { leaveOrDeleteChannel, setLeaveOrDeleteChannel } =
@@ -25,6 +26,7 @@ const LeaveOrDelete = (props: { user: User }) => {
       notify('Removed channel successfully!');
       queryClient.invalidateQueries('channels-overview');
       queryClient.invalidateQueries('sidebar-channels');
+      socket.emit('leave_channel', leaveOrDeleteChannel?._id);
     } else {
       notify('Failed to remove channel!', undefined, true);
     }

@@ -43,6 +43,10 @@ const HomePage = () => {
       socket.on('user_added', () => {
         queryClient.invalidateQueries('channels-overview');
       });
+
+      socket.on('user_left', () => {
+        queryClient.invalidateQueries('channels-overview');
+      })
     });
 
     socket.on('disconnect', () => {

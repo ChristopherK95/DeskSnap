@@ -92,7 +92,13 @@ export const sockets = (
     });
 
     socket.on('invite_accepted', (channel_id: string) => {
+      socket.join(channel_id);
       socket.to(channel_id).emit('user_added');
+    });
+
+    socket.on('leave_channel', (_id: string) => {
+      socket.to(_id).emit('user_left');
+      socket.leave(_id);
     });
   });
 
