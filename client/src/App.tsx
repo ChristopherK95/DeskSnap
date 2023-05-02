@@ -25,7 +25,7 @@ function App() {
   const router = createBrowserRouter([
     {
       path: '/',
-      element: user.isLoggedIn ? (
+      element: user.id !== '' && user.isLoggedIn ? (
         <Navigate replace to={'/home'} />
       ) : (
         <Navigate replace to={'/login'} />
@@ -37,7 +37,7 @@ function App() {
     },
     {
       path: '/home',
-      element: <HomePage />,
+      element: user.id !== '' ? <HomePage user={user}/> : <></>,
     },
   ]);
 
