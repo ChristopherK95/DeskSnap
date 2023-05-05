@@ -13,7 +13,7 @@ import { socket } from '../../socket';
 import useFetch, { fetchOnce } from '../hooks/useFetch';
 import { Channel, User } from './start-page/types';
 
-const HomePage = (props: {user: User }) => {
+const HomePage = (props: { user: User }) => {
   // const a = useQuery('getChannels', () => axios.post('getChannels', {userId: }))
   const { activeChannel } = useContext(SidebarContext);
   const queryClient = useQueryClient();
@@ -28,8 +28,8 @@ const HomePage = (props: {user: User }) => {
   const [channels, setChannels] = useState<Channel[]>([]);
 
   const findChannel = (item: Channel) => {
-      return item._id === activeChannel.id;
-    }
+    return item._id === activeChannel.id;
+  };
 
   useEffect(() => {
     if (data) {
@@ -38,9 +38,9 @@ const HomePage = (props: {user: User }) => {
   }, [data]);
 
   useEffect(() => {
-    if (!props.user.id) {
+    if (!props.user.id || channels.length === 0) {
       return;
-  }
+    }
 
     queryClient.invalidateQueries('channels-overview');
 
@@ -59,13 +59,13 @@ const HomePage = (props: {user: User }) => {
 
       socket.on('user_left', () => {
         queryClient.invalidateQueries('channels-overview');
-      })
+      });
     });
 
     socket.on('disconnect', () => {
       console.log('disconnected');
     });
-  }, [props.user]);
+  }, [props.user, channels]);
 
   if (!props.user.id) {
     return <></>;
@@ -75,10 +75,14 @@ const HomePage = (props: {user: User }) => {
     <NotificationProvider>
       <Container>
         <Sidebar />
-        {activeChannel.channelName === 'home' && <StartPage userId={props.user.id} channels={channels} />}
+        {activeChannel.channelName === 'home' && (
+          <StartPage userId={props.user.id} channels={channels} />
+        )}
         {activeChannel.channelName === 'profile' && <UserInfo />}
         {activeChannel.channelName !== 'home' &&
-          activeChannel.channelName !== 'profile' && <ChannelPage channel={channels[channels.findIndex(findChannel)]} />}
+          activeChannel.channelName !== 'profile' && (
+            <ChannelPage channel={channels[channels.findIndex(findChannel)]} />
+          )}
       </Container>
     </NotificationProvider>
   );
