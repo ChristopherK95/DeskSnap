@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Container } from './Styles';
 import Sidebar from '../sidebar/Sidebar';
 import { SidebarContext } from '../sidebar/SidebarContext';
@@ -10,31 +10,44 @@ import UserInfo from './user-info/UserInfo';
 import ChannelPage from './channel-page/ChannelPage';
 import { useQueryClient } from 'react-query';
 import { socket } from '../../socket';
-import { fetchOnce } from '../hooks/useFetch';
+import useFetch, { fetchOnce } from '../hooks/useFetch';
+import { Channel, User } from './start-page/types';
 
-const HomePage = () => {
+const HomePage = (props: { user: User }) => {
   // const a = useQuery('getChannels', () => axios.post('getChannels', {userId: }))
   const { activeChannel } = useContext(SidebarContext);
-  const user = useSelector((state: RootState) => state.user);
   const queryClient = useQueryClient();
 
-  const getUserChannels = async () => {
-    return await fetchOnce<'channel'>({
-      action: 'channel/getChannels',
-      payload: { user_id: user.id },
-    });
+  const { data, isLoading, isFetching } = useFetch<'channel', Channel[]>({
+    action: 'channel/getChannelsOverview',
+    payload: { user_id: props.user.id },
+    key: 'channels-overview',
+    options: { refetchOnWindowFocus: false },
+  });
+
+  const [channels, setChannels] = useState<Channel[]>([]);
+
+  const findChannel = (item: Channel) => {
+    return item._id === activeChannel.id;
   };
 
   useEffect(() => {
-    if (!user.id) {
+    if (data) {
+      setChannels(data);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (!props.user.id || channels.length === 0) {
       return;
     }
+
+    queryClient.invalidateQueries('channels-overview');
 
     socket.connect();
 
     socket.on('connect', async () => {
-      const channels = await getUserChannels();
-      socket.emit('establish', user.username, channels.data);
+      socket.emit('establish', props.user.username, channels);
 
       socket.on('receive_invite', () => {
         queryClient.invalidateQueries('get-invites');
@@ -46,15 +59,15 @@ const HomePage = () => {
 
       socket.on('user_left', () => {
         queryClient.invalidateQueries('channels-overview');
-      })
+      });
     });
 
     socket.on('disconnect', () => {
       console.log('disconnected');
     });
-  }, [user]);
+  }, [props.user, channels]);
 
-  if (!user.id) {
+  if (!props.user.id) {
     return <></>;
   }
 
@@ -62,10 +75,14 @@ const HomePage = () => {
     <NotificationProvider>
       <Container>
         <Sidebar />
-        {activeChannel.channelName === 'home' && <StartPage userId={user.id} />}
+        {activeChannel.channelName === 'home' && (
+          <StartPage userId={props.user.id} channels={channels} />
+        )}
         {activeChannel.channelName === 'profile' && <UserInfo />}
         {activeChannel.channelName !== 'home' &&
-          activeChannel.channelName !== 'profile' && <ChannelPage />}
+          activeChannel.channelName !== 'profile' && (
+            <ChannelPage channel={channels[channels.findIndex(findChannel)]} />
+          )}
       </Container>
     </NotificationProvider>
   );

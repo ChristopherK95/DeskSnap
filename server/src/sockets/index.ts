@@ -100,6 +100,16 @@ export const sockets = (
       socket.to(_id).emit('user_left');
       socket.leave(_id);
     });
+
+    socket.on('channel_users', async (_id: string, callback) => {
+      const temp = await io.in(_id).fetchSockets();
+      const roomUsersIds = temp.map((t) => t.id);
+      const connectedUsers: string[] = [];
+      clients.forEach((c) => {
+        if (roomUsersIds.includes(c.socketId)) connectedUsers.push(c.username);
+      });
+      callback(connectedUsers);
+    });
   });
 
   httpServer.listen(3000);

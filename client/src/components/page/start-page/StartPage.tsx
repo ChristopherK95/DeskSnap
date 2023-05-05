@@ -15,16 +15,9 @@ import LeaveOrDelete from './leave-or-delete-channel/LeaveOrDelete';
 import { SidebarContext } from '../../sidebar/SidebarContext';
 import EditChannel from './edit-channel/EditChannel';
 
-const StartPage = (props: { userId: string }) => {
+const StartPage = (props: { userId: string; channels: Channel[] }) => {
   const user = useSelector((state: RootState) => state.user);
   const { setActiveChannel } = useContext(SidebarContext);
-
-  const { data, isLoading, isFetching } = useFetch<'channel', Channel[]>({
-    action: 'channel/getChannelsOverview',
-    payload: { user_id: props.userId },
-    key: 'channels-overview',
-    options: { refetchOnWindowFocus: false },
-  });
 
   const invitesData = useFetch<'user', Invite[]>({
     action: 'user/getInvites',
@@ -34,17 +27,11 @@ const StartPage = (props: { userId: string }) => {
   }).data;
 
   const [invites, setInvites] = useState<Invite[]>([]);
-  const [channels, setChannels] = useState<Channel[]>();
   const [showUsers, setShowUsers] = useState<number>();
 
   const { setInviteChannelId, setLeaveOrDeleteChannel, setShowEdit } =
     useContext(PopupContext);
 
-  useEffect(() => {
-    if (data) {
-      setChannels(data);
-    }
-  }, [data]);
 
   useEffect(() => {
     if (invitesData) {
@@ -56,7 +43,7 @@ const StartPage = (props: { userId: string }) => {
   //   return <Container>Loading..</Container>;
   // }
 
-  if (!channels || channels?.length === 0) {
+  if (!props.channels || props.channels?.length === 0) {
     return (
       <div>
         <Invites invites={invites} />
@@ -70,7 +57,7 @@ const StartPage = (props: { userId: string }) => {
       {invites.length > 0 && <Invites invites={invites} />}
       <Table
         setShowUsers={setShowUsers}
-        channels={channels}
+        channels={props.channels}
         actions={[
           {
             label: 'Add User',
@@ -94,7 +81,7 @@ const StartPage = (props: { userId: string }) => {
       {showUsers !== undefined && (
         <Modal onClose={() => setShowUsers(undefined)}>
           <Users
-            channel={channels[showUsers]}
+            channel={props.channels[showUsers]}
             currentUser={user}
             setShowUsers={setShowUsers}
           />
